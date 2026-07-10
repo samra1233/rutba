@@ -1,0 +1,257 @@
+{
+  "products": [
+    {
+      "id": "zar-001",
+      "name": "Shehnai Crimson",
+      "price": 6850,
+      "fabric": "Chiffon",
+      "type": "Embroidered",
+      "collection": "Festive Chiffon 26",
+      "images": [
+        "https://picsum.photos/seed/zar001a/800/1067",
+        "https://picsum.photos/seed/zar001b/800/1067"
+      ],
+      "description": "An opulent crimson unstitched chiffon suit adorned with deep antique gold zari and meticulous resham embroidery on the front panel. Complete with a delicate sequins-scalloped chiffon dupatta and dyed raw silk trousers.",
+      "stock": 8,
+      "colors": [
+        "Crimson Red",
+        "Antique Gold"
+      ],
+      "viewers": 7,
+      "isNewArrival": true,
+      "features": [
+        "Embroidered Chiffon Front (1.25m)",
+        "Dyed Chiffon Back & Sleeves (1.75m)",
+        "Embroidered Neckline & Border Patches (3m)",
+        "Dyed Raw Silk Trouser (2.5m)",
+        "Embroidered Chiffon Dupatta with Sequins (2.5m)"
+      ]
+    },
+    {
+      "id": "zar-002",
+      "name": "Darya Mint",
+      "price": 5800,
+      "fabric": "Lawn",
+      "type": "Printed",
+      "collection": "Classic Printed 26",
+      "images": [
+        "https://picsum.photos/seed/zar002a/800/1067",
+        "https://picsum.photos/seed/zar002b/800/1067"
+      ],
+      "description": "A refreshing mint green unstitched premium lawn outfit with classic Mughal block-print-inspired patterns. Features a soft, breathable pure voile dupatta and solid dyed cambric trousers for high summer comfort.",
+      "stock": 14,
+      "colors": [
+        "Mint Green",
+        "Peach Cream"
+      ],
+      "viewers": 5,
+      "isNewArrival": false,
+      "features": [
+        "Printed Premium Lawn Shirt (3m)",
+        "Dyed Cambric Cotton Trouser (2.5m)",
+        "Printed Pure Voile Dupatta (2.5m)",
+        "Additional Embroidered Sleeve Organza Lace (1m)"
+      ]
+    },
+    {
+      "id": "zar-003",
+      "name": "Noor-ul-Ain Ivory",
+      "price": 7200,
+      "fabric": "Lawn",
+      "type": "Embroidered",
+      "collection": "Festive Lawn 26",
+      "images": [
+        "https://picsum.photos/seed/zar003a/800/1067",
+        "https://picsum.photos/seed/zar003b/800/1067"
+      ],
+      "description": "Our signature ivory 3-piece unstitched lawn ensemble featuring intricate laser-cut schiffli embroidery on the shirt front. Paired with a dreamy, gold-dusted printed silk dupatta and plain dyed trousers.",
+      "stock": 5,
+      "colors": [
+        "Ivory White",
+        "Gold Dust"
+      ],
+      "viewers": 12,
+      "isNewArrival": true,
+      "features": [
+        "Schiffli Embroidered Lawn Front (1.25m)",
+        "Dyed Premium Lawn Back & Sleeves (1.75m)",
+        "Embroidered Organza Hem & Sleeves Border (2m)",
+        "Dyed Cotton Trouser (2.5m)",
+        "Digital Printed Gold-Dusted Medium Silk Dupatta (2.5m)"
+      ]
+    },
+    {
+      "id": "zar-004",
+      "name": "Gulbadan Amber",
+      "price": 5650,
+      "fabric": "Lawn",
+      "type": "Printed",
+      "collection": "Classic Printed 26",
+      "images": [
+        "https://picsum.photos/seed/zar004a/800/1067",
+        "https://picsum.photos/seed/zar004b/800/1067"
+      ],
+      "description": "A glowing amber yellow unstitched 3-piece lawn suit, showing a beautiful contrast of micro-floral vines and classic geometry. Perfect for daytime elegant wear and daily premium utility.",
+      "stock": 12,
+      "colors": [
+        "Amber Yellow",
+        "Terracotta"
+      ],
+      "viewers": 5,
+      "isNewArrival": false,
+      "features": [
+        "Printed Premium Lawn Shirt (3m)",
+        "Dyed Cambric Cotton Trouser (2.5m)",
+        "Printed Swiss Voile Dupatta (2.5m)",
+        "Contrast Printed Trouser Border Patch"
+      ]
+    },
+    {
+      "id": "zar-005",
+      "name": "Soraya Sage",
+      "price": 6450,
+      "fabric": "Lawn",
+      "type": "Embroidered",
+      "collection": "Festive Lawn 26",
+      "images": [
+        "https://picsum.photos/seed/zar005a/800/1067",
+        "https://picsum.photos/seed/zar005b/800/1067"
+      ],
+      "description": "A calm sage green 3-piece unstitched lawn ensemble accented with delicate pastel pink and white embroidery on the neckline and daman. Paired with a digital printed chiffon dupatta for a soft breezy drape.",
+      "stock": 6,
+      "colors": [
+        "Sage Green",
+        "Blush Pink"
+      ],
+      "viewers": 9,
+      "isNewArrival": true,
+      "features": [
+        "Embroidered Premium Lawn Front (1.25m)",
+        "Dyed Lawn Back & Sleeves (1.75m)",
+        "Embroidered Neckline & Sleeves Organza Motif (3 units)",
+        "Dyed Cambric Cotton Trouser (2.5m)",
+        "Digital Printed Chiffon Dupatta (2.5m)"
+      ]
+    },
+    {
+      "id": "zar-006",
+      "name": "Feroza Azure",
+      "price": 6950,
+      "fabric": "Chiffon",
+      "type": "Embroidered",
+      "collection": "Festive Chiffon 26",
+      "images": [
+        "https://picsum.photos/seed/zar006a/800/1067",
+        "https://picsum.photos/seed/zar006b/800/1067"
+      ],
+      "description": "A striking turquoise azure embroidered unstitched chiffon suit with silver tilla work. This design features a heavy front panels layout, elegant flowy sleeves, and a pre-stitched embroidered border pallu dupatta.",
+      "stock": 4,
+      "colors": [
+        "Azure Turquoise",
+        "Silver Tilla"
+      ],
+      "viewers": 14,
+      "isNewArrival": true,
+      "features": [
+        "Embroidered Chiffon Left/Right Front Panels (1.25m)",
+        "Embroidered Chiffon Back (1.25m)",
+        "Embroidered Chiffon Sleeves (0.7m)",
+        "Dyed Grip Trouser Silk (2.5m)",
+        "Embroidered Chiffon Dupatta with Silver Pallu borders (2.5m)"
+      ]
+    },
+    {
+      "id": "zar-007",
+      "name": "Mehtab Indigo",
+      "price": 5900,
+      "fabric": "Lawn",
+      "type": "Printed",
+      "collection": "Classic Printed 26",
+      "images": [
+        "https://picsum.photos/seed/zar007a/800/1067",
+        "https://picsum.photos/seed/zar007b/800/1067"
+      ],
+      "description": "A timeless deep indigo unstitched lawn ensemble with exquisite white paisley prints reminiscent of cool midsummer nights. Features an ultra-soft printed voile dupatta for absolute comfort.",
+      "stock": 10,
+      "colors": [
+        "Indigo Blue",
+        "Chalk White"
+      ],
+      "viewers": 7,
+      "isNewArrival": false,
+      "features": [
+        "Printed Premium Lawn Shirt (3m)",
+        "Dyed Premium Cotton Trouser (2.5m)",
+        "Printed Pure Swiss Voile Dupatta (2.5m)"
+      ]
+    },
+    {
+      "id": "zar-008",
+      "name": "Sunehri Ochre",
+      "price": 6750,
+      "fabric": "Chiffon",
+      "type": "Embroidered",
+      "collection": "Festive Chiffon 26",
+      "images": [
+        "https://picsum.photos/seed/zar008a/800/1067",
+        "https://picsum.photos/seed/zar008b/800/1067"
+      ],
+      "description": "A warm ochre and gold embroidered unstitched chiffon suite celebrating heritage thread works. Delicately patterned with Kashmiri-style neck embroidery and paired with a contrasting rich rust-toned dupatta.",
+      "stock": 7,
+      "colors": [
+        "Ochre Gold",
+        "Rust Orange"
+      ],
+      "viewers": 8,
+      "isNewArrival": false,
+      "features": [
+        "Embroidered Chiffon Front (1.25m)",
+        "Dyed Chiffon Back & Sleeves (1.75m)",
+        "Embroidered Collar & Slit Lace (1.5m)",
+        "Dyed Raw Silk Trouser (2.5m)",
+        "Embroidered Contrast Organza Dupatta (2.5m)"
+      ]
+    },
+    {
+      "id": "zar-009",
+      "name": "Shabnam Lilac",
+      "price": 6200,
+      "fabric": "Lawn",
+      "type": "Embroidered",
+      "collection": "Festive Lawn 26",
+      "images": [
+        "https://picsum.photos/seed/zar009a/800/1067",
+        "https://picsum.photos/seed/zar009b/800/1067"
+      ],
+      "description": "A pastel dream featuring a light lilac premium unstitched lawn, adorned with intricate self-tone lavender and white cotton threads embroidery. Includes a romantic organza dupatta with floral vine print borders.",
+      "stock": 9,
+      "colors": [
+        "Lilac Lavender",
+        "Pearl White"
+      ],
+      "viewers": 11,
+      "isNewArrival": true,
+      "features": [
+        "Embroidered Lawn Front (1.25m)",
+        "Dyed Lawn Back & Sleeves (1.75m)",
+        "Embroidered Sleeves motif patches (2 units)",
+        "Dyed cambric cotton Trouser (2.5m)",
+        "Digital Printed Organza Dupatta (2.5m)"
+      ]
+    }
+  ],
+  "orders": [],
+  "carts": {
+    "usr_qqad0yg2t": {
+      "userId": "usr_qqad0yg2t",
+      "items": []
+    }
+  },
+  "admins": [
+    {
+      "id": "admin-001",
+      "email": "admin@rotba.com",
+      "passwordHash": "$2b$10$aIlKiVh2XMe4wojIv4erFOQ7euu1c/5xzhAGPWf9Cxzdoudu4dDhq"
+    }
+  ]
+}

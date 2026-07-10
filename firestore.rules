@@ -1,0 +1,31 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Products: anyone can read, only authenticated or all for dev proxy
+    match /products/{productId} {
+      allow read: if true;
+      allow write: if true;
+    }
+    
+    // Orders: anyone can read/write for checkout/tracking, but usually protected
+    match /orders/{orderId} {
+      allow read: if true;
+      allow write: if true;
+    }
+    
+    // Carts: read/write allowed
+    match /carts/{userId} {
+      allow read, write: if true;
+    }
+    
+    // Admins: read/write
+    match /admins/{adminId} {
+      allow read, write: if true;
+    }
+    
+    // Settings: anyone can read, write is open
+    match /settings/{settingId} {
+      allow read, write: if true;
+    }
+  }
+}
