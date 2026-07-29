@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useEffect, useRef } from 'react';
 import { Product, Cart, CartItem, Order, ShippingDetails, RealTimeUpdateEvent } from './types';
+import initialDb from '../zariha_db.json';
 
 interface AppContextType {
   products: Product[];
@@ -57,8 +58,10 @@ interface AppContextType {
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
 
+const staticCatalog: Product[] = (initialDb && initialDb.products) ? (initialDb.products as Product[]) : [];
+
 export function AppProvider({ children }: { children: React.ReactNode }) {
-  const [products, setProducts] = useState<Product[]>([]);
+  const [products, setProducts] = useState<Product[]>(staticCatalog);
   const [cart, setCart] = useState<Cart | null>(null);
   const [activePage, setActivePageInternal] = useState<string>(() => {
     const path = window.location.pathname;
@@ -282,6 +285,22 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     setCart(null);
   };
 
+  const filterFallbackProducts = (list: Product[]) => {
+    let filtered = [...list];
+    if (activeFilters.fabric) filtered = filtered.filter(p => p.fabric === activeFilters.fabric);
+    if (activeFilters.type) filtered = filtered.filter(p => p.type === activeFilters.type);
+    if (activeFilters.collection) filtered = filtered.filter(p => p.collection === activeFilters.collection);
+    if (activeFilters.category) filtered = filtered.filter(p => p.category === activeFilters.category);
+    if (activeFilters.season) filtered = filtered.filter(p => p.season === activeFilters.season);
+    if (activeFilters.bestSeller === 'true') filtered = filtered.filter(p => p.isBestSeller);
+    if (activeFilters.newArrival === 'true') filtered = filtered.filter(p => p.isNewArrival);
+    if (activeFilters.search) {
+      const q = activeFilters.search.toLowerCase();
+      filtered = filtered.filter(p => p.name.toLowerCase().includes(q) || (p.description && p.description.toLowerCase().includes(q)));
+    }
+    return filtered;
+  };
+
   // 2. Fetch products whenever filters change
   const fetchProducts = async () => {
     setLoading(true);
@@ -304,10 +323,15 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
       const res = await fetch(`/api/products?${query.toString()}`);
       if (res.ok) {
         const data = await res.json();
-        setProducts(data);
+        if (Array.isArray(data) && data.length > 0) {
+          setProducts(data);
+          return;
+        }
       }
+      setProducts(filterFallbackProducts(staticCatalog));
     } catch (e) {
-      console.error('Error fetching products:', e);
+      console.log('Using static products catalog for live domain:', e);
+      setProducts(filterFallbackProducts(staticCatalog));
     } finally {
       setLoading(false);
     }
