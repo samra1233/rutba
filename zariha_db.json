@@ -1,315 +1,2988 @@
 {
   "products": [
     {
-      "id": "zar-001",
-      "name": "Shehnai Crimson",
-      "price": 6850,
-      "fabric": "Chiffon",
-      "type": "Embroidered",
-      "collection": "Festive Chiffon 26",
-      "images": [
-        "https://picsum.photos/seed/zar001a/800/1067",
-        "https://picsum.photos/seed/zar001b/800/1067"
+      "sizes": [
+        "S",
+        "M",
+        "L",
+        "XL"
       ],
-      "description": "An opulent crimson unstitched chiffon suit adorned with deep antique gold zari and meticulous resham embroidery on the front panel. Complete with a delicate sequins-scalloped chiffon dupatta and dyed raw silk trousers.",
-      "stock": 8,
       "colors": [
-        "Crimson Red",
-        "Antique Gold"
+        "Indigo Blue"
       ],
-      "viewers": 7,
+      "id": "ms-001",
+      "fabric": "Lawn",
+      "isBestSeller": true,
+      "type": "Embroidered",
+      "onSale": false,
+      "features": [
+        "Shirt : Complete Front Embroidered",
+        "Fabric : Summer Cotton with Digital Print",
+        "Dupatta : Chiffon",
+        "Dupatta",
+        "Trouser"
+      ],
+      "category": "Unstitched",
       "isNewArrival": true,
-      "features": [
-        "Embroidered Chiffon Front (1.25m)",
-        "Dyed Chiffon Back & Sleeves (1.75m)",
-        "Embroidered Neckline & Border Patches (3m)",
-        "Dyed Raw Silk Trouser (2.5m)",
-        "Embroidered Chiffon Dupatta with Sequins (2.5m)"
-      ]
-    },
-    {
-      "id": "zar-002",
-      "name": "Darya Mint",
-      "price": 5800,
-      "fabric": "Lawn",
-      "type": "Printed",
-      "collection": "Classic Printed 26",
+      "season": "Summer",
+      "description": "Shirt : Complete Front Embroidered Fabric : Summer Cotton with Digital Print Dupatta : Chiffon Dupatta Trouser Fabric : Cotton Lawn with Digital Print Model is wearing small size",
+      "name": "Embroidered 3 Piece Indigo Suit",
+      "stock": 9,
       "images": [
-        "https://picsum.photos/seed/zar002a/800/1067",
-        "https://picsum.photos/seed/zar002b/800/1067"
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/DSC09743.jpg?v=1779358189",
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/DSC09759.jpg?v=1779357975",
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/DSC09746.jpg?v=1779357935",
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/DSC09763.jpg?v=1779357461"
       ],
-      "description": "A refreshing mint green unstitched premium lawn outfit with classic Mughal block-print-inspired patterns. Features a soft, breathable pure voile dupatta and solid dyed cambric trousers for high summer comfort.",
-      "stock": 14,
-      "colors": [
-        "Mint Green",
-        "Peach Cream"
-      ],
-      "viewers": 5,
-      "isNewArrival": false,
-      "features": [
-        "Printed Premium Lawn Shirt (3m)",
-        "Dyed Cambric Cotton Trouser (2.5m)",
-        "Printed Pure Voile Dupatta (2.5m)",
-        "Additional Embroidered Sleeve Organza Lace (1m)"
-      ]
+      "price": 6699,
+      "viewers": 7,
+      "collection": "New Arrivals 26",
+      "pieces": "3 Piece"
     },
     {
-      "id": "zar-003",
-      "name": "Noor-ul-Ain Ivory",
-      "price": 7200,
-      "fabric": "Lawn",
+      "price": 6699,
+      "features": [
+        "Shirt : Complete Front Embroidered",
+        "Fabric : Summer Cotton with Digital Print",
+        "Dupatta : Lawn",
+        "Dupatta",
+        "Farshi Shalwar"
+      ],
       "type": "Embroidered",
-      "collection": "Festive Lawn 26",
-      "images": [
-        "https://picsum.photos/seed/zar003a/800/1067",
-        "https://picsum.photos/seed/zar003b/800/1067"
-      ],
-      "description": "Our signature ivory 3-piece unstitched lawn ensemble featuring intricate laser-cut schiffli embroidery on the shirt front. Paired with a dreamy, gold-dusted printed silk dupatta and plain dyed trousers.",
-      "stock": 5,
+      "onSale": false,
+      "category": "Unstitched",
+      "id": "ms-002",
+      "season": "Summer",
+      "stock": 9,
+      "collection": "New Arrivals 26",
       "colors": [
-        "Ivory White",
-        "Gold Dust"
+        "Mustard Yellow"
       ],
+      "isBestSeller": false,
+      "isNewArrival": true,
+      "fabric": "Lawn",
+      "description": "Shirt : Complete Front Embroidered Fabric : Summer Cotton with Digital Print Dupatta : Lawn Dupatta Farshi Shalwar Fabric : Cotton Lawn with Digital Print Model is wearing small size",
+      "sizes": [
+        "S",
+        "M",
+        "L",
+        "XL"
+      ],
+      "pieces": "3 Piece",
+      "name": "Embroidered 3 Piece Mustard Suite-Farshi",
+      "images": [
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/DSC09075.jpg?v=1779356941",
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/DSC09094.jpg?v=1779356963",
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/DSC09097.jpg?v=1779356649",
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/DSC09082.jpg?v=1779356649"
+      ],
+      "viewers": 3
+    },
+    {
+      "images": [
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/DSC09207.jpg?v=1779350029",
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/DSC09223_9b3d9f07-0edb-4f1e-af21-c6c177e4ae29.jpg?v=1779350062",
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/DSC09202.jpg?v=1779349706",
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/DSC09210.jpg?v=1779349706"
+      ],
+      "stock": 10,
+      "pieces": "3 Piece",
+      "features": [
+        "Shirt : Complete Front Embroidered",
+        "Fabric : Summer Cotton with Digital Print",
+        "Dupatta : Lawn",
+        "Dupatta",
+        "Trouser"
+      ],
+      "isBestSeller": false,
+      "category": "Unstitched",
+      "isNewArrival": true,
+      "type": "Embroidered",
+      "price": 6699,
+      "fabric": "Lawn",
+      "colors": [
+        "Lilac Purple"
+      ],
+      "name": "Embroidered 3-Piece Lilac Suit",
+      "viewers": 29,
+      "season": "Summer",
+      "id": "ms-003",
+      "description": "Shirt : Complete Front Embroidered Fabric : Summer Cotton with Digital Print Dupatta : Lawn Dupatta Trouser Fabric : Cotton Lawn with Digital Print Model is wearing small size",
+      "sizes": [
+        "S",
+        "M",
+        "L",
+        "XL"
+      ],
+      "onSale": false,
+      "collection": "New Arrivals 26"
+    },
+    {
+      "onSale": false,
+      "sizes": [
+        "S",
+        "M",
+        "L",
+        "XL"
+      ],
+      "name": "Ivory Blossom Embroidered Suit-3 Piece",
+      "season": "Summer",
+      "colors": [
+        "Ivory Cream"
+      ],
+      "id": "ms-004",
+      "fabric": "Lawn",
+      "isNewArrival": true,
+      "stock": 10,
+      "collection": "New Arrivals 26",
+      "description": "Shirt : Complete Front Embroidered Fabric : Summer Cotton with Digital Print Dupatta : Lawn Dupatta Trouser Fabric : Cotton Lawn with Digital Print Model is wearing small size",
+      "isBestSeller": false,
+      "price": 6699,
+      "pieces": "3 Piece",
+      "features": [
+        "Shirt : Complete Front Embroidered",
+        "Fabric : Summer Cotton with Digital Print",
+        "Dupatta : Lawn",
+        "Dupatta",
+        "Trouser"
+      ],
+      "type": "Embroidered",
+      "images": [
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/DSC09046.jpg?v=1779348577",
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/DSC09061.jpg?v=1779348596",
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/DSC09052.jpg?v=1779348356",
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/DSC09047.jpg?v=1779348356"
+      ],
+      "category": "Unstitched",
+      "viewers": 8
+    },
+    {
+      "type": "Embroidered",
+      "id": "ms-005",
+      "description": "Shirt : Complete Front Embroidered Fabric : Summer Cotton with Digital Print Dupatta : Chiffon Dupatta Trouser Fabric : Cotton Lawn with Digital Print Model is wearing small size",
+      "season": "Summer",
+      "onSale": false,
+      "price": 6599,
+      "fabric": "Lawn",
+      "colors": [
+        "Blue"
+      ],
+      "stock": 10,
+      "features": [
+        "Shirt : Complete Front Embroidered",
+        "Fabric : Summer Cotton with Digital Print",
+        "Dupatta : Chiffon",
+        "Dupatta",
+        "Trouser"
+      ],
+      "pieces": "3 Piece",
+      "isNewArrival": true,
+      "isBestSeller": false,
+      "category": "Unstitched",
+      "name": "Blue Blossom 3 Piece Suit-Embroidered",
+      "images": [
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/DSC09818_300928bf-0c55-4c2f-9405-36c7c980160a.jpg?v=1779347903",
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/DSC09838.jpg?v=1779347922",
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/DSC09828.jpg?v=1779347854",
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/DSC09822.jpg?v=1779347855"
+      ],
+      "sizes": [
+        "S",
+        "M",
+        "L",
+        "XL"
+      ],
+      "viewers": 16,
+      "collection": "New Arrivals 26"
+    },
+    {
+      "sizes": [
+        "S",
+        "M",
+        "L",
+        "XL"
+      ],
+      "features": [
+        "Shirt : Complete Front Embroidered",
+        "Fabric : Summer Cotton with Digital Print",
+        "Dupatta : Chiffon",
+        "Dupatta",
+        "Trouser"
+      ],
+      "category": "Unstitched",
+      "images": [
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/DSC09230.jpg?v=1779347024",
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/DSC09246.jpg?v=1779347045",
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/DSC09228.jpg?v=1779346945",
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/DSC09234.jpg?v=1779346945"
+      ],
+      "id": "ms-006",
+      "collection": "New Arrivals 26",
+      "description": "Shirt : Complete Front Embroidered Fabric : Summer Cotton with Digital Print Dupatta : Chiffon Dupatta Trouser Fabric : Cotton Lawn with Digital Print Model is wearing small size",
       "viewers": 12,
       "isNewArrival": true,
-      "features": [
-        "Schiffli Embroidered Lawn Front (1.25m)",
-        "Dyed Premium Lawn Back & Sleeves (1.75m)",
-        "Embroidered Organza Hem & Sleeves Border (2m)",
-        "Dyed Cotton Trouser (2.5m)",
-        "Digital Printed Gold-Dusted Medium Silk Dupatta (2.5m)"
-      ]
-    },
-    {
-      "id": "zar-004",
-      "name": "Gulbadan Amber",
-      "price": 5650,
-      "fabric": "Lawn",
-      "type": "Printed",
-      "collection": "Classic Printed 26",
-      "images": [
-        "https://picsum.photos/seed/zar004a/800/1067",
-        "https://picsum.photos/seed/zar004b/800/1067"
-      ],
-      "description": "A glowing amber yellow unstitched 3-piece lawn suit, showing a beautiful contrast of micro-floral vines and classic geometry. Perfect for daytime elegant wear and daily premium utility.",
-      "stock": 12,
-      "colors": [
-        "Amber Yellow",
-        "Terracotta"
-      ],
-      "viewers": 5,
-      "isNewArrival": false,
-      "features": [
-        "Printed Premium Lawn Shirt (3m)",
-        "Dyed Cambric Cotton Trouser (2.5m)",
-        "Printed Swiss Voile Dupatta (2.5m)",
-        "Contrast Printed Trouser Border Patch"
-      ]
-    },
-    {
-      "id": "zar-005",
-      "name": "Soraya Sage",
-      "price": 6450,
-      "fabric": "Lawn",
       "type": "Embroidered",
-      "collection": "Festive Lawn 26",
-      "images": [
-        "https://picsum.photos/seed/zar005a/800/1067",
-        "https://picsum.photos/seed/zar005b/800/1067"
-      ],
-      "description": "A calm sage green 3-piece unstitched lawn ensemble accented with delicate pastel pink and white embroidery on the neckline and daman. Paired with a digital printed chiffon dupatta for a soft breezy drape.",
-      "stock": 6,
+      "pieces": "3 Piece",
+      "isBestSeller": false,
       "colors": [
-        "Sage Green",
-        "Blush Pink"
+        "Aqua Green"
       ],
+      "stock": 10,
+      "fabric": "Lawn",
+      "name": "Aqua Floral Printed 3 Piece Suit-Embroidered",
+      "price": 6699,
+      "onSale": false,
+      "season": "Summer"
+    },
+    {
+      "id": "ms-007",
+      "fabric": "Lawn",
+      "collection": "New Arrivals 26",
+      "colors": [
+        "Ochre Yellow"
+      ],
+      "type": "Embroidered",
+      "sizes": [
+        "S",
+        "M",
+        "L",
+        "XL"
+      ],
+      "season": "Summer",
+      "description": "Shirt : Complete Front Embroidered Fabric : Summer Cotton with Digital Print Dupatta : Lawn Dupatta Trouser Fabric : Cotton Lawn with Digital Print Model is wearing small size",
+      "onSale": false,
+      "name": "Embroidered 3 Piece Ochre Palette Suit",
+      "images": [
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/RHP8301.jpg?v=1778064867",
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/RHP8335.jpg?v=1778064889",
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/RHP8328.jpg?v=1778064230",
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/RHP8326.jpg?v=1778064230"
+      ],
+      "viewers": 31,
+      "isBestSeller": false,
+      "features": [
+        "Shirt : Complete Front Embroidered",
+        "Fabric : Summer Cotton with Digital Print",
+        "Dupatta : Lawn",
+        "Dupatta",
+        "Trouser"
+      ],
+      "stock": 10,
+      "pieces": "3 Piece",
+      "price": 6999,
+      "category": "Unstitched",
+      "isNewArrival": true
+    },
+    {
+      "season": "Summer",
+      "name": "3 Piece Vibrant Sky Blue Suit-Embroidered",
+      "onSale": false,
+      "collection": "New Arrivals 26",
+      "fabric": "Lawn",
+      "stock": 10,
+      "price": 6999,
+      "viewers": 18,
+      "colors": [
+        "Blue"
+      ],
+      "features": [
+        "Shirt : Complete Front Embroidered",
+        "Fabric : Summer Cotton with Digital Print",
+        "Dupatta : Lawn",
+        "Dupatta",
+        "Trouser"
+      ],
+      "isNewArrival": true,
+      "pieces": "3 Piece",
+      "isBestSeller": false,
+      "description": "Shirt : Complete Front Embroidered Fabric : Summer Cotton with Digital Print Dupatta : Lawn Dupatta Trouser Fabric : Summer Cotton with Digital Print Model is wearing small size",
+      "id": "ms-008",
+      "category": "Unstitched",
+      "images": [
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/RHP8535.jpg?v=1778063891",
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/RHP8561.jpg?v=1778063913",
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/RHP8565.jpg?v=1778063820",
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/RHP8537.jpg?v=1778063821"
+      ],
+      "sizes": [
+        "S",
+        "M",
+        "L",
+        "XL"
+      ],
+      "type": "Embroidered"
+    },
+    {
+      "sizes": [
+        "S",
+        "M",
+        "L",
+        "XL"
+      ],
+      "images": [
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/RHP8570.jpg?v=1778063540",
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/RHP8603.jpg?v=1778063557",
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/RHP8578.jpg?v=1778063199",
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/RHP8584.jpg?v=1778063199"
+      ],
+      "category": "Unstitched",
+      "type": "Embroidered",
+      "collection": "New Arrivals 26",
+      "pieces": "3 Piece",
+      "features": [
+        "Shirt : Complete Front Embroidered",
+        "Fabric : Summer Cotton with Digital Print",
+        "Dupatta : Lawn",
+        "Dupatta",
+        "Farshi Shalwar :"
+      ],
+      "name": "Embroidered 3 Piece Suit-Farshi",
+      "colors": [
+        "Multi"
+      ],
+      "viewers": 17,
+      "stock": 10,
+      "price": 6849,
+      "id": "ms-009",
+      "fabric": "Lawn",
+      "description": "Shirt : Complete Front Embroidered Fabric : Summer Cotton with Digital Print Dupatta : Lawn Dupatta Farshi Shalwar : Fabric : Summer Cotton with Digital Print Model is wearing small size",
+      "onSale": false,
+      "isBestSeller": true,
+      "isNewArrival": true,
+      "season": "Summer"
+    },
+    {
+      "isBestSeller": false,
+      "isNewArrival": true,
+      "id": "ms-010",
+      "colors": [
+        "Black"
+      ],
+      "price": 6999,
+      "features": [
+        "Shirt : Complete Front Embroidered",
+        "Fabric : Summer Cotton with Digital Print",
+        "Dupatta : Lawn",
+        "Dupatta",
+        "Trouser"
+      ],
+      "images": [
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/RHP8424.jpg?v=1778062695",
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/RHP8446.jpg?v=1778062714",
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/RHP8458.jpg?v=1778062407",
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/RHP8430.jpg?v=1778062407"
+      ],
+      "category": "Unstitched",
+      "name": "3 Piece Embroidered Black Floral Suit",
+      "onSale": false,
+      "viewers": 25,
+      "collection": "New Arrivals 26",
+      "pieces": "3 Piece",
+      "fabric": "Lawn",
+      "stock": 10,
+      "sizes": [
+        "S",
+        "M",
+        "L",
+        "XL"
+      ],
+      "description": "Shirt : Complete Front Embroidered Fabric : Summer Cotton with Digital Print Dupatta : Lawn Dupatta Trouser Fabric : Summer Cotton with Digital Print Model is wearing small size",
+      "season": "Summer",
+      "type": "Embroidered"
+    },
+    {
+      "collection": "New Arrivals 26",
+      "colors": [
+        "Mint Green"
+      ],
+      "isNewArrival": true,
+      "price": 6749,
+      "stock": 10,
+      "fabric": "Lawn",
+      "isBestSeller": false,
+      "onSale": false,
+      "id": "ms-011",
+      "name": "3 Piece Embroidered Mint Green Suit-Farshi",
+      "season": "Summer",
+      "category": "Unstitched",
+      "description": "Shirt : Complete Front Embroidered Fabric : Summer Cotton with Digital Print Dupatta : Lawn Dupatta Farshi Shalwar Fabric : Cotton Lawn with Digital Print Model is wearing small size",
       "viewers": 9,
-      "isNewArrival": true,
-      "features": [
-        "Embroidered Premium Lawn Front (1.25m)",
-        "Dyed Lawn Back & Sleeves (1.75m)",
-        "Embroidered Neckline & Sleeves Organza Motif (3 units)",
-        "Dyed Cambric Cotton Trouser (2.5m)",
-        "Digital Printed Chiffon Dupatta (2.5m)"
-      ]
-    },
-    {
-      "id": "zar-006",
-      "name": "Feroza Azure",
-      "price": 6950,
-      "fabric": "Chiffon",
       "type": "Embroidered",
-      "collection": "Festive Chiffon 26",
-      "images": [
-        "https://picsum.photos/seed/zar006a/800/1067",
-        "https://picsum.photos/seed/zar006b/800/1067"
-      ],
-      "description": "A striking turquoise azure embroidered unstitched chiffon suit with silver tilla work. This design features a heavy front panels layout, elegant flowy sleeves, and a pre-stitched embroidered border pallu dupatta.",
-      "stock": 4,
-      "colors": [
-        "Azure Turquoise",
-        "Silver Tilla"
-      ],
-      "viewers": 14,
-      "isNewArrival": true,
       "features": [
-        "Embroidered Chiffon Left/Right Front Panels (1.25m)",
-        "Embroidered Chiffon Back (1.25m)",
-        "Embroidered Chiffon Sleeves (0.7m)",
-        "Dyed Grip Trouser Silk (2.5m)",
-        "Embroidered Chiffon Dupatta with Silver Pallu borders (2.5m)"
-      ]
+        "Shirt : Complete Front Embroidered",
+        "Fabric : Summer Cotton with Digital Print",
+        "Dupatta : Lawn",
+        "Dupatta",
+        "Farshi Shalwar"
+      ],
+      "images": [
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/RHP8219.jpg?v=1778061646",
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/RHP8236.jpg?v=1778061554",
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/RHP8209.jpg?v=1778061476",
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/RHP8242.jpg?v=1778061476"
+      ],
+      "sizes": [
+        "S",
+        "M",
+        "L",
+        "XL"
+      ],
+      "pieces": "3 Piece"
     },
     {
-      "id": "zar-007",
-      "name": "Mehtab Indigo",
-      "price": 5900,
-      "fabric": "Lawn",
-      "type": "Printed",
-      "collection": "Classic Printed 26",
-      "images": [
-        "https://picsum.photos/seed/zar007a/800/1067",
-        "https://picsum.photos/seed/zar007b/800/1067"
+      "name": "3 Piece Embroidered Mustard Cotton Suit",
+      "category": "Unstitched",
+      "id": "ms-012",
+      "stock": 10,
+      "price": 6999,
+      "features": [
+        "Shirt : Complete Front Embroidered",
+        "Fabric : Summer Cotton with Digital Print",
+        "Dupatta : Crinkle Chiffon",
+        "Dupatta",
+        "Trouser"
       ],
-      "description": "A timeless deep indigo unstitched lawn ensemble with exquisite white paisley prints reminiscent of cool midsummer nights. Features an ultra-soft printed voile dupatta for absolute comfort.",
+      "viewers": 25,
+      "pieces": "3 Piece",
+      "images": [
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/DSC09961.jpg?v=1778061197",
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/DSC09976.jpg?v=1778061229",
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/DSC09979.jpg?v=1778061052",
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/DSC09959.jpg?v=1778061052"
+      ],
+      "sizes": [
+        "S",
+        "M",
+        "L",
+        "XL"
+      ],
+      "onSale": false,
+      "collection": "New Arrivals 26",
+      "season": "Summer",
+      "type": "Embroidered",
+      "isBestSeller": false,
+      "colors": [
+        "Mustard Yellow"
+      ],
+      "fabric": "Lawn",
+      "isNewArrival": true,
+      "description": "Shirt : Complete Front Embroidered Fabric : Summer Cotton with Digital Print Dupatta : Crinkle Chiffon Dupatta Trouser Fabric : Cotton Lawn with Digital Print Model is wearing small size"
+    },
+    {
+      "features": [
+        "Shirt : Complete Front Embroidered",
+        "Fabric : Summer Cotton with Digital Print",
+        "Dupatta : Crinkle Chiffon",
+        "Dupatta",
+        "Trouser"
+      ],
+      "type": "Embroidered",
+      "season": "Summer",
+      "category": "Unstitched",
+      "onSale": false,
+      "description": "Shirt : Complete Front Embroidered Fabric : Summer Cotton with Digital Print Dupatta : Crinkle Chiffon Dupatta Trouser Fabric : Cotton Lawn with Digital Print Model is wearing small size",
+      "id": "ms-013",
+      "isBestSeller": false,
+      "collection": "New Arrivals 26",
+      "fabric": "Lawn",
+      "isNewArrival": true,
+      "sizes": [
+        "S",
+        "M",
+        "L",
+        "XL"
+      ],
+      "colors": [
+        "Multi"
+      ],
+      "pieces": "3 Piece",
+      "price": 6799,
+      "images": [
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/DSC00099.jpg?v=1778060433",
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/DSC00111.jpg?v=1778060455",
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/DSC00115.jpg?v=1778060342",
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/DSC00096.jpg?v=1778060342"
+      ],
+      "name": "3 Piece Embroidered Summer Cotton Suit",
+      "viewers": 12,
+      "stock": 10
+    },
+    {
+      "id": "ms-014",
+      "features": [
+        "Shirt : Complete Front Embroidered",
+        "Fabric : Summer Cotton with Digital Print",
+        "Dupatta : Lawn",
+        "Dupatta",
+        "Trouser"
+      ],
+      "colors": [
+        "Peach"
+      ],
+      "description": "Shirt : Complete Front Embroidered Fabric : Summer Cotton with Digital Print Dupatta : Lawn Dupatta Trouser Fabric : Cotton Lawn with Digital Print Model is wearing small size",
+      "category": "Unstitched",
+      "sizes": [
+        "S",
+        "M",
+        "L",
+        "XL"
+      ],
+      "fabric": "Lawn",
+      "name": "3 Piece Embroidered Peach Summer Cotton Suit",
+      "isBestSeller": false,
+      "onSale": false,
+      "season": "Summer",
+      "isNewArrival": true,
+      "price": 6749,
+      "type": "Embroidered",
+      "images": [
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/RHP8482.jpg?v=1778059715",
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/RHP8504.jpg?v=1778059795",
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/RHP8507.jpg?v=1778059644",
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/RHP8470.jpg?v=1778059644"
+      ],
+      "stock": 10,
+      "viewers": 17,
+      "pieces": "3 Piece",
+      "collection": "New Arrivals 26"
+    },
+    {
+      "pieces": "3 Piece",
+      "isNewArrival": true,
+      "isBestSeller": false,
+      "images": [
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/RHP8164.jpg?v=1778058763",
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/RHP8185.jpg?v=1778058783",
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/RHP8159.jpg?v=1778058719",
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/RHP8166.jpg?v=1778058719"
+      ],
+      "sizes": [
+        "S",
+        "M",
+        "L",
+        "XL"
+      ],
+      "id": "ms-015",
+      "name": "Embroidered 3 Piece Ivory Cream Suite With Floral Print",
+      "features": [
+        "Shirt : Complete Front Embroidered",
+        "Fabric : Summer Cotton with Digital Print",
+        "Dupatta : Lawn",
+        "Dupatta",
+        "Trouser"
+      ],
+      "description": "Shirt : Complete Front Embroidered Fabric : Summer Cotton with Digital Print Dupatta : Lawn Dupatta Trouser Fabric : Cotton Lawn with Digital Print Model is wearing small size",
+      "season": "Summer",
+      "onSale": false,
+      "type": "Embroidered",
+      "category": "Unstitched",
+      "fabric": "Lawn",
+      "price": 6899,
+      "stock": 10,
+      "viewers": 9,
+      "colors": [
+        "Ivory Cream"
+      ],
+      "collection": "New Arrivals 26"
+    },
+    {
+      "price": 6799,
+      "onSale": false,
+      "collection": "New Arrivals 26",
+      "stock": 10,
+      "season": "Summer",
+      "name": "3 Piece Summer Cotton Suite-Embroidered",
+      "isBestSeller": false,
+      "description": "Shirt : Complete Front Embroidered Fabric : Summer Cotton Dupatta : Chiffon Dupatta Trouser Fabric : Cotton Lawn Model is wearing small size",
+      "colors": [
+        "Multi"
+      ],
+      "fabric": "Lawn",
+      "isNewArrival": true,
+      "type": "Embroidered",
+      "features": [
+        "Shirt : Complete Front Embroidered",
+        "Fabric : Summer Cotton",
+        "Dupatta : Chiffon",
+        "Dupatta",
+        "Trouser"
+      ],
+      "id": "ms-016",
+      "sizes": [
+        "S",
+        "M",
+        "L",
+        "XL"
+      ],
+      "pieces": "3 Piece",
+      "category": "Unstitched",
+      "images": [
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/DSC09707.jpg?v=1777387697",
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/DSC09726.jpg?v=1777387715",
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/DSC09732.jpg?v=1777387653",
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/DSC09714.jpg?v=1777387654"
+      ],
+      "viewers": 13
+    },
+    {
+      "season": "Summer",
+      "id": "ms-017",
+      "onSale": false,
+      "price": 6999,
+      "name": "3 Piece Mustard suite-Embroidered",
+      "fabric": "Lawn",
+      "description": "Shirt : Complete Front Embroidered Fabric : Summer Cotton Dupatta : Chiffon Dupatta Trouser Fabric : Cotton Lawn Model is wearing small size",
+      "viewers": 18,
+      "collection": "New Arrivals 26",
       "stock": 10,
       "colors": [
-        "Indigo Blue",
-        "Chalk White"
+        "Mustard Yellow"
       ],
-      "viewers": 7,
-      "isNewArrival": false,
-      "features": [
-        "Printed Premium Lawn Shirt (3m)",
-        "Dyed Premium Cotton Trouser (2.5m)",
-        "Printed Pure Swiss Voile Dupatta (2.5m)"
-      ]
-    },
-    {
-      "id": "zar-008",
-      "name": "Sunehri Ochre",
-      "price": 6750,
-      "fabric": "Chiffon",
       "type": "Embroidered",
-      "collection": "Festive Chiffon 26",
-      "images": [
-        "https://picsum.photos/seed/zar008a/800/1067",
-        "https://picsum.photos/seed/zar008b/800/1067"
-      ],
-      "description": "A warm ochre and gold embroidered unstitched chiffon suite celebrating heritage thread works. Delicately patterned with Kashmiri-style neck embroidery and paired with a contrasting rich rust-toned dupatta.",
-      "stock": 7,
-      "colors": [
-        "Ochre Gold",
-        "Rust Orange"
-      ],
-      "viewers": 8,
-      "isNewArrival": false,
-      "features": [
-        "Embroidered Chiffon Front (1.25m)",
-        "Dyed Chiffon Back & Sleeves (1.75m)",
-        "Embroidered Collar & Slit Lace (1.5m)",
-        "Dyed Raw Silk Trouser (2.5m)",
-        "Embroidered Contrast Organza Dupatta (2.5m)"
-      ]
-    },
-    {
-      "id": "zar-009",
-      "name": "Shabnam Lilac",
-      "price": 6200,
-      "fabric": "Lawn",
-      "type": "Embroidered",
-      "collection": "Festive Lawn 26",
-      "images": [
-        "https://picsum.photos/seed/zar009a/800/1067",
-        "https://picsum.photos/seed/zar009b/800/1067"
-      ],
-      "description": "A pastel dream featuring a light lilac premium unstitched lawn, adorned with intricate self-tone lavender and white cotton threads embroidery. Includes a romantic organza dupatta with floral vine print borders.",
-      "stock": 9,
-      "colors": [
-        "Lilac Lavender",
-        "Pearl White"
-      ],
-      "viewers": 11,
+      "pieces": "3 Piece",
       "isNewArrival": true,
       "features": [
-        "Embroidered Lawn Front (1.25m)",
-        "Dyed Lawn Back & Sleeves (1.75m)",
-        "Embroidered Sleeves motif patches (2 units)",
-        "Dyed cambric cotton Trouser (2.5m)",
-        "Digital Printed Organza Dupatta (2.5m)"
+        "Shirt : Complete Front Embroidered",
+        "Fabric : Summer Cotton",
+        "Dupatta : Chiffon",
+        "Dupatta",
+        "Trouser"
+      ],
+      "images": [
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/DSC09986.jpg?v=1777389184",
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/DSC09997.jpg?v=1777389208",
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/DSC09999.jpg?v=1777389145",
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/DSC09981.jpg?v=1777389144"
+      ],
+      "sizes": [
+        "S",
+        "M",
+        "L",
+        "XL"
+      ],
+      "isBestSeller": true,
+      "category": "Unstitched"
+    },
+    {
+      "type": "Embroidered",
+      "sizes": [
+        "S",
+        "M",
+        "L",
+        "XL"
+      ],
+      "images": [
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/DSC09912.jpg?v=1777388495",
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/DSC09924.jpg?v=1777388516",
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/DSC09926.jpg?v=1777388228",
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/DSC09909.jpg?v=1777388228"
+      ],
+      "id": "ms-018",
+      "description": "Shirt : Complete Front Embroidered Fabric : Summer Cotton Dupatta : Chiffon Dupatta Trouser Fabric : Cotton Lawn Model is wearing small size",
+      "features": [
+        "Shirt : Complete Front Embroidered",
+        "Fabric : Summer Cotton",
+        "Dupatta : Chiffon",
+        "Dupatta",
+        "Trouser"
+      ],
+      "viewers": 10,
+      "category": "Unstitched",
+      "pieces": "3 Piece",
+      "colors": [
+        "Brown"
+      ],
+      "collection": "New Arrivals 26",
+      "price": 6999,
+      "stock": 10,
+      "fabric": "Lawn",
+      "onSale": false,
+      "isBestSeller": false,
+      "name": "3 Piece Embroidered Chestnut Brown Suite",
+      "isNewArrival": true,
+      "season": "Summer"
+    },
+    {
+      "category": "Unstitched",
+      "colors": [
+        "Multi"
+      ],
+      "type": "Embroidered",
+      "description": "Shirt : Complete Front Embroidered Fabric : Summer Cotton Dupatta : Chiffon Dupatta Trouser Fabric : Cotton Lawn Model is wearing small size",
+      "fabric": "Lawn",
+      "sizes": [
+        "S",
+        "M",
+        "L",
+        "XL"
+      ],
+      "features": [
+        "Shirt : Complete Front Embroidered",
+        "Fabric : Summer Cotton",
+        "Dupatta : Chiffon",
+        "Dupatta",
+        "Trouser"
+      ],
+      "onSale": false,
+      "season": "Summer",
+      "isNewArrival": true,
+      "price": 6799,
+      "collection": "New Arrivals 26",
+      "viewers": 10,
+      "id": "ms-019",
+      "isBestSeller": false,
+      "stock": 10,
+      "images": [
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/DSC09881_c04c42f9-a952-4a05-8aa5-8c29283351a4.jpg?v=1777388837",
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/DSC09886_86e3ad7f-2c96-4407-947c-88bf0cedb45f.jpg?v=1777388860",
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/DSC09888_d0cf5881-42b4-48c2-99c7-a25ad01c740e.jpg?v=1777388791",
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/DSC09894_2b987464-925b-418d-bd45-00b72c47bf4f.jpg?v=1777388791"
+      ],
+      "pieces": "3 Piece",
+      "name": "3 Piece Summer Cotton Suite-Embroidered"
+    },
+    {
+      "pieces": "3 Piece",
+      "features": [
+        "Shirt : Complete Front Embroidered",
+        "Fabric : Summer Cotton",
+        "Dupatta : Lawn",
+        "Dupatta",
+        "Trouser"
+      ],
+      "isNewArrival": true,
+      "images": [
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/RHP8367.jpg?v=1777387294",
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/RHP8398.jpg?v=1777387318",
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/RHP8415.jpg?v=1777387240",
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/RHP8382.jpg?v=1777387241"
+      ],
+      "stock": 10,
+      "isBestSeller": false,
+      "type": "Embroidered",
+      "price": 6999,
+      "category": "Unstitched",
+      "description": "Shirt : Complete Front Embroidered Fabric : Summer Cotton Dupatta : Lawn Dupatta Trouser Fabric : Cotton Lawn Model is wearing small size",
+      "season": "Summer",
+      "id": "ms-020",
+      "name": "Embroidered  3 Piece Ivory Cream suite",
+      "onSale": false,
+      "fabric": "Lawn",
+      "collection": "New Arrivals 26",
+      "sizes": [
+        "S",
+        "M",
+        "L",
+        "XL"
+      ],
+      "viewers": 12,
+      "colors": [
+        "Ivory Cream"
       ]
     },
     {
-      "id": "ms-bag01",
-      "name": "Classic Gold Embellished Clutch",
-      "price": 350,
+      "pieces": "3 Piece",
+      "price": 6899,
+      "images": [
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/DSC09783.jpg?v=1777386830",
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/DSC09798.jpg?v=1777386852",
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/DSC09804.jpg?v=1777386779",
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/DSC09782.jpg?v=1777386778"
+      ],
+      "collection": "New Arrivals 26",
+      "name": "3 Piece Orchid Pink suite-Embroidered",
+      "viewers": 5,
+      "stock": 10,
+      "description": "Shirt : Complete Front Embroidered Fabric : Summer Cotton Dupatta : Chiffon Dupatta Trouser Fabric : Cotton Lawn Model is wearing small size",
+      "season": "Summer",
+      "isBestSeller": false,
+      "id": "ms-021",
+      "type": "Embroidered",
+      "isNewArrival": true,
+      "onSale": false,
+      "features": [
+        "Shirt : Complete Front Embroidered",
+        "Fabric : Summer Cotton",
+        "Dupatta : Chiffon",
+        "Dupatta",
+        "Trouser"
+      ],
+      "fabric": "Lawn",
+      "sizes": [
+        "S",
+        "M",
+        "L",
+        "XL"
+      ],
+      "colors": [
+        "Pink"
+      ],
+      "category": "Unstitched"
+    },
+    {
+      "pieces": "3 Piece",
+      "viewers": 13,
+      "isNewArrival": true,
+      "images": [
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/RHP8262.jpg?v=1777376003",
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/RHP8277.jpg?v=1777376043",
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/RHP8254.jpg?v=1777375903",
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/RHP8292.jpg?v=1777375904"
+      ],
+      "name": "3 Piece Slate Teal suite-Embroidered",
+      "category": "Unstitched",
+      "isBestSeller": false,
+      "features": [
+        "Shirt : Complete Front Embroidered",
+        "Fabric : Summer Cotton",
+        "Dupatta : Lawn",
+        "Dupatta",
+        "Trouser"
+      ],
+      "sizes": [
+        "S",
+        "M",
+        "L",
+        "XL"
+      ],
+      "description": "Shirt : Complete Front Embroidered Fabric : Summer Cotton Dupatta : Lawn Dupatta Trouser Fabric : Cotton Lawn Model is wearing small size",
+      "type": "Embroidered",
+      "season": "Summer",
+      "onSale": false,
+      "collection": "New Arrivals 26",
+      "price": 6999,
+      "fabric": "Lawn",
+      "stock": 10,
+      "id": "ms-022",
+      "colors": [
+        "Teal"
+      ]
+    },
+    {
+      "viewers": 16,
+      "fabric": "Lawn",
+      "colors": [
+        "Multi"
+      ],
+      "isNewArrival": true,
+      "category": "Unstitched",
+      "season": "Summer",
+      "price": 6799,
+      "stock": 10,
+      "isBestSeller": false,
+      "features": [
+        "Shirt : Front Embroidered With Print",
+        "Fabric : Cotton Lawn",
+        "Dupatta : Chiffon",
+        "Dupatta",
+        "Farshi Shalwar"
+      ],
+      "onSale": false,
+      "name": "Embroidered 3 Piece Suite-Farshi Shalwar",
+      "collection": "New Arrivals 26",
+      "images": [
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/DSC04143.jpg?v=1775827868",
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/DSC04161.jpg?v=1775827868",
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/DSC04164.jpg?v=1775827868",
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/DSC04137.jpg?v=1775827868"
+      ],
+      "type": "Embroidered",
+      "pieces": "3 Piece",
+      "description": "Shirt : Front Embroidered With Print Fabric : Cotton Lawn Dupatta : Chiffon Dupatta Farshi Shalwar Fabric : Cotton Lawn Model is wearing small size",
+      "id": "ms-023",
+      "sizes": [
+        "S",
+        "M",
+        "L",
+        "XL"
+      ]
+    },
+    {
+      "sizes": [
+        "S",
+        "M",
+        "L",
+        "XL"
+      ],
+      "description": "Shirt : Front Embroidered With Print Fabric : Cotton Lawn Dupatta : Chiffon Dupatta Trouser Fabric : Cotton Lawn Model is wearing small size",
+      "images": [
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/DSC04111.jpg?v=1775827403",
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/DSC04130.jpg?v=1775827403",
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/DSC04134.jpg?v=1775827403",
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/DSC04116.jpg?v=1775827403"
+      ],
+      "viewers": 4,
+      "id": "ms-024",
+      "type": "Embroidered",
+      "stock": 10,
+      "isNewArrival": true,
+      "isBestSeller": false,
+      "colors": [
+        "Multi"
+      ],
+      "category": "Unstitched",
+      "features": [
+        "Shirt : Front Embroidered With Print",
+        "Fabric : Cotton Lawn",
+        "Dupatta : Chiffon",
+        "Dupatta",
+        "Trouser"
+      ],
+      "collection": "New Arrivals 26",
+      "season": "Summer",
+      "pieces": "3 Piece",
+      "fabric": "Lawn",
+      "name": "Embroidered 3 Piece Suite-Chiffon Dupatta",
+      "price": 6999,
+      "onSale": false
+    },
+    {
+      "pieces": "3 Piece",
+      "collection": "New Arrivals 26",
+      "id": "ms-025",
+      "type": "Embroidered",
+      "description": "Shirt : Front Embroidered With Print Fabric : Cotton Lawn Dupatta : Chiffon Dupatta Trouser Fabric : Cotton Lawn Model is wearing small size",
+      "isNewArrival": true,
+      "price": 6899,
+      "images": [
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/DSC04078.jpg?v=1775826427",
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/DSC04105.jpg?v=1775826427",
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/DSC04106.jpg?v=1775826427",
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/DSC04094.jpg?v=1775826427"
+      ],
+      "isBestSeller": true,
+      "viewers": 13,
+      "stock": 10,
+      "season": "Summer",
+      "onSale": false,
+      "features": [
+        "Shirt : Front Embroidered With Print",
+        "Fabric : Cotton Lawn",
+        "Dupatta : Chiffon",
+        "Dupatta",
+        "Trouser"
+      ],
+      "fabric": "Lawn",
+      "name": "Embroidered 3 Piece Suite-Chiffon Dupatta",
+      "sizes": [
+        "S",
+        "M",
+        "L",
+        "XL"
+      ],
+      "colors": [
+        "Multi"
+      ],
+      "category": "Unstitched"
+    },
+    {
+      "pieces": "3 Piece",
+      "description": "Shirt : Front Embroidered With Print Fabric : Cotton Lawn Dupatta : Chiffon Dupatta Trouser Fabric : Cotton Lawn Model is wearing small size",
+      "images": [
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/DSC03991.jpg?v=1775825955",
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/DSC04004.jpg?v=1775825955",
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/DSC04010.jpg?v=1775825955",
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/DSC04001.jpg?v=1775825955"
+      ],
+      "stock": 10,
+      "isBestSeller": false,
+      "type": "Embroidered",
+      "isNewArrival": true,
+      "price": 6799,
+      "season": "Summer",
+      "id": "ms-026",
+      "name": "Embroidered 3 Piece Suite-Chiffon Dupatta",
+      "onSale": false,
+      "features": [
+        "Shirt : Front Embroidered With Print",
+        "Fabric : Cotton Lawn",
+        "Dupatta : Chiffon",
+        "Dupatta",
+        "Trouser"
+      ],
+      "collection": "New Arrivals 26",
+      "fabric": "Lawn",
+      "sizes": [
+        "S",
+        "M",
+        "L",
+        "XL"
+      ],
+      "viewers": 11,
+      "colors": [
+        "Multi"
+      ],
+      "category": "Unstitched"
+    },
+    {
+      "pieces": "3 Piece",
+      "isBestSeller": false,
+      "isNewArrival": true,
+      "features": [
+        "Shirt : Front Embroidered With Print",
+        "Fabric : Cotton Lawn",
+        "Dupatta : Chiffon",
+        "Dupatta",
+        "Trouser"
+      ],
+      "price": 7199,
+      "images": [
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/DSC03882.jpg?v=1775825631",
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/DSC03899.jpg?v=1775825651",
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/DSC03904.jpg?v=1775825603",
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/DSC03884.jpg?v=1775825603"
+      ],
+      "viewers": 11,
+      "stock": 10,
+      "name": "Embroidered 3 Piece Suite-Chiffon Dupatta",
+      "collection": "New Arrivals 26",
+      "category": "Unstitched",
+      "season": "Summer",
+      "type": "Embroidered",
+      "id": "ms-027",
+      "onSale": false,
+      "fabric": "Lawn",
+      "colors": [
+        "Multi"
+      ],
+      "sizes": [
+        "S",
+        "M",
+        "L",
+        "XL"
+      ],
+      "description": "Shirt : Front Embroidered With Print Fabric : Cotton Lawn Dupatta : Chiffon Dupatta Trouser Fabric : Cotton Lawn Model is wearing small size"
+    },
+    {
+      "features": [
+        "Shirt : Front Embroidered With Print",
+        "Fabric : Cotton Lawn",
+        "Dupatta : Chiffon",
+        "Dupatta",
+        "Trouser"
+      ],
+      "season": "Summer",
+      "onSale": false,
+      "category": "Unstitched",
+      "isNewArrival": true,
+      "name": "Embroidered 3 Piece Suite-Chiffon Dupatta",
+      "fabric": "Lawn",
+      "sizes": [
+        "S",
+        "M",
+        "L",
+        "XL"
+      ],
+      "isBestSeller": false,
+      "colors": [
+        "Multi"
+      ],
+      "pieces": "3 Piece",
+      "type": "Embroidered",
+      "price": 6999,
+      "collection": "New Arrivals 26",
+      "images": [
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/DSC03819.jpg?v=1775825304",
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/DSC03823.jpg?v=1775825304",
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/DSC03829.jpg?v=1775825304",
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/DSC03806.jpg?v=1775825304"
+      ],
+      "description": "Shirt : Front Embroidered With Print Fabric : Cotton Lawn Dupatta : Chiffon Dupatta Trouser Fabric : Cotton Lawn Model is wearing small size",
+      "viewers": 11,
+      "stock": 10,
+      "id": "ms-028"
+    },
+    {
+      "images": [
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/DSC04205.jpg?v=1775476069",
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/DSC04228.jpg?v=1775476069",
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/DSC04231.jpg?v=1775476069",
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/DSC04210.jpg?v=1775476069"
+      ],
+      "isNewArrival": true,
+      "pieces": "3 Piece",
+      "name": "Embroidered 3 Piece Suite-Chiffon Dupatta",
+      "sizes": [
+        "S",
+        "M",
+        "L",
+        "XL"
+      ],
+      "isBestSeller": false,
+      "collection": "New Arrivals 26",
+      "category": "Unstitched",
+      "type": "Embroidered",
+      "viewers": 4,
+      "fabric": "Lawn",
+      "description": "Shirt : Front Embroidered With Print Fabric : Cotton Lawn Dupatta : Chiffon Dupatta Trouser Fabric : Cotton Lawn Model is wearing small size",
+      "id": "ms-029",
+      "features": [
+        "Shirt : Front Embroidered With Print",
+        "Fabric : Cotton Lawn",
+        "Dupatta : Chiffon",
+        "Dupatta",
+        "Trouser"
+      ],
+      "colors": [
+        "Multi"
+      ],
+      "price": 6999,
+      "season": "Summer",
+      "stock": 10,
+      "onSale": false
+    },
+    {
+      "name": "Embroidered 3 Piece Suite-Chiffon Dupatta",
+      "sizes": [
+        "S",
+        "M",
+        "L",
+        "XL"
+      ],
+      "colors": [
+        "Multi"
+      ],
+      "id": "ms-030",
+      "fabric": "Lawn",
+      "description": "Shirt : Front Embroidered With Print Fabric : Cotton Lawn Dupatta : Chiffon Dupatta Trouser Fabric : Cotton Lawn Model is wearing small size",
+      "onSale": false,
+      "features": [
+        "Shirt : Front Embroidered With Print",
+        "Fabric : Cotton Lawn",
+        "Dupatta : Chiffon",
+        "Dupatta",
+        "Trouser"
+      ],
+      "category": "Unstitched",
+      "season": "Summer",
+      "stock": 10,
+      "images": [
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/DSC04050.jpg?v=1775475512",
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/DSC04068.jpg?v=1775475512",
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/DSC04072.jpg?v=1775475512",
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/DSC04057.jpg?v=1775475512"
+      ],
+      "price": 6999,
+      "collection": "New Arrivals 26",
+      "type": "Embroidered",
+      "isNewArrival": true,
+      "viewers": 13,
+      "isBestSeller": false,
+      "pieces": "3 Piece"
+    },
+    {
+      "images": [
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/DSC03775.jpg?v=1775475264",
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/DSC03757.jpg?v=1775475264",
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/DSC03766.jpg?v=1775475264",
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/DSC03741.jpg?v=1775475264"
+      ],
+      "stock": 10,
+      "pieces": "3 Piece",
+      "features": [
+        "Shirt : Front Embroidered With Print",
+        "Fabric : Cotton Lawn",
+        "Dupatta : Chiffon",
+        "Dupatta",
+        "Trouser"
+      ],
+      "isBestSeller": false,
+      "category": "Unstitched",
+      "isNewArrival": true,
+      "type": "Embroidered",
+      "price": 6999,
+      "fabric": "Lawn",
+      "colors": [
+        "Multi"
+      ],
+      "name": "Embroidered 3 Piece Suite-Chiffon Dupatta",
+      "season": "Summer",
+      "viewers": 7,
+      "id": "ms-031",
+      "sizes": [
+        "S",
+        "M",
+        "L",
+        "XL"
+      ],
+      "description": "Shirt : Front Embroidered With Print Fabric : Cotton Lawn Dupatta : Chiffon Dupatta Trouser Fabric : Cotton Lawn Model is wearing small size",
+      "onSale": false,
+      "collection": "New Arrivals 26"
+    },
+    {
+      "images": [
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/DSC03212.jpg?v=1762499301",
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/DSC03223.jpg?v=1762499342",
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/DSC03231.jpg?v=1762499342",
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/DSC03237.jpg?v=1762499342"
+      ],
+      "isNewArrival": true,
+      "isBestSeller": false,
+      "name": "3 Piece Cotton Lawn Suit Stitched-Embroidered",
+      "id": "ms-032",
+      "collection": "New Arrivals 26",
+      "viewers": 24,
+      "pieces": "3 Piece",
+      "sizes": [
+        "S",
+        "M",
+        "L",
+        "XL"
+      ],
+      "fabric": "Lawn",
+      "features": [
+        "Shirt Complete Front Embroidered",
+        "Fabric : Summer Cotton",
+        "Dupatta Printed Diomond",
+        "Dupatta",
+        "Trouser"
+      ],
+      "colors": [
+        "Multi"
+      ],
+      "category": "Unstitched",
+      "season": "Summer",
+      "stock": 10,
+      "onSale": false,
+      "type": "Embroidered",
+      "price": 5799,
+      "description": "Shirt Complete Front EmbroideredFabric : Summer Cotton Dupatta Printed Diomond Dupatta Trouser Fabric : Summer Cotton Model is wearing small size"
+    },
+    {
+      "price": 6899,
+      "type": "Embroidered",
+      "viewers": 7,
+      "images": [
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/DSC04022.jpg?v=1773563908",
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/DSC04042.jpg?v=1773563908",
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/DSC04044.jpg?v=1773563908",
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/DSC04019.jpg?v=1773563908"
+      ],
+      "stock": 10,
+      "collection": "New Arrivals 26",
+      "pieces": "3 Piece",
+      "id": "ms-033",
+      "colors": [
+        "Multi"
+      ],
+      "description": "Shirt : Front Embroidered With Print Fabric : Cotton Lawn Dupatta : Chiffon Dupatta Trouser Fabric : Cotton Lawn Model is wearing small size",
+      "sizes": [
+        "S",
+        "M",
+        "L",
+        "XL"
+      ],
+      "fabric": "Lawn",
+      "category": "Unstitched",
+      "isNewArrival": true,
+      "onSale": false,
+      "name": "Embroidered 3 Piece Suite-Chiffon Dupatta",
+      "isBestSeller": true,
+      "features": [
+        "Shirt : Front Embroidered With Print",
+        "Fabric : Cotton Lawn",
+        "Dupatta : Chiffon",
+        "Dupatta",
+        "Trouser"
+      ],
+      "season": "Summer"
+    },
+    {
+      "isBestSeller": false,
+      "season": "Summer",
+      "collection": "New Arrivals 26",
+      "isNewArrival": true,
+      "onSale": false,
+      "name": "3 Piece Cotton Lawn Suit Stitched-Embroidered",
+      "fabric": "Lawn",
+      "sizes": [
+        "S",
+        "M",
+        "L",
+        "XL"
+      ],
+      "description": "Shirt Complete Front EmbroideredFabric : Summer Cotton Dupatta Printed Diomond Dupatta Trouser Fabric : Summer Cotton Model is wearing small size",
+      "colors": [
+        "Multi"
+      ],
+      "features": [
+        "Shirt Complete Front Embroidered",
+        "Fabric : Summer Cotton",
+        "Dupatta Printed Diomond",
+        "Dupatta",
+        "Trouser"
+      ],
+      "pieces": "3 Piece",
+      "type": "Embroidered",
+      "category": "Unstitched",
+      "price": 5699,
+      "images": [
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/DSC2109.jpg?v=1773566783",
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/DSC2123.jpg?v=1773566783",
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/DSC2141.jpg?v=1773566783",
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/DSC2117.jpg?v=1773566783"
+      ],
+      "viewers": 4,
+      "stock": 10,
+      "id": "ms-034"
+    },
+    {
+      "season": "Summer",
+      "name": "3 Piece Cotton Lawn Suit Stitched-Embroidered",
+      "onSale": false,
+      "isNewArrival": true,
+      "sizes": [
+        "S",
+        "M",
+        "L",
+        "XL"
+      ],
+      "fabric": "Lawn",
+      "collection": "New Arrivals 26",
+      "isBestSeller": false,
+      "colors": [
+        "Multi"
+      ],
+      "description": "Shirt Complete Front EmbroideredFabric : Summer Cotton Dupatta Printed Diomond Dupatta Trouser Fabric : Summer Cotton Model is wearing small size",
+      "pieces": "3 Piece",
+      "images": [
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/DSC4868.jpg?v=1760686994",
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/DSC4882.jpg?v=1760687060",
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/DSC4891.jpg?v=1760687060",
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/DSC4894.jpg?v=1760687060"
+      ],
+      "features": [
+        "Shirt Complete Front Embroidered",
+        "Fabric : Summer Cotton",
+        "Dupatta Printed Diomond",
+        "Dupatta",
+        "Trouser"
+      ],
+      "stock": 10,
+      "type": "Embroidered",
+      "viewers": 13,
+      "price": 5649,
+      "id": "ms-035",
+      "category": "Unstitched"
+    },
+    {
+      "pieces": "3 Piece",
+      "description": "Shirt Complete Front EmbroideredFabric : Summer Cotton Dupatta Printed Diomond Dupatta Trouser Fabric : Summer Cotton Model is wearing small size",
+      "images": [
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/DSC03057.jpg?v=1762340892",
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/DSC03066.jpg?v=1762340892",
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/DSC03072.jpg?v=1762340892",
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/DSC03076.jpg?v=1762340892"
+      ],
+      "sizes": [
+        "S",
+        "M",
+        "L",
+        "XL"
+      ],
+      "type": "Embroidered",
+      "category": "Unstitched",
+      "features": [
+        "Shirt Complete Front Embroidered",
+        "Fabric : Summer Cotton",
+        "Dupatta Printed Diomond",
+        "Dupatta",
+        "Trouser"
+      ],
+      "season": "Summer",
+      "name": "3 Piece Cotton Lawn Suit Stitched-Embroidered",
+      "viewers": 13,
+      "onSale": false,
+      "isNewArrival": true,
+      "id": "ms-036",
+      "fabric": "Lawn",
+      "stock": 10,
+      "collection": "New Arrivals 26",
+      "isBestSeller": false,
+      "price": 5699,
+      "colors": [
+        "Multi"
+      ]
+    },
+    {
+      "stock": 10,
+      "isNewArrival": true,
+      "isBestSeller": false,
+      "images": [
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/RHP08093.jpg?v=1772908345",
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/RHP08117.jpg?v=1772908345",
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/RHP08085.jpg?v=1772908345",
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/RHP08090.jpg?v=1772908345"
+      ],
+      "price": 7299,
+      "features": [
+        "Shirt Complete Front Embroidered",
+        "Fabric : Summer Cotton",
+        "Dupatta Printed Diomond",
+        "Dupatta",
+        "Trouser"
+      ],
+      "category": "Unstitched",
+      "id": "ms-037",
+      "pieces": "3 Piece",
+      "collection": "New Arrivals 26",
+      "type": "Embroidered",
+      "colors": [
+        "Multi"
+      ],
+      "description": "Shirt Complete Front EmbroideredFabric : Summer Cotton Dupatta Printed Diomond Dupatta Trouser Fabric : Summer Cotton Model is wearing small size",
+      "sizes": [
+        "S",
+        "M",
+        "L",
+        "XL"
+      ],
+      "fabric": "Lawn",
+      "name": "Embroidered Summer Cotton Suit-3 Piece Stitched",
+      "onSale": false,
+      "viewers": 27,
+      "season": "Summer"
+    },
+    {
+      "sizes": [
+        "S",
+        "M",
+        "L",
+        "XL"
+      ],
+      "name": "3 Piece Embroidered Summer Cotton Suit-Stitched",
+      "images": [
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/RHP07829.jpg?v=1772907562",
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/RHP07839.jpg?v=1772907563",
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/RHP07842.jpg?v=1772907563",
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/RHP07848.jpg?v=1772907563"
+      ],
+      "category": "Unstitched",
+      "features": [
+        "Shirt Complete Front Embroidered",
+        "Fabric : Summer Cotton",
+        "Dupatta Printed Diomond",
+        "Dupatta",
+        "Trouser"
+      ],
+      "pieces": "3 Piece",
+      "colors": [
+        "Multi"
+      ],
+      "viewers": 8,
+      "id": "ms-038",
+      "stock": 10,
+      "price": 6849,
+      "fabric": "Lawn",
+      "collection": "New Arrivals 26",
+      "type": "Embroidered",
+      "isNewArrival": true,
+      "onSale": false,
+      "isBestSeller": false,
+      "season": "Summer",
+      "description": "Shirt Complete Front EmbroideredFabric : Summer Cotton Dupatta Printed Diomond Dupatta Trouser Fabric : Summer Cotton Model is wearing small size"
+    },
+    {
+      "price": 6699,
+      "type": "Embroidered",
+      "onSale": false,
+      "season": "Summer",
+      "stock": 10,
+      "features": [
+        "Shirt Complete Front Embroidered",
+        "Fabric : Summer Cotton",
+        "Dupatta Printed Diomond",
+        "Dupatta",
+        "Trouser"
+      ],
+      "colors": [
+        "Multi"
+      ],
+      "category": "Unstitched",
+      "collection": "New Arrivals 26",
+      "viewers": 21,
+      "fabric": "Lawn",
+      "isNewArrival": true,
+      "isBestSeller": false,
+      "sizes": [
+        "S",
+        "M",
+        "L",
+        "XL"
+      ],
+      "id": "ms-039",
+      "pieces": "3 Piece",
+      "description": "Shirt Complete Front EmbroideredFabric : Summer Cotton Dupatta Printed Diomond Dupatta Trouser Fabric : Summer Cotton Model is wearing small size",
+      "name": "3 Piece Embroidered Summer Cotton Suit-Stitched",
+      "images": [
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/RHP07796.jpg?v=1772907299",
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/RHP07821.jpg?v=1772907523",
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/RHP07825.jpg?v=1772907523",
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/RHP07802.jpg?v=1772907523"
+      ]
+    },
+    {
+      "collection": "New Arrivals 26",
+      "onSale": false,
+      "season": "Summer",
+      "viewers": 24,
+      "sizes": [
+        "S",
+        "M",
+        "L",
+        "XL"
+      ],
+      "type": "Embroidered",
+      "isNewArrival": true,
+      "colors": [
+        "Multi"
+      ],
+      "id": "ms-040",
+      "isBestSeller": false,
+      "fabric": "Lawn",
+      "price": 6899,
+      "pieces": "3 Piece",
+      "stock": 10,
+      "description": "Shirt Complete Front EmbroideredFabric : Summer Cotton Dupatta Printed Diomond Dupatta Trouser Fabric : Summer Cotton Model is wearing small size",
+      "category": "Unstitched",
+      "features": [
+        "Shirt Complete Front Embroidered",
+        "Fabric : Summer Cotton",
+        "Dupatta Printed Diomond",
+        "Dupatta",
+        "Trouser"
+      ],
+      "name": "3 Piece Embroidered Summer Cotton Suit-Stitched",
+      "images": [
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/RHP07770.jpg?v=1772907236",
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/RHP07789.jpg?v=1772907264",
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/RHP07791.jpg?v=1772907264",
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/RHP07772.jpg?v=1772907264"
+      ]
+    },
+    {
+      "season": "Summer",
+      "collection": "New Arrivals 26",
+      "onSale": false,
+      "description": "Shirt Complete Front EmbroideredFabric : Summer Cotton Dupatta Printed Diomond Dupatta Trouser Fabric : Summer Cotton Model is wearing small size",
+      "fabric": "Lawn",
+      "category": "Unstitched",
+      "sizes": [
+        "S",
+        "M",
+        "L",
+        "XL"
+      ],
+      "features": [
+        "Shirt Complete Front Embroidered",
+        "Fabric : Summer Cotton",
+        "Dupatta Printed Diomond",
+        "Dupatta",
+        "Trouser"
+      ],
+      "colors": [
+        "Multi"
+      ],
+      "type": "Embroidered",
+      "pieces": "3 Piece",
+      "isNewArrival": true,
+      "viewers": 17,
+      "name": "3 Piece Embroidered Summer Cotton Suit-Stitched",
+      "isBestSeller": true,
+      "stock": 10,
+      "id": "ms-041",
+      "images": [
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/RHP07727.jpg?v=1772906830",
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/RHP07753.jpg?v=1772906830",
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/RHP07754.jpg?v=1772906830",
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/RHP07722.jpg?v=1772906830"
+      ],
+      "price": 6749
+    },
+    {
+      "features": [
+        "Shirt Complete Front Embroidered",
+        "Fabric : Summer Cotton",
+        "Dupatta Printed Diomond",
+        "Dupatta",
+        "Trouser"
+      ],
+      "id": "ms-042",
+      "season": "Summer",
+      "description": "Shirt Complete Front EmbroideredFabric : Summer Cotton Dupatta Printed Diomond Dupatta Trouser Fabric : Summer Cotton Model is wearing small size",
+      "onSale": false,
+      "category": "Unstitched",
+      "type": "Embroidered",
+      "fabric": "Lawn",
+      "stock": 10,
+      "viewers": 14,
+      "price": 6799,
+      "colors": [
+        "Multi"
+      ],
+      "name": "3 Piece Embroidered Summer Cotton Suit-Stitched",
+      "pieces": "3 Piece",
+      "sizes": [
+        "S",
+        "M",
+        "L",
+        "XL"
+      ],
+      "images": [
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/RHP07691.jpg?v=1772906538",
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/RHP07707.jpg?v=1772906570",
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/RHP07714.jpg?v=1772906570",
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/RHP07694.jpg?v=1772906570"
+      ],
+      "isNewArrival": true,
+      "collection": "New Arrivals 26",
+      "isBestSeller": false
+    },
+    {
+      "season": "Summer",
+      "isBestSeller": false,
+      "onSale": false,
+      "isNewArrival": true,
+      "fabric": "Lawn",
+      "collection": "New Arrivals 26",
+      "sizes": [
+        "S",
+        "M",
+        "L",
+        "XL"
+      ],
+      "colors": [
+        "Multi"
+      ],
+      "type": "Embroidered",
+      "pieces": "3 Piece",
+      "viewers": 11,
+      "name": "3 Piece Cotton Lawn Suit Stitched-Embroidered",
+      "id": "ms-043",
+      "stock": 10,
+      "images": [
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/DSC00017.jpg?v=1761549359",
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/DSC00018.jpg?v=1761549392",
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/DSC00041.jpg?v=1761549420",
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/DSC00044.jpg?v=1761549420"
+      ],
+      "description": "Shirt : Front Embroidered With Print Fabric : Cotton Lawn Dupatta : Pure Lawn Dupatta Trouser : Same Fabric Printed Trouser Model is wearing small size",
+      "category": "Unstitched",
+      "features": [
+        "Shirt : Front Embroidered With Print",
+        "Fabric : Cotton Lawn",
+        "Dupatta : Pure Lawn",
+        "Dupatta",
+        "Trouser : Same"
+      ],
+      "price": 5699
+    },
+    {
+      "isBestSeller": false,
+      "pieces": "3 Piece",
+      "type": "Embroidered",
+      "category": "Unstitched",
+      "features": [
+        "Shirt : Front Embroidered With Print",
+        "Fabric : Cotton Lawn",
+        "Dupatta : Pure Lawn",
+        "Dupatta",
+        "Trouser : Same"
+      ],
+      "isNewArrival": true,
+      "description": "Shirt : Front Embroidered With Print Fabric : Cotton Lawn Dupatta : Pure Lawn Dupatta Trouser : Same Fabric Printed Trouser Model is wearing small size",
+      "images": [
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/DSC2049.jpg?v=1760078149",
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/DSC2062.jpg?v=1760078149",
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/DSC2070.jpg?v=1760078149",
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/DSC2073.jpg?v=1760078149"
+      ],
+      "id": "ms-044",
+      "sizes": [
+        "S",
+        "M",
+        "L",
+        "XL"
+      ],
+      "season": "Summer",
+      "collection": "New Arrivals 26",
+      "viewers": 23,
+      "onSale": false,
+      "price": 5849,
+      "name": "3 Piece Cotton Lawn Suit Stitched-Embroidered",
+      "fabric": "Lawn",
+      "stock": 10,
+      "colors": [
+        "Multi"
+      ]
+    },
+    {
+      "price": 5649,
+      "collection": "New Arrivals 26",
+      "viewers": 32,
+      "stock": 10,
+      "images": [
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/DSC4904.jpg?v=1760687225",
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/DSC4910.jpg?v=1760687225",
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/DSC4922.jpg?v=1760687225",
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/DSC4926.jpg?v=1760687225"
+      ],
+      "isNewArrival": true,
+      "name": "3 Piece Cotton Lawn Suit Stitched-Embroidered",
+      "pieces": "3 Piece",
+      "isBestSeller": false,
+      "description": "Shirt : Front Embroidered With Print Fabric : Cotton Lawn Dupatta : Pure Lawn Dupatta Trouser : Same Fabric Printed Trouser Model is wearing small size",
+      "type": "Embroidered",
+      "colors": [
+        "Multi"
+      ],
+      "sizes": [
+        "S",
+        "M",
+        "L",
+        "XL"
+      ],
+      "fabric": "Lawn",
+      "category": "Unstitched",
+      "id": "ms-045",
+      "onSale": false,
+      "season": "Summer",
+      "features": [
+        "Shirt : Front Embroidered With Print",
+        "Fabric : Cotton Lawn",
+        "Dupatta : Pure Lawn",
+        "Dupatta",
+        "Trouser : Same"
+      ]
+    },
+    {
+      "features": [
+        "Shirt : Front Embroidered With Print",
+        "Fabric : Cotton Lawn",
+        "Dupatta : Pure Lawn",
+        "Dupatta",
+        "Trouser : Same"
+      ],
+      "pieces": "3 Piece",
+      "name": "3 Piece Cotton Lawn Suit Stitched-Embroidered",
+      "category": "Unstitched",
+      "id": "ms-046",
+      "isNewArrival": true,
+      "images": [
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/DSC09904_7c01a0a0-29b1-4cc0-a8c2-75aff8a1e753.jpg?v=1761550576",
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/DSC09915_d5b32328-5cc3-499b-8a34-6a77d020ccff.jpg?v=1761550576",
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/DSC09918_3b405fb1-faec-4907-8bd4-ca910b889d08.jpg?v=1761550576",
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/DSC09933_83a2a195-55a9-47cb-9284-dd2b07e90bbd.jpg?v=1761550576"
+      ],
+      "stock": 10,
+      "viewers": 6,
+      "isBestSeller": false,
+      "price": 5699,
+      "season": "Summer",
+      "onSale": false,
+      "fabric": "Lawn",
+      "sizes": [
+        "S",
+        "M",
+        "L",
+        "XL"
+      ],
+      "collection": "New Arrivals 26",
+      "description": "Shirt : Front Embroidered With Print Fabric : Cotton Lawn Dupatta : Pure Lawn Dupatta Trouser : Same Fabric Printed Trouser Model is wearing small size",
+      "colors": [
+        "Multi"
+      ],
+      "type": "Embroidered"
+    },
+    {
+      "viewers": 26,
+      "isBestSeller": false,
+      "type": "Embroidered",
+      "images": [
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/DSC03152.jpg?v=1772259830",
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/DSC03157.jpg?v=1772259830",
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/DSC03162.jpg?v=1772259830",
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/DSC03166.jpg?v=1772259830"
+      ],
+      "isNewArrival": true,
+      "id": "ms-047",
+      "price": 5749,
+      "pieces": "3 Piece",
+      "category": "Unstitched",
+      "stock": 3,
+      "features": [
+        "Shirt : Front Embroidered With Print",
+        "Fabric : Cotton Lawn",
+        "Dupatta : Pure Lawn",
+        "Dupatta",
+        "Trouser : Same"
+      ],
+      "fabric": "Lawn",
+      "colors": [
+        "Multi"
+      ],
+      "name": "3 Piece Cotton Lawn Suit Stitched-Embroidered",
+      "collection": "New Arrivals 26",
+      "season": "Summer",
+      "description": "Shirt : Front Embroidered With Print Fabric : Cotton Lawn Dupatta : Pure Lawn Dupatta Trouser : Same Fabric Printed Trouser Model is wearing small size",
+      "sizes": [
+        "S",
+        "M",
+        "L",
+        "XL"
+      ],
+      "onSale": false
+    },
+    {
+      "price": 5799,
+      "pieces": "3 Piece",
+      "stock": 10,
+      "description": "Shirt : Front Embroidered With Print Fabric : Cotton Lawn Dupatta : Pure Lawn Dupatta Trouser : Same Fabric Printed Trouser Model is wearing small size",
+      "type": "Embroidered",
+      "images": [
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/DSC02836.jpg?v=1762326590",
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/DSC02849.jpg?v=1762326642",
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/DSC02857.jpg?v=1762326642",
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/DSC02862.jpg?v=1762326642"
+      ],
+      "viewers": 21,
+      "onSale": false,
+      "collection": "New Arrivals 26",
+      "season": "Summer",
+      "id": "ms-048",
+      "sizes": [
+        "S",
+        "M",
+        "L",
+        "XL"
+      ],
+      "isBestSeller": false,
+      "features": [
+        "Shirt : Front Embroidered With Print",
+        "Fabric : Cotton Lawn",
+        "Dupatta : Pure Lawn",
+        "Dupatta",
+        "Trouser : Same"
+      ],
+      "colors": [
+        "Multi"
+      ],
+      "isNewArrival": true,
+      "name": "3 Piece Cotton Lawn Suit Stitched-Embroidered",
+      "category": "Unstitched",
+      "fabric": "Lawn"
+    },
+    {
+      "type": "Embroidered",
+      "sizes": [
+        "S",
+        "M",
+        "L",
+        "XL"
+      ],
+      "pieces": "3 Piece",
+      "description": "Shirt : Front Embroidered With Print Fabric : Cotton Lawn Dupatta : Pure Lawn Dupatta Trouser : Same Fabric Printed Trouser Model is wearing small size",
+      "viewers": 9,
+      "isBestSeller": true,
+      "category": "Unstitched",
+      "isNewArrival": true,
+      "features": [
+        "Shirt : Front Embroidered With Print",
+        "Fabric : Cotton Lawn",
+        "Dupatta : Pure Lawn",
+        "Dupatta",
+        "Trouser : Same"
+      ],
+      "images": [
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/DSC03117.jpg?v=1762498526",
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/DSC03131.jpg?v=1762498581",
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/DSC03140.jpg?v=1762498581",
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/DSC03148.jpg?v=1762498581"
+      ],
+      "price": 5699,
+      "collection": "New Arrivals 26",
+      "onSale": false,
+      "stock": 10,
+      "season": "Summer",
+      "name": "3 Piece Cotton Lawn Suit Stitched-Embroidered",
+      "colors": [
+        "Multi"
+      ],
+      "id": "ms-049",
+      "fabric": "Lawn"
+    },
+    {
+      "sizes": [
+        "S",
+        "M",
+        "L",
+        "XL"
+      ],
+      "onSale": false,
+      "season": "Summer",
+      "colors": [
+        "Multi"
+      ],
+      "type": "Embroidered",
+      "id": "ms-050",
+      "fabric": "Lawn",
+      "viewers": 35,
+      "description": "Shirt Front Embroidered With Print Fabric : Summer Cotton Dupatta Pure Lawn Dupatta Trouser Fabric : Summer Cotton Model is wearing small size",
+      "features": [
+        "Shirt Front Embroidered With Print",
+        "Fabric : Summer Cotton",
+        "Dupatta Pure Lawn",
+        "Dupatta",
+        "Trouser"
+      ],
+      "stock": 10,
+      "name": "3 Piece Summer Cotton Suit Stitched-Embroidered",
+      "isBestSeller": false,
+      "price": 5499,
+      "category": "Unstitched",
+      "isNewArrival": true,
+      "pieces": "3 Piece",
+      "collection": "New Arrivals 26",
+      "images": [
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/DSC09338.jpg?v=1759472332",
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/DSC09349.jpg?v=1759472363",
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/DSC09356.jpg?v=1759472288",
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/DSC09358.jpg?v=1759472288"
+      ]
+    },
+    {
+      "isBestSeller": false,
+      "stock": 10,
+      "name": "Embroidered 3 Piece Suite-Summer Cotton",
+      "images": [
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/RHP09949.jpg?v=1769839879",
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/RHP09948.jpg?v=1769839879",
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/RHP09966.jpg?v=1769839879",
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/RHP09938.jpg?v=1769839879"
+      ],
+      "isNewArrival": true,
+      "price": 5999,
+      "category": "Unstitched",
+      "description": "Shirt : Complete Front EmbroideredFabric : Summer Cotton Dupatta : Gold Tilla Dupatta Trouser Fabric : Summer Cotton Model is wearing small size",
+      "features": [
+        "Shirt : Complete Front Embroidered",
+        "Fabric : Summer Cotton",
+        "Dupatta : Gold Tilla",
+        "Dupatta",
+        "Trouser"
+      ],
+      "pieces": "3 Piece",
+      "colors": [
+        "Multi"
+      ],
+      "sizes": [
+        "S",
+        "M",
+        "L",
+        "XL"
+      ],
+      "viewers": 10,
+      "fabric": "Lawn",
+      "collection": "New Arrivals 26",
+      "id": "ms-051",
+      "onSale": false,
+      "type": "Embroidered",
+      "season": "Summer"
+    },
+    {
+      "description": "Shirt : Front Embroidered With Print Fabric : Summer Cotton Dupatta : Gold Tilla Dupatta Trouser Fabric : Summer Cotton Model is wearing small size",
+      "features": [
+        "Shirt : Front Embroidered With Print",
+        "Fabric : Summer Cotton",
+        "Dupatta : Gold Tilla",
+        "Dupatta",
+        "Trouser"
+      ],
+      "images": [
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/RHP09872.jpg?v=1769839592",
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/RHP09882.jpg?v=1769839592",
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/RHP09885.jpg?v=1769839592",
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/RHP09880.jpg?v=1769839592"
+      ],
+      "category": "Unstitched",
+      "type": "Embroidered",
+      "pieces": "3 Piece",
+      "isBestSeller": false,
+      "price": 6099,
+      "stock": 10,
+      "isNewArrival": true,
+      "fabric": "Lawn",
+      "colors": [
+        "Multi"
+      ],
+      "viewers": 27,
+      "season": "Summer",
+      "id": "ms-052",
+      "collection": "New Arrivals 26",
+      "onSale": false,
+      "name": "Embroidered 3 Piece Suite-Summer Cotton",
+      "sizes": [
+        "S",
+        "M",
+        "L",
+        "XL"
+      ]
+    },
+    {
+      "category": "Unstitched",
+      "colors": [
+        "Multi"
+      ],
+      "description": "Shirt : Front Embroidered With Print Fabric : Summer Cotton Dupatta : Gold Tilla Dupatta Trouser Fabric : Summer Cotton Model is wearing small size",
+      "sizes": [
+        "S",
+        "M",
+        "L",
+        "XL"
+      ],
+      "collection": "New Arrivals 26",
+      "fabric": "Lawn",
+      "features": [
+        "Shirt : Front Embroidered With Print",
+        "Fabric : Summer Cotton",
+        "Dupatta : Gold Tilla",
+        "Dupatta",
+        "Trouser"
+      ],
+      "onSale": false,
+      "name": "Embroidered 3 Piece Suite-Summer Cotton",
+      "season": "Summer",
+      "id": "ms-053",
+      "price": 6199,
+      "viewers": 12,
+      "type": "Embroidered",
+      "stock": 10,
+      "images": [
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/RHP09782.jpg?v=1769838945",
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/RHP09795.jpg?v=1769839049",
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/RHP09792.jpg?v=1769839049",
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/RHP09783.jpg?v=1769839049"
+      ],
+      "isNewArrival": true,
+      "pieces": "3 Piece",
+      "isBestSeller": false
+    },
+    {
+      "id": "ms-054",
+      "features": [
+        "Shirt : Complete Front Embroidered",
+        "Fabric : Plain Soft Cotton",
+        "Dupatta : Diamond Minar",
+        "Dupatta",
+        "Trouser"
+      ],
+      "category": "Unstitched",
+      "sizes": [
+        "S",
+        "M",
+        "L",
+        "XL"
+      ],
+      "images": [
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/DSC09590.jpg?v=1767975628",
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/DSC09614.jpg?v=1767975698",
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/DSC09622.jpg?v=1767975563",
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/DSC09599.jpg?v=1767975563"
+      ],
+      "description": "Shirt : Complete Front EmbroideredFabric : Plain Soft Cotton Dupatta : Diamond Minar Dupatta Trouser Fabric : Plain Soft Cotton Model is wearing small size",
+      "isBestSeller": false,
+      "name": "3 Piece Embroidered Suite-Plain Soft Cotton",
+      "isNewArrival": true,
+      "pieces": "3 Piece",
+      "price": 5999,
+      "colors": [
+        "Multi"
+      ],
+      "type": "Embroidered",
+      "stock": 10,
+      "fabric": "Lawn",
+      "collection": "New Arrivals 26",
+      "onSale": false,
+      "viewers": 11,
+      "season": "Summer"
+    },
+    {
+      "collection": "New Arrivals 26",
+      "sizes": [
+        "S",
+        "M",
+        "L",
+        "XL"
+      ],
+      "images": [
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/DSC04768.jpg?v=1767968902",
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/DSC04783.jpg?v=1767968902",
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/DSC04785.jpg?v=1767968902",
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/DSC04766.jpg?v=1767968902"
+      ],
+      "viewers": 7,
+      "type": "Embroidered",
+      "pieces": "3 Piece",
+      "colors": [
+        "Multi"
+      ],
+      "stock": 10,
+      "features": [
+        "Shirt Front Embroidered With Print",
+        "Fabric : Summer Cotton Dupatt Printed Lawn",
+        "Dupatta",
+        "Trouser Printed",
+        "Trouser"
+      ],
+      "category": "Unstitched",
+      "fabric": "Lawn",
+      "name": "3 Piece Summer Cotton Suit-Embroidered",
+      "id": "ms-055",
+      "price": 5599,
+      "onSale": false,
+      "description": "Shirt Front Embroidered With Print Fabric : Summer Cotton Dupatt Printed Lawn Dupatta Trouser Printed Trouser Fabric : Summer Cotton Model is wearing small size",
+      "isNewArrival": true,
+      "season": "Summer",
+      "isBestSeller": false
+    },
+    {
+      "images": [
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/DSC04716.jpg?v=1767968627",
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/DSC04734.jpg?v=1767968673",
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/DSC04725.jpg?v=1767968673",
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/DSC04717.jpg?v=1767968673"
+      ],
+      "name": "3 Piece Summer Cotton Suit-Embroidered",
+      "description": "Shirt Front Embroidered With Print Fabric : Summer Cotton Dupatt Printed Lawn Dupatta Trouser Printed Trouser Fabric : Summer Cotton Model is wearing small size",
+      "isNewArrival": true,
+      "sizes": [
+        "S",
+        "M",
+        "L",
+        "XL"
+      ],
+      "features": [
+        "Shirt Front Embroidered With Print",
+        "Fabric : Summer Cotton Dupatt Printed Lawn",
+        "Dupatta",
+        "Trouser Printed",
+        "Trouser"
+      ],
+      "pieces": "3 Piece",
+      "isBestSeller": false,
+      "category": "Unstitched",
+      "fabric": "Lawn",
+      "collection": "New Arrivals 26",
+      "colors": [
+        "Multi"
+      ],
+      "id": "ms-056",
+      "viewers": 14,
+      "season": "Summer",
+      "stock": 10,
+      "onSale": false,
+      "type": "Embroidered",
+      "price": 5599
+    },
+    {
+      "fabric": "Lawn",
+      "viewers": 7,
+      "isNewArrival": true,
+      "colors": [
+        "Multi"
+      ],
+      "isBestSeller": true,
+      "season": "Summer",
+      "sizes": [
+        "S",
+        "M",
+        "L",
+        "XL"
+      ],
+      "onSale": false,
+      "type": "Embroidered",
+      "collection": "New Arrivals 26",
+      "category": "Unstitched",
+      "images": [
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/DSC04572.jpg?v=1767968254",
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/DSC04591.jpg?v=1767968318",
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/DSC04592.jpg?v=1767968318",
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/DSC04576.jpg?v=1767968318"
+      ],
+      "id": "ms-057",
+      "description": "Shirt Front Embroidered With Print Fabric : Summer Cotton Dupatt Printed Lawn Dupatta Trouser Printed Trouser Fabric : Summer Cotton Model is wearing small size",
+      "name": "3 Piece Summer Cotton Suit-Embroidered",
+      "features": [
+        "Shirt Front Embroidered With Print",
+        "Fabric : Summer Cotton Dupatt Printed Lawn",
+        "Dupatta",
+        "Trouser Printed",
+        "Trouser"
+      ],
+      "stock": 10,
+      "pieces": "3 Piece",
+      "price": 5649
+    },
+    {
+      "stock": 10,
+      "price": 5649,
+      "id": "ms-058",
+      "viewers": 15,
+      "pieces": "3 Piece",
+      "type": "Embroidered",
+      "images": [
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/DSC04547.jpg?v=1767968140",
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/DSC04564.jpg?v=1767968140",
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/DSC04546.jpg?v=1767968140",
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/DSC04553.jpg?v=1767968140"
+      ],
+      "description": "Shirt Front Embroidered With Print Fabric : Summer Cotton Dupatt Printed Lawn Dupatta Trouser Printed Trouser Fabric : Summer Cotton Model is wearing small size",
+      "sizes": [
+        "S",
+        "M",
+        "L",
+        "XL"
+      ],
+      "onSale": false,
+      "name": "3 Piece Summer Cotton Suit-Embroidered",
+      "category": "Unstitched",
+      "collection": "New Arrivals 26",
+      "season": "Summer",
+      "features": [
+        "Shirt Front Embroidered With Print",
+        "Fabric : Summer Cotton Dupatt Printed Lawn",
+        "Dupatta",
+        "Trouser Printed",
+        "Trouser"
+      ],
+      "isBestSeller": false,
+      "colors": [
+        "Multi"
+      ],
+      "isNewArrival": true,
+      "fabric": "Lawn"
+    },
+    {
+      "colors": [
+        "Multi"
+      ],
+      "price": 5749,
+      "type": "Embroidered",
+      "images": [
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/DSC04408.jpg?v=1767967828",
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/DSC04424.jpg?v=1767967828",
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/DSC04426.jpg?v=1767967828",
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/DSC04401.jpg?v=1767967828"
+      ],
+      "id": "ms-059",
+      "onSale": false,
+      "description": "Shirt Front Embroidered With Print Fabric : Summer Cotton Dupatt Printed Lawn Dupatta Trouser Printed Trouser Fabric : Summer Cotton Model is wearing small size",
+      "fabric": "Lawn",
+      "collection": "New Arrivals 26",
+      "features": [
+        "Shirt Front Embroidered With Print",
+        "Fabric : Summer Cotton Dupatt Printed Lawn",
+        "Dupatta",
+        "Trouser Printed",
+        "Trouser"
+      ],
+      "pieces": "3 Piece",
+      "stock": 10,
+      "name": "3 Piece Summer Cotton Suit-Embroidered",
+      "viewers": 27,
+      "category": "Unstitched",
+      "season": "Summer",
+      "isNewArrival": true,
+      "isBestSeller": false,
+      "sizes": [
+        "S",
+        "M",
+        "L",
+        "XL"
+      ]
+    },
+    {
+      "type": "Embroidered",
+      "sizes": [
+        "S",
+        "M",
+        "L",
+        "XL"
+      ],
+      "stock": 10,
+      "onSale": false,
+      "features": [
+        "Shirt Front Embroidered With Print",
+        "Fabric : Summer Cotton Dupatt Printed Lawn",
+        "Dupatta",
+        "Trouser Printed",
+        "Trouser"
+      ],
+      "category": "Unstitched",
+      "season": "Summer",
+      "description": "Shirt Front Embroidered With Print Fabric : Summer Cotton Dupatt Printed Lawn Dupatta Trouser Printed Trouser Fabric : Summer Cotton Model is wearing small size",
+      "fabric": "Lawn",
+      "pieces": "3 Piece",
+      "viewers": 8,
+      "name": "3 Piece Summer Cotton Suit-Embroidered",
+      "colors": [
+        "Multi"
+      ],
+      "price": 5799,
+      "images": [
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/DSC04373.jpg?v=1767967493",
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/DSC04396.jpg?v=1767967556",
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/DSC04398.jpg?v=1767967556",
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/DSC04382.jpg?v=1767967556"
+      ],
+      "collection": "New Arrivals 26",
+      "isNewArrival": true,
+      "isBestSeller": false,
+      "id": "ms-060"
+    },
+    {
+      "pieces": "3 Piece",
+      "price": 7149,
+      "images": [
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/RHP09523copy.jpg?v=1767703324",
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/RHP09569.jpg?v=1767703324",
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/RHP09546.jpg?v=1767703324",
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/RHP09517.jpg?v=1767703324"
+      ],
+      "name": "3 Piece Embroidered Suite-Stitched",
+      "stock": 10,
+      "features": [
+        "Shirt : Complete Front Embroidered",
+        "Fabric : Plain Soft Cotton",
+        "Dupatta : Diamond Minar",
+        "Dupatta",
+        "Trouser"
+      ],
+      "season": "Summer",
+      "isNewArrival": true,
+      "description": "Shirt : Complete Front EmbroideredFabric : Plain Soft Cotton Dupatta : Diamond Minar Dupatta Trouser Fabric : Plain Soft Cotton Model is wearing small size",
+      "id": "ms-061",
+      "type": "Embroidered",
+      "isBestSeller": false,
+      "onSale": false,
+      "category": "Unstitched",
+      "fabric": "Lawn",
+      "viewers": 30,
+      "sizes": [
+        "S",
+        "M",
+        "L",
+        "XL"
+      ],
+      "colors": [
+        "Multi"
+      ],
+      "collection": "New Arrivals 26"
+    },
+    {
+      "features": [
+        "Shirt : Complete Front Embroidered",
+        "Fabric : Plain Soft Cotton",
+        "Dupatta : Diamond Minar",
+        "Dupatta",
+        "Trouser :"
+      ],
+      "isBestSeller": false,
+      "pieces": "3 Piece",
+      "isNewArrival": true,
+      "category": "Unstitched",
+      "images": [
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/RHP09328copy.jpg?v=1767702023",
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/RHP09354.jpg?v=1767702235",
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/RHP09350.jpg?v=1767702428",
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/RHP09325.jpg?v=1767702428"
+      ],
+      "id": "ms-062",
+      "collection": "New Arrivals 26",
+      "sizes": [
+        "S",
+        "M",
+        "L",
+        "XL"
+      ],
+      "viewers": 22,
+      "description": "Shirt : Complete Front EmbroideredFabric : Plain Soft Cotton Dupatta : Diamond Minar Dupatta Trouser : Fabric : Plain Soft Cotton Model is wearing small size",
+      "type": "Embroidered",
+      "season": "Summer",
+      "onSale": false,
+      "name": "3 Piece Embroidered Suite-Stitched",
+      "stock": 10,
+      "fabric": "Lawn",
+      "colors": [
+        "Multi"
+      ],
+      "price": 6999
+    },
+    {
+      "description": "Shirt Front Embroidered With Print Fabric : Summer Cotton Dupatta Pure Lawn Dupatta Trouser Fabric : Summer Cotton Model is wearing small size",
+      "fabric": "Lawn",
+      "colors": [
+        "Multi"
+      ],
+      "price": 5649,
+      "viewers": 20,
+      "name": "Stitched 3 Piece Summer Cotton Suit-Embroidered",
+      "season": "Summer",
+      "collection": "New Arrivals 26",
+      "isBestSeller": false,
+      "isNewArrival": true,
+      "id": "ms-063",
+      "stock": 10,
+      "onSale": false,
+      "images": [
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/DSC5027.jpg?v=1760850299",
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/DSC5035.jpg?v=1760850373",
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/DSC5046.jpg?v=1760850373",
+        "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/DSC5053.jpg?v=1760850373"
+      ],
+      "type": "Embroidered",
+      "pieces": "3 Piece",
+      "features": [
+        "Shirt Front Embroidered With Print",
+        "Fabric : Summer Cotton",
+        "Dupatta Pure Lawn",
+        "Dupatta",
+        "Trouser"
+      ],
+      "sizes": [
+        "S",
+        "M",
+        "L",
+        "XL"
+      ],
+      "category": "Unstitched"
+    },
+    {
+      "viewers": 4,
       "fabric": "Velvet",
-      "type": "Bags",
       "collection": "Luxe Accessories",
+      "colors": [
+        "Black",
+        "Gold"
+      ],
+      "isNewArrival": true,
+      "season": "All Season",
+      "isBestSeller": true,
+      "name": "Classic Gold Embellished Clutch",
+      "onSale": false,
+      "sizes": [
+        "OS"
+      ],
       "images": [
         "https://picsum.photos/seed/rotbabag1/800/1067",
         "https://picsum.photos/seed/rotbabag1b/800/1067"
       ],
+      "id": "ms-bag01",
+      "type": "Bags",
       "description": "An elegant evening clutch in premium velvet with signature gold-plated embellishments and detachable chain strap.",
+      "pieces": "1 Piece",
+      "category": "Bags",
+      "price": 350,
       "stock": 12,
-      "colors": ["Black", "Gold"],
-      "viewers": 9,
-      "isNewArrival": true,
       "features": [
         "Premium velvet exterior",
         "Signature gold brass clasp",
         "Detachable chain shoulder strap",
         "Interior card pocket"
-      ],
-      "category": "Bags",
-      "pieces": "1 Piece",
-      "season": "All Season",
-      "sizes": ["OS"],
-      "isBestSeller": true,
-      "onSale": false
+      ]
     },
     {
-      "id": "ms-bag02",
-      "name": "Royal Ivory Silk Handbag",
-      "price": 420,
-      "fabric": "Silk",
-      "type": "Bags",
-      "collection": "Luxe Accessories",
+      "isNewArrival": true,
+      "sizes": [
+        "OS"
+      ],
       "images": [
         "https://picsum.photos/seed/rotbabag2/800/1067",
         "https://picsum.photos/seed/rotbabag2b/800/1067"
       ],
-      "description": "Handcrafted structured silk handbag featuring traditional gold thread work, satin lining and comfortable handles.",
-      "stock": 7,
-      "colors": ["Ivory White", "Gold"],
-      "viewers": 15,
-      "isNewArrival": true,
+      "isBestSeller": false,
+      "name": "Royal Ivory Silk Handbag",
+      "pieces": "1 Piece",
+      "category": "Bags",
+      "type": "Bags",
+      "price": 420,
+      "id": "ms-bag02",
+      "viewers": 7,
+      "colors": [
+        "Ivory White",
+        "Gold"
+      ],
       "features": [
         "Pure silk outer shell",
         "Hand-embroidered gold motifs",
         "Luxurious satin lining",
         "Dual top handles"
       ],
-      "category": "Bags",
+      "fabric": "Silk",
+      "stock": 7,
+      "collection": "Luxe Accessories",
+      "description": "Handcrafted structured silk handbag featuring traditional gold thread work, satin lining and comfortable handles.",
+      "onSale": false,
+      "season": "All Season"
+    },
+    {
+      "price": 180,
+      "viewers": 4,
+      "images": [
+        "/cat_undergarments.png"
+      ],
+      "stock": 25,
+      "category": "Undergarments",
+      "id": "ms-ug01",
+      "name": "Luxury Cotton Seamless Brassiere",
       "pieces": "1 Piece",
+      "features": [
+        "95% Organic Cotton, 5% Elastane",
+        "Seamless design for zero irritation",
+        "Soft double-layer cups",
+        "Adjustable straps"
+      ],
+      "isBestSeller": true,
+      "type": "Seamless",
+      "collection": "Essential Comfort",
+      "colors": [
+        "Ivory White",
+        "Nude"
+      ],
+      "isNewArrival": true,
+      "sizes": [
+        "S",
+        "M",
+        "L",
+        "XL"
+      ],
+      "description": "A seamless luxury everyday brassiere crafted with ultra-soft organic cotton. Designed for maximum comfort, breathability, and natural silhouette support.",
+      "fabric": "Organic Cotton",
+      "onSale": false,
+      "season": "All Season"
+    },
+    {
+      "images": [
+        "/cat_undergarments.png"
+      ],
+      "name": "Premium Cotton Hipster Briefs (3-Pack)",
+      "id": "ms-ug02",
+      "sizes": [
+        "S",
+        "M",
+        "L",
+        "XL"
+      ],
+      "category": "Undergarments",
+      "pieces": "3 Piece",
+      "features": [
+        "Pack of 3 premium briefs",
+        "100% breathable organic cotton lining",
+        "Flat-locked seams prevent chafing",
+        "Machine washable"
+      ],
+      "viewers": 3,
+      "fabric": "Organic Cotton",
+      "colors": [
+        "Ivory White",
+        "Nude",
+        "Blush Rose"
+      ],
       "season": "All Season",
-      "sizes": ["OS"],
-      "isBestSeller": false,
-      "onSale": false
+      "isBestSeller": true,
+      "type": "Hipster",
+      "collection": "Essential Comfort",
+      "stock": 40,
+      "isNewArrival": true,
+      "price": 120,
+      "onSale": false,
+      "description": "A pack of three premium hipster briefs crafted from fine-ribbed organic cotton. Features a flat elastic waistband and tagless design for ultimate everyday comfort."
     }
   ],
-  "orders": [],
+  "orders": [
+    {
+      "status": "Pending",
+      "paymentDetails": {
+        "cardHolder": "Samra",
+        "transactionId": "ZAR-CARD-765479",
+        "accountNumber": "•••• •••• •••• 4534"
+      },
+      "trackingNumber": "ZR-338176",
+      "shippingDetails": {
+        "phone": "03066003307",
+        "email": "zainab@zariha.com",
+        "address": "Rizwan Garden Lahore",
+        "city": "Lahore, Pakistan",
+        "country": "Pakistan",
+        "name": "zainab"
+      },
+      "items": [
+        {
+          "productId": "ms-006",
+          "product": {
+            "onSale": false,
+            "name": "Aqua Floral Printed 3 Piece Suit-Embroidered",
+            "description": "Shirt : Complete Front Embroidered Fabric : Summer Cotton with Digital Print Dupatta : Chiffon Dupatta Trouser Fabric : Cotton Lawn with Digital Print Model is wearing small size",
+            "fabric": "Lawn",
+            "sizes": [
+              "S",
+              "M",
+              "L",
+              "XL"
+            ],
+            "pieces": "3 Piece",
+            "stock": 0,
+            "isBestSeller": false,
+            "isNewArrival": true,
+            "season": "Summer",
+            "price": 6699,
+            "type": "Embroidered",
+            "viewers": 3,
+            "collection": "New Arrivals 26",
+            "features": [
+              "Shirt : Complete Front Embroidered",
+              "Fabric : Summer Cotton with Digital Print",
+              "Dupatta : Chiffon",
+              "Dupatta",
+              "Trouser"
+            ],
+            "colors": [
+              "Aqua Green"
+            ],
+            "category": "Unstitched",
+            "images": [
+              "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/DSC09230.jpg?v=1779347024",
+              "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/DSC09246.jpg?v=1779347045",
+              "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/DSC09228.jpg?v=1779346945",
+              "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/DSC09234.jpg?v=1779346945"
+            ],
+            "id": "ms-006"
+          },
+          "quantity": 1
+        }
+      ],
+      "userId": "usr_zainab_zariha_com",
+      "subtotal": 6699,
+      "createdAt": "2026-07-08T22:31:59.151Z",
+      "shippingCost": 100,
+      "paymentMethod": "card",
+      "total": 6799,
+      "id": "ORD-429751"
+    },
+    {
+      "id": "ORD-455087",
+      "paymentDetails": {
+        "transactionId": "ZAR-CARD-985108",
+        "accountNumber": "•••• •••• •••• 4534",
+        "cardHolder": "Samra"
+      },
+      "total": 13498,
+      "userId": "usr_zainab_zariha_com",
+      "trackingNumber": "ZR-518688",
+      "subtotal": 13398,
+      "createdAt": "2026-07-08T22:20:10.589Z",
+      "items": [
+        {
+          "product": {
+            "images": [
+              "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/DSC09230.jpg?v=1779347024",
+              "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/DSC09246.jpg?v=1779347045",
+              "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/DSC09228.jpg?v=1779346945",
+              "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/DSC09234.jpg?v=1779346945"
+            ],
+            "colors": [
+              "Aqua Green"
+            ],
+            "type": "Embroidered",
+            "isBestSeller": false,
+            "isNewArrival": true,
+            "price": 6699,
+            "viewers": 5,
+            "season": "Summer",
+            "category": "Unstitched",
+            "stock": 1,
+            "features": [
+              "Shirt : Complete Front Embroidered",
+              "Fabric : Summer Cotton with Digital Print",
+              "Dupatta : Chiffon",
+              "Dupatta",
+              "Trouser"
+            ],
+            "fabric": "Lawn",
+            "pieces": "3 Piece",
+            "description": "Shirt : Complete Front Embroidered Fabric : Summer Cotton with Digital Print Dupatta : Chiffon Dupatta Trouser Fabric : Cotton Lawn with Digital Print Model is wearing small size",
+            "sizes": [
+              "S",
+              "M",
+              "L",
+              "XL"
+            ],
+            "name": "Aqua Floral Printed 3 Piece Suit-Embroidered",
+            "collection": "New Arrivals 26",
+            "onSale": false,
+            "id": "ms-006"
+          },
+          "productId": "ms-006",
+          "quantity": 2
+        }
+      ],
+      "shippingDetails": {
+        "phone": "03066003307",
+        "email": "zainab@zariha.com",
+        "city": "Lahore, Pakistan",
+        "country": "Pakistan",
+        "address": "Rizwan Garden Lahore",
+        "name": "zainab"
+      },
+      "status": "Pending",
+      "paymentMethod": "card",
+      "shippingCost": 100
+    },
+    {
+      "paymentDetails": {
+        "cardHolder": "Samra",
+        "accountNumber": "•••• •••• •••• 4534",
+        "transactionId": "ZAR-CARD-435268"
+      },
+      "shippingDetails": {
+        "country": "Pakistan",
+        "city": "Lahore, Pakistan",
+        "phone": "03066003307",
+        "email": "zainab@zariha.com",
+        "address": "Rizwan Garden Lahore",
+        "name": "zainab"
+      },
+      "total": 6412,
+      "trackingNumber": "ZR-701613",
+      "createdAt": "2026-07-08T20:51:00.536Z",
+      "userId": "usr_zainab_zariha_com",
+      "paymentMethod": "card",
+      "shippingCost": 0,
+      "subtotal": 6749,
+      "items": [
+        {
+          "product": {
+            "images": [
+              "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/RHP8219.jpg?v=1778061646",
+              "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/RHP8236.jpg?v=1778061554",
+              "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/RHP8209.jpg?v=1778061476",
+              "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/RHP8242.jpg?v=1778061476"
+            ],
+            "colors": [
+              "Mint Green"
+            ],
+            "name": "3 Piece Embroidered Mint Green Suit-Farshi",
+            "isNewArrival": true,
+            "price": 6749,
+            "description": "Shirt : Complete Front Embroidered Fabric : Summer Cotton with Digital Print Dupatta : Lawn Dupatta Farshi Shalwar Fabric : Cotton Lawn with Digital Print Model is wearing small size",
+            "isBestSeller": false,
+            "season": "Summer",
+            "stock": 6,
+            "sizes": [
+              "S",
+              "M",
+              "L",
+              "XL"
+            ],
+            "pieces": "3 Piece",
+            "collection": "New Arrivals 26",
+            "viewers": 22,
+            "fabric": "Lawn",
+            "id": "ms-011",
+            "category": "Unstitched",
+            "type": "Embroidered",
+            "features": [
+              "Shirt : Complete Front Embroidered",
+              "Fabric : Summer Cotton with Digital Print",
+              "Dupatta : Lawn",
+              "Dupatta",
+              "Farshi Shalwar"
+            ],
+            "onSale": false
+          },
+          "quantity": 1,
+          "productId": "ms-011"
+        }
+      ],
+      "status": "Pending",
+      "id": "ORD-717465"
+    },
+    {
+      "userId": "usr_samra20020413_gmail_com",
+      "items": [
+        {
+          "productId": "ms-002",
+          "quantity": 1,
+          "product": {
+            "collection": "New Arrivals 26",
+            "id": "ms-002",
+            "onSale": false,
+            "name": "Embroidered 3 Piece Mustard Suite-Farshi",
+            "viewers": 5,
+            "features": [
+              "Shirt : Complete Front Embroidered",
+              "Fabric : Summer Cotton with Digital Print",
+              "Dupatta : Lawn",
+              "Dupatta",
+              "Farshi Shalwar"
+            ],
+            "category": "Unstitched",
+            "price": 6699,
+            "season": "Summer",
+            "pieces": "3 Piece",
+            "fabric": "Lawn",
+            "sizes": [
+              "S",
+              "M",
+              "L",
+              "XL"
+            ],
+            "colors": [
+              "Mustard Yellow"
+            ],
+            "type": "Embroidered",
+            "stock": 9,
+            "isNewArrival": true,
+            "isBestSeller": false,
+            "images": [
+              "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/DSC09075.jpg?v=1779356941",
+              "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/DSC09094.jpg?v=1779356963",
+              "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/DSC09097.jpg?v=1779356649",
+              "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/DSC09082.jpg?v=1779356649"
+            ],
+            "description": "Shirt : Complete Front Embroidered Fabric : Summer Cotton with Digital Print Dupatta : Lawn Dupatta Farshi Shalwar Fabric : Cotton Lawn with Digital Print Model is wearing small size"
+          }
+        }
+      ],
+      "shippingDetails": {
+        "name": "Samra",
+        "email": "samra20020413@gmail.com",
+        "phone": "03066003307",
+        "address": "Rizwan Garden Lahore",
+        "city": "Lahore, Pakistan",
+        "country": "Pakistan"
+      },
+      "paymentMethod": "cod",
+      "subtotal": 6699,
+      "shippingCost": 100,
+      "total": 6799,
+      "id": "ORD-868077",
+      "trackingNumber": "ZR-286351",
+      "status": "Pending",
+      "createdAt": "2026-07-29T21:55:51.372Z"
+    },
+    {
+      "shippingCost": 100,
+      "total": 6799,
+      "subtotal": 6699,
+      "shippingDetails": {
+        "phone": "03066003307",
+        "country": "Pakistan",
+        "email": "samra20020413@gmail.com",
+        "city": "Lahore, Pakistan",
+        "address": "Rizwan Garden Lahore",
+        "name": "Samra"
+      },
+      "status": "Pending",
+      "id": "ORD-959119",
+      "userId": "usr_samra20020413_gmail_com",
+      "items": [
+        {
+          "productId": "ms-001",
+          "quantity": 1,
+          "product": {
+            "price": 6699,
+            "type": "Embroidered",
+            "category": "Unstitched",
+            "isBestSeller": true,
+            "features": [
+              "Shirt : Complete Front Embroidered",
+              "Fabric : Summer Cotton with Digital Print",
+              "Dupatta : Chiffon",
+              "Dupatta",
+              "Trouser"
+            ],
+            "isNewArrival": true,
+            "description": "Shirt : Complete Front Embroidered Fabric : Summer Cotton with Digital Print Dupatta : Chiffon Dupatta Trouser Fabric : Cotton Lawn with Digital Print Model is wearing small size",
+            "images": [
+              "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/DSC09743.jpg?v=1779358189",
+              "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/DSC09759.jpg?v=1779357975",
+              "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/DSC09746.jpg?v=1779357935",
+              "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/DSC09763.jpg?v=1779357461"
+            ],
+            "colors": [
+              "Indigo Blue"
+            ],
+            "collection": "New Arrivals 26",
+            "name": "Embroidered 3 Piece Indigo Suit",
+            "fabric": "Lawn",
+            "pieces": "3 Piece",
+            "season": "Summer",
+            "onSale": false,
+            "id": "ms-001",
+            "sizes": [
+              "S",
+              "M",
+              "L",
+              "XL"
+            ],
+            "stock": 9,
+            "viewers": 5
+          }
+        }
+      ],
+      "paymentMethod": "cod",
+      "createdAt": "2026-07-29T21:44:10.934Z",
+      "trackingNumber": "ZR-466511"
+    }
+  ],
   "carts": {
-    "usr_qqad0yg2t": {
-      "userId": "usr_qqad0yg2t",
+    "usr_a5rhvspj5": {
+      "userId": "usr_a5rhvspj5",
+      "items": []
+    },
+    "usr_gjm2wx93n": {
+      "items": [],
+      "userId": "usr_gjm2wx93n"
+    },
+    "usr_hc6e4p1te": {
+      "userId": "usr_hc6e4p1te",
+      "items": []
+    },
+    "usr_ju6b38f8c": {
+      "userId": "usr_ju6b38f8c",
+      "items": []
+    },
+    "usr_p0mijmmkr": {
+      "userId": "usr_p0mijmmkr",
+      "items": []
+    },
+    "usr_samra20020413_gmail_com": {
+      "userId": "usr_samra20020413_gmail_com",
+      "items": []
+    },
+    "usr_uxnka28if": {
+      "items": [],
+      "userId": "usr_uxnka28if"
+    },
+    "usr_zainab_zariha_com": {
+      "userId": "usr_zainab_zariha_com",
       "items": []
     }
   },
   "admins": [
     {
       "id": "admin-001",
-      "email": "admin@rotba.com",
-      "passwordHash": "$2b$10$aIlKiVh2XMe4wojIv4erFOQ7euu1c/5xzhAGPWf9Cxzdoudu4dDhq"
+      "passwordHash": "$2b$10$kfyrFtsu7KS.4VtzjOyLPOs.3LUs1j0xbOdCo16TQaIKCDRWrKHrK",
+      "email": "admin@rotba.com"
     }
-  ]
+  ],
+  "settings": {
+    "freeShippingThreshold": 500,
+    "homeMarqueeText": "✦ Unstitched Luxury ✦ Handloom Heritage ✦ Festive Archive ✦",
+    "cardShippingFee": 15,
+    "shippingFee": 15,
+    "codShippingFee": 25,
+    "announcementText": ""
+  }
 }

@@ -45,8 +45,12 @@ try {
   console.error("Failed to initialize Firebase:", e);
 }
 
-// Save DB file in node_modules to prevent Vite's HMR watcher from triggering page reloads on DB writes
-const DB_FILE = path.join(process.cwd(), 'node_modules', 'zariha_db.json');
+const ROOT_DB_FILE = path.join(process.cwd(), 'zariha_db.json');
+const NODE_MODULES_DB_FILE = path.join(process.cwd(), 'node_modules', 'zariha_db.json');
+
+const DB_FILE = fs.existsSync(ROOT_DB_FILE) 
+  ? ROOT_DB_FILE 
+  : NODE_MODULES_DB_FILE;
 
 // All products sourced from mushtaqsons.pk/collections/new-arrival-1
 const SEED_PRODUCTS: Product[] = [
@@ -2437,7 +2441,11 @@ class Database {
 
   public save() {
     try {
-      fs.writeFileSync(DB_FILE, JSON.stringify(this.state, null, 2), 'utf-8');
+      const data = JSON.stringify(this.state, null, 2);
+      fs.writeFileSync(ROOT_DB_FILE, data, 'utf-8');
+      if (fs.existsSync(path.dirname(NODE_MODULES_DB_FILE))) {
+        try { fs.writeFileSync(NODE_MODULES_DB_FILE, data, 'utf-8'); } catch (_) {}
+      }
     } catch (e) {
       console.error('Error saving DB', e);
     }
