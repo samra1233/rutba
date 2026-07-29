@@ -30,8 +30,16 @@
     content="Premium Pakistani unstitched 3-piece lawn & chiffon suits with authentic embroidery." />
   <meta name="twitter:image" content="/og-image.jpg" />
 
+  <!-- Preconnect to image CDNs for instant DNS lookup & SSL handshake -->
+  <link rel="preconnect" href="https://cdn.shopify.com" crossorigin />
+  <link rel="dns-prefetch" href="https://cdn.shopify.com" />
+  
+  <!-- Preload critical mobile hero assets -->
+  <link rel="preload" as="image" href="/hero_showcase.jpeg" fetchpriority="high" />
+  <link rel="preload" as="image" href="/logo_rotba.png" fetchpriority="high" />
+  
   <!-- Favicon -->
-  <link rel="icon" type="image/png" href="/logo.png" />
+  <link rel="icon" type="image/png" href="/logo_rotba.png" />
 </head>
 
 <body>

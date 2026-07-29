@@ -164,7 +164,7 @@ export default function MobileHomeView() {
                   : 'bg-neutral-200'
               }`}>
                 <div className="w-15 h-15 rounded-full p-0.5 bg-white overflow-hidden shadow-xs">
-                  <img src={st.img} alt={st.title} loading="lazy" decoding="async" className="w-full h-full object-cover rounded-full group-active:scale-95 transition-transform" />
+                  <img src={st.img} alt={st.title} loading="eager" decoding="async" className="w-full h-full object-cover rounded-full group-active:scale-95 transition-transform" />
                 </div>
               </div>
               <span className="text-[10px] font-sans font-semibold text-neutral-800 tracking-tight text-center">
@@ -266,7 +266,7 @@ export default function MobileHomeView() {
             >
               <div className="w-20 h-20 rounded-full bg-[#f4eee8] p-1 border border-neutral-200/80 shadow-2xs overflow-hidden group-active:scale-95 transition-transform">
                 <div className="w-full h-full rounded-full overflow-hidden bg-neutral-200">
-                  <img src={cat.img} alt={cat.label} loading="lazy" decoding="async" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                  <img src={cat.img} alt={cat.label} loading="eager" decoding="async" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
                 </div>
               </div>
               <span className="text-[11px] font-sans font-medium text-neutral-800 text-center tracking-tight">
@@ -292,14 +292,14 @@ export default function MobileHomeView() {
         </div>
 
         <div className="flex gap-3 overflow-x-auto no-scrollbar pr-4">
-          {products.slice(0, 5).map(prod => (
+          {products.slice(0, 5).map((prod, pIdx) => (
             <div
               key={prod.id}
               onClick={() => setActivePage('product-detail', prod.id)}
               className="w-40 shrink-0 bg-white rounded-2xl p-2 border border-neutral-200 shadow-2xs flex flex-col justify-between cursor-pointer active:scale-98 transition-transform"
             >
               <div className="relative aspect-[3/4] w-full rounded-xl overflow-hidden bg-neutral-100 mb-2">
-                <img src={prod.images[0]} alt={prod.name} loading="lazy" decoding="async" className="w-full h-full object-cover" />
+                <img src={prod.images[0]} alt={prod.name} loading={pIdx < 2 ? "eager" : "lazy"} decoding="async" className="w-full h-full object-cover" />
                 <span className="absolute top-2 left-2 bg-[#7C1F1F] text-white text-[8px] font-mono font-bold px-1.5 py-0.5 rounded">
                   HOT
                 </span>
@@ -325,7 +325,7 @@ export default function MobileHomeView() {
         </div>
 
         <div className="grid grid-cols-2 gap-3">
-          {filteredProducts.map(product => {
+          {filteredProducts.map((product, pIdx) => {
             const originalPrice = Math.round(product.price * 1.18);
             const wishlisted = isWishlisted(product.id);
 
@@ -337,7 +337,7 @@ export default function MobileHomeView() {
               >
                 {/* Image Container */}
                 <div className="relative aspect-[3/4] w-full rounded-xl overflow-hidden bg-neutral-100 mb-2">
-                  <img src={product.images[0]} alt={product.name} loading="lazy" decoding="async" className="w-full h-full object-cover" />
+                  <img src={product.images[0]} alt={product.name} loading={pIdx < 4 ? "eager" : "lazy"} decoding="async" className="w-full h-full object-cover" />
                   
                   {/* Sale Tag */}
                   <span className="absolute top-2 left-2 bg-[#7C1F1F] text-white text-[8px] font-mono font-bold px-2 py-0.5 rounded-md shadow-2xs">
