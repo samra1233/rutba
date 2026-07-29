@@ -25,6 +25,7 @@ interface AppContextType {
   globalViewers: number;
   userId: string;
   trackedOrder: Order | null;
+  userOrders: Order[];
   loading: boolean;
   user: { name: string; email: string; phone?: string } | null;
   isAuthModalOpen: boolean;
@@ -47,6 +48,9 @@ interface AppContextType {
   wishlist: string[];
   toggleWishlist: (productId: string) => void;
   isWishlisted: (productId: string) => boolean;
+  currency: 'PKR' | 'AED';
+  setCurrency: (cur: 'PKR' | 'AED') => void;
+  formatPrice: (priceInPKR: number) => string;
   settings: { announcementText: string; homeMarqueeText: string; shippingFee?: number; cardShippingFee?: number; codShippingFee?: number; freeShippingThreshold?: number };
   updateSettings: (updated: Partial<{ announcementText: string; homeMarqueeText: string; shippingFee?: number; cardShippingFee?: number; codShippingFee?: number; freeShippingThreshold?: number }>) => Promise<void>;
 }
@@ -68,14 +72,52 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   const [selectedProductId, setSelectedProductId] = useState<string | null>(null);
   const [userId, setUserId] = useState<string>('');
   const [trackedOrder, setTrackedOrder] = useState<Order | null>(null);
+  const [userOrders, setUserOrders] = useState<Order[]>([]);
+  const [user, setUser] = useState<{ name: string; email: string; phone?: string } | null>(null);
   const [loading, setLoading] = useState(true);
+  const [isAuthModalOpen, setAuthModalOpen] = useState<boolean>(false);
+  const [wishlist, setWishlist] = useState<string[]>([]);
+  const [currency, setCurrencyState] = useState<'PKR' | 'AED'>('PKR');
+
+  useEffect(() => {
+    const fetchUserOrders = async () => {
+      if (!userId && !user?.email) return;
+      try {
+        const query = new URLSearchParams();
+        if (userId) query.append('userId', userId);
+        if (user?.email) query.append('email', user.email);
+        
+        const res = await fetch(`/api/orders?${query.toString()}`);
+        if (res.ok) {
+          const data = await res.json();
+          setUserOrders(data);
+          if (data.length > 0 && !trackedOrder) {
+            setTrackedOrder(data[0]);
+          }
+        }
+      } catch (e) {
+        console.error('Error fetching user orders:', e);
+      }
+    };
+    fetchUserOrders();
+  }, [userId, user, trackedOrder]);
   const [globalViewers, setGlobalViewers] = useState<number>(12);
   const [liveAlerts, setLiveAlerts] = useState<AppContextType['liveAlerts']>([]);
   const [flyingItems, setFlyingItems] = useState<AppContextType['flyingItems']>([]);
   const [isCartBusting, setIsCartBusting] = useState<boolean>(false);
-  const [user, setUser] = useState<{ name: string; email: string; phone?: string } | null>(null);
-  const [isAuthModalOpen, setAuthModalOpen] = useState<boolean>(false);
-  const [wishlist, setWishlist] = useState<string[]>([]);
+
+  const setCurrency = (cur: 'PKR' | 'AED') => {
+    setCurrencyState(cur);
+  };
+
+  const formatPrice = (priceInPKR: number) => {
+    if (currency === 'AED') {
+      const aedVal = Math.round(priceInPKR / 76);
+      return `AED ${aedVal.toLocaleString()}`;
+    }
+    return `PKR ${priceInPKR.toLocaleString()}`;
+  };
+
   const [settings, setSettings] = useState<{ announcementText: string; homeMarqueeText: string; shippingFee?: number; cardShippingFee?: number; codShippingFee?: number; freeShippingThreshold?: number }>({ announcementText: '', homeMarqueeText: '', shippingFee: 15, cardShippingFee: 15, codShippingFee: 25, freeShippingThreshold: 500 });
   
   const [activeFilters, setActiveFilters] = useState({
@@ -121,9 +163,9 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     const product = products.find(p => p.id === productId);
     if (product) {
       if (!isAdding) {
-        addToast(`${product.name} removed from your wishlist.`, 'info');
+        addToast(`✦ ROTBA Couture ✦ ${product.name} removed from your wishlist.`, 'info');
       } else {
-        addToast(`${product.name} added to your wishlist.`, 'success');
+        addToast(`✦ ROTBA Couture ✦ ${product.name} added to your wishlist.`, 'success');
       }
     }
   };
@@ -225,7 +267,6 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     localStorage.setItem('zariha_user_id', emailId);
     
     setAuthModalOpen(false);
-    addToast(`Logged in successfully! Welcome back, ${name}`, 'success');
   };
 
   const logout = () => {
@@ -239,7 +280,6 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     
     // Clear local cart state
     setCart(null);
-    addToast('Logged out successfully.', 'info');
   };
 
   // 2. Fetch products whenever filters change
@@ -503,7 +543,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     }
 
     await syncCartWithServer(updatedItems);
-    addToast(`${prod?.name || 'Item'} added to shopping bag.`, 'success');
+    addToast(`✦ ROTBA Couture ✦ ${prod?.name || 'Item'} added to your shopping bag.`, 'success');
   };
 
   const updateCartQty = async (productId: string, quantity: number) => {
@@ -550,7 +590,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
         const order = await res.json();
         setCart({ userId, items: [] }); // clear local state
         setTrackedOrder(order);
-        addToast(`Order placed successfully! Tracking: ${order.trackingNumber}`, 'success');
+        setUserOrders(prev => [order, ...prev]);
         setActivePage('orders');
         return order;
       } else {
@@ -613,6 +653,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
       globalViewers,
       userId,
       trackedOrder,
+      userOrders,
       loading,
       user,
       isAuthModalOpen,
@@ -635,6 +676,9 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
       wishlist,
       toggleWishlist,
       isWishlisted,
+      currency,
+      setCurrency,
+      formatPrice,
       settings,
       updateSettings
     }}>

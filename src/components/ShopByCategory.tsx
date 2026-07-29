@@ -44,7 +44,7 @@ const CATEGORIES: CategoryDef[] = [
     tag: 'Trending Now',
     filterKey: 'bestSeller',
     filterValue: 'true',
-    image: '/cat_blue.jpg',
+    image: '/cat_bestseller_new.png',
   },
   {
     id: 'summer',
@@ -54,7 +54,7 @@ const CATEGORIES: CategoryDef[] = [
     tag: 'Seasonal Drop',
     filterKey: 'season',
     filterValue: 'Summer',
-    image: '/cat_white.jpg',
+    image: '/cat_summer_new.png',
   },
   {
     id: 'new-arrivals',
@@ -64,7 +64,7 @@ const CATEGORIES: CategoryDef[] = [
     tag: 'Just In',
     filterKey: 'newArrival',
     filterValue: 'true',
-    image: '/cat_pink.jpg',
+    image: '/cat_newarrivals_new.png',
   },
   {
     id: 'ready-to-wear',
@@ -74,7 +74,7 @@ const CATEGORIES: CategoryDef[] = [
     tag: 'Pret-A-Porter',
     filterKey: 'category',
     filterValue: 'Ready to Wear',
-    image: '/cat_peach.jpg',
+    image: '/cat_readytowear_new.png',
   },
   {
     id: 'unstitched',
@@ -84,17 +84,7 @@ const CATEGORIES: CategoryDef[] = [
     tag: 'Artisan Yardage',
     filterKey: 'category',
     filterValue: 'Unstitched',
-    image: '/cat_unstitched.png',
-  },
-  {
-    id: 'undergarments',
-    num: '06',
-    label: 'Undergarments',
-    sublabel: 'Artisan everyday essentials in premium organic cotton',
-    tag: 'Pure Comfort',
-    filterKey: 'category',
-    filterValue: 'Undergarments',
-    image: '/cat_undergarments.png',
+    image: '/cat_unstitched_new.jpg',
   },
 ];
 
@@ -149,7 +139,7 @@ export default function ShopByCategory() {
         opacity: sectionOpacity,
         background: 'transparent',
       }}
-      className="w-full py-24 md:py-32 overflow-hidden relative"
+      className="w-full py-12 md:py-16 overflow-hidden relative"
       aria-labelledby="shop-by-category-heading"
     >
       {/* Subtle loom background grid pattern */}
@@ -164,130 +154,104 @@ export default function ShopByCategory() {
         </svg>
       </div>
 
-      <div className="max-w-7xl mx-auto px-6 md:px-8 space-y-16 relative z-10">
+      <div className="w-full px-4 md:px-12 lg:px-16 space-y-6 md:space-y-8 relative z-10">
 
         {/* ── Section Header ── */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 border-b border-[#C5A059]/20 pb-8">
-          <div className="space-y-4">
-
-
-            <div className="overflow-hidden">
-              <motion.h2
+        <div className="flex flex-col gap-3 md:gap-4 text-left">
+          {/* Heading Row */}
+          <div className="flex items-center justify-between gap-3 w-full">
+            {/* Accent Line + Heading */}
+            <div className="flex items-center gap-3 md:gap-4.5">
+              <div className="w-[5px] sm:w-[7px] h-7 sm:h-9 md:h-11 lg:h-12 bg-[#003e1c] rounded-full shrink-0 ml-1 sm:ml-4" />
+              <h2
                 id="shop-by-category-heading"
-                initial={{ y: '100%' }}
-                whileInView={{ y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-                className="leading-none text-[#1A1A1A]"
-                style={{
-                  fontSize: 'clamp(1.8rem, 4.5vw, 2.8rem)',
-                  fontWeight: 300,
-                  letterSpacing: '0.08em'
-                }}
+                className="text-2xl sm:text-4xl lg:text-6xl uppercase tracking-normal leading-none"
+                style={{ fontFamily: 'var(--font-didot)', fontWeight: 400, letterSpacing: '0.00em' }}
               >
-                <span style={{ fontFamily: 'var(--font-display)', textTransform: 'uppercase' }}>Shop by </span>
-                <span className="font-serif italic text-[#C5A059] capitalize" style={{ fontFamily: 'var(--font-serif)', letterSpacing: '0.02em', fontWeight: 'normal' }}>Category</span>
-              </motion.h2>
+                <span className="text-[#000000]">SHOP BY </span>
+                <span className="text-[#003e1c]">CATEGORY</span>
+              </h2>
             </div>
+
+            {/* View All Button */}
+            <button
+              onClick={() => {
+                setActivePage('shop');
+              }}
+              className="px-4 py-2 sm:px-6 sm:py-2.5 bg-[linear-gradient(110deg,#D4AF37_0%,#FFF3A8_25%,#C5A059_50%,#FFEC99_75%,#A07C28_100%)] text-[#1A1A1A] font-bold text-xs md:text-sm tracking-wider rounded-full shadow-[0_4px_18px_rgba(197,160,89,0.4),inset_0_1px_2px_rgba(255,255,255,0.85)] hover:shadow-[0_6px_25px_rgba(197,160,89,0.65),inset_0_1px_2px_rgba(255,255,255,1)] hover:scale-105 active:scale-95 transition-all duration-300 cursor-pointer shrink-0 border border-[#FFF0A6]/70 text-center flex items-center justify-center relative overflow-hidden group"
+              style={{ fontFamily: 'var(--font-avenir)' }}
+            >
+              <span className="relative z-10 font-bold drop-shadow-[0_1px_0px_rgba(255,255,255,0.6)]">View All</span>
+              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/50 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700 ease-in-out pointer-events-none" />
+            </button>
           </div>
+
+          {/* Paragraph */}
+          <p
+            className="text-xs sm:text-sm md:text-base font-sans tracking-wide text-neutral-1500 max-w-5xl leading-relaxed pl-2 sm:pl-[20px]"
+            style={{ fontFamily: 'var(--font-body)', fontSize: '20px' }}
+          >
+            Explore our curated selection of premium fabrics, artisan collections, and everyday essentials designed with heritage weaving techniques and modern aesthetic sophistication.
+          </p>
         </div>
 
-        {/* ── Premium Accordion Showcase ── */}
-        <div className="flex flex-col lg:flex-row w-full gap-5 min-h-[580px] lg:h-[620px]">
+        {/* ── Premium Category Grid (LAAM / SHEIN 2-column mobile, flex accordion desktop) ── */}
+        <div className="grid grid-cols-2 lg:flex lg:flex-row w-full gap-3 md:gap-4 lg:h-[75vh]">
           {CATEGORIES.map((cat, index) => {
             const isHovered = hoveredIdx === index;
             const isAnyHovered = hoveredIdx !== null;
-
-            // Flex size changes dynamically on hover (accordion mechanism)
-            let flexVal = 'flex-1';
-            if (isAnyHovered) {
-              flexVal = isHovered ? 'lg:flex-[2.8]' : 'lg:flex-[0.6]';
-            }
+            const isLastOnMobile = index === CATEGORIES.length - 1;
 
             return (
               <motion.div
                 key={cat.id}
-                initial={{ opacity: 0, y: 80 }}
+                initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, amount: 0.1 }}
-                transition={{ type: 'spring', stiffness: 55, damping: 14, delay: index * 0.08 }}
+                transition={{ type: 'spring', stiffness: 55, damping: 14, delay: index * 0.05 }}
                 onClick={() => handleSelect(cat)}
                 onMouseEnter={() => setHoveredIdx(index)}
                 onMouseLeave={() => setHoveredIdx(null)}
-                className="group relative w-full rounded-[32px] transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] overflow-hidden border border-[#C5A059]/20 flex flex-col justify-between p-6 cursor-pointer"
+                className={`group relative w-full rounded-2xl md:rounded-[32px] transition-all duration-500 ease-out overflow-hidden border border-[#C5A059]/25 flex flex-col justify-between p-4 md:p-6 pb-16 md:pb-20 cursor-pointer shadow-sm active:scale-98 ${
+                  isLastOnMobile ? 'col-span-2 lg:col-span-1 min-h-[160px] md:min-h-[280px]' : 'min-h-[200px] md:min-h-[280px]'
+                }`}
                 style={{
-                  background: '#FCFAF7',
-                  boxShadow: isHovered
-                    ? '0 24px 50px rgba(197, 160, 89, 0.15)'
-                    : '0 12px 30px rgba(0, 0, 0, 0.02)',
-                  minHeight: '280px',
+                  background: '#ffffff',
                   flex: isAnyHovered ? (isHovered ? '2.8' : '0.6') : '1',
                 }}
               >
-                {/* ── Background Category Image (Clean, flat focal scale) ── */}
+                {/* ── Background Category Image (Clean, sharp focus) ── */}
                 <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none rounded-[32px]">
                   <div
-                    className="absolute inset-0 w-full h-full bg-cover bg-center transition-all duration-1000 ease-out"
+                    className="absolute inset-0 w-full h-full bg-cover bg-center transition-all duration-700 ease-out"
                     style={{
                       backgroundImage: `url(${cat.image})`,
-                      transform: isHovered ? 'scale(1.06)' : 'scale(1)',
-                      filter: `contrast(${isHovered ? 1.05 : 1}) brightness(${isHovered ? 0.95 : 0.85})`,
-                      opacity: isHovered ? 1 : 0.9,
+                      transform: isHovered ? 'scale(1.05)' : 'scale(1)',
+                      opacity: 1,
                     }}
                   />
-                </div>
-
-                {/* TOP BAR */}
-                <div className="flex justify-between items-start w-full relative z-10 shrink-0">
-                  <span
-                    className="font-serif italic text-4xl text-[#C5A059]/40 transition-colors duration-300"
-                    style={{ fontFamily: 'var(--font-serif)' }}
-                  >
-                    {cat.num}
-                  </span>
                 </div>
 
                 {/* MIDDLE SECTION — Elegant empty space to showcase images */}
                 <div className="flex-1 flex items-center justify-center relative z-10 my-4 w-full" />
 
                 {/* BOTTOM SECTION — Expands with details on hover */}
-                <div className="relative z-10 w-full shrink-0">
-                  {/* Category Name Button - full width of card, displayed at bottom when NOT hovered */}
-                  <div
-                    className={`transition-all duration-500 ease-out ${
-                      isHovered ? 'lg:opacity-0 lg:translate-y-4 lg:pointer-events-none absolute bottom-0 left-0 right-0' : 'relative opacity-100 translate-y-0'
+                <div
+                  className={`absolute bottom-0 left-0 right-0 z-20 w-full transition-all duration-500 ease-out ${isHovered ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4 pointer-events-none'
                     }`}
-                  >
-                    <div
-                      className="flex items-center justify-between w-full px-5 py-3.5 rounded-2xl border font-mono text-[10px] uppercase tracking-widest"
-                      style={{
-                        background: 'rgba(255, 255, 255, 0.92)',
-                        color: '#1A1A1A',
-                        borderColor: 'rgba(197, 160, 89, 0.3)',
-                        boxShadow: '0 8px 24px rgba(0,0,0,0.05)',
-                      }}
-                    >
-                      <div className="flex items-center gap-2">
-                        <Sparkles className="w-3 h-3 text-[#C5A059]" />
-                        <span className="font-bold">{cat.label}</span>
-                      </div>
-                      <ArrowRight className="w-3.5 h-3.5 text-[#C5A059]" />
-                    </div>
-                  </div>
-
-                  {/* Expandable details panel */}
+                >
+                  {/* Expandable details panel - flush at bottom */}
                   <div
-                    className={`transition-all duration-500 ease-out flex items-center justify-between border border-white/20 p-5 rounded-2xl ${isHovered
-                      ? 'opacity-100 translate-y-0 scale-100 relative'
-                      : 'lg:opacity-0 lg:translate-y-8 lg:scale-95 pointer-events-none absolute bottom-0 left-0 right-0'
-                      }`}
+                    className="flex items-center justify-between border p-5 rounded-b-[31px] w-full"
                     style={{
-                      background: 'rgba(255, 255, 255, 0.45)',
-                      backdropFilter: 'blur(20px)',
+                      background: 'rgba(0, 62, 28, 0.85)',
+                      backdropFilter: 'blur(10px)',
+                      borderColor: 'rgba(197, 160, 89, 0.35)',
+                      boxShadow: '0 -4px 15px rgba(0,0,0,0.08)',
                     }}
                   >
                     <div className="flex-1 min-w-0 pr-4 text-left">
-                      <p className="font-sans text-[11px] text-neutral-800 font-medium leading-relaxed line-clamp-2">
+                      <p className="font-sans text-xs text-[#FCFAF7] font-medium leading-relaxed line-clamp-2">
                         {cat.sublabel}
                       </p>
 
@@ -314,9 +278,28 @@ export default function ShopByCategory() {
                       )}
                     </div>
 
-                    <div className="w-10 h-10 rounded-full bg-[#C5A059] flex items-center justify-center shrink-0 shadow-md">
-                      <ArrowRight className="w-4 h-4 text-white" />
+                    <div className="w-10 h-10 rounded-full bg-[#C5A059] flex items-center justify-center shrink-0 shadow-md text-white">
+                      <ArrowRight className="w-4 h-4" />
                     </div>
+                  </div>
+                </div>
+
+                {/* Category Name Button - absolute bottom flush */}
+                <div
+                  className={`absolute bottom-0 left-0 right-0 transition-all duration-500 ease-out z-10 ${isHovered ? 'opacity-0 translate-y-4 pointer-events-none' : 'opacity-100 translate-y-0'
+                    }`}
+                >
+                  <div
+                    className="flex items-center justify-start w-full px-6 md:px-7 py-4 border-t text-[13px] md:text-[18px] uppercase tracking-widest transition-all duration-300 rounded-b-[31px]"
+                    style={{
+                      background: 'rgba(0, 62, 28, 0.8)',
+                      backdropFilter: 'blur(10px)',
+                      color: '#FCFAF7',
+                      borderColor: 'rgba(197, 160, 89, 0.35)',
+                      boxShadow: '0 -4px 15px rgba(0,0,0,0.08)',
+                    }}
+                  >
+                    <span className="font-bold tracking-wider text-left text-[#FCFAF7] transition-colors whitespace-nowrap truncate" style={{ fontFamily: 'var(--font-avenir)' }}>{cat.label}</span>
                   </div>
                 </div>
 

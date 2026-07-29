@@ -328,7 +328,19 @@ app.post('/api/orders', (req, res) => {
   res.status(201).json(order);
 });
 
-// 6. Order Tracking / Get Order by ID or Tracking number
+// 6. Order Tracking & List Orders
+app.get('/api/orders', (req, res) => {
+  const { userId, email } = req.query;
+  let orders = db.getOrders();
+  if (userId || email) {
+    orders = orders.filter(o => 
+      (userId && o.userId === userId) || 
+      (email && o.shippingDetails && o.shippingDetails.email && o.shippingDetails.email.toLowerCase() === String(email).toLowerCase())
+    );
+  }
+  res.json(orders.reverse());
+});
+
 app.get('/api/orders/:id', (req, res) => {
   const order = db.getOrder(req.params.id);
   if (!order) {

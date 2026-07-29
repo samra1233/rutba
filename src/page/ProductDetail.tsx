@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from 'motion/react';
 import ProductCard from '../components/ProductCard';
 
 export default function ProductDetail() {
-  const { selectedProductId, products, addToCart, setActivePage, toggleWishlist, isWishlisted } = useApp();
+  const { selectedProductId, products, addToCart, setActivePage, toggleWishlist, isWishlisted, currency, setCurrency, formatPrice } = useApp();
   const [activeImageIdx, setActiveImageIdx] = useState(0);
   const [selectedSize, setSelectedSize] = useState('S');
   const [quantity, setQuantity] = useState(1);
@@ -57,13 +57,14 @@ export default function ProductDetail() {
   const sizes = ['S', 'M', 'L', 'XL'];
 
   return (
-    <div className="min-h-screen bg-[#FAF5F0] font-sans pb-24 selection:bg-neutral-200 selection:text-black relative overflow-hidden">
-      {/* Background ambient luxury glows */}
-      <div className="absolute top-[10%] left-[-10%] w-[500px] h-[500px] bg-[#C5A059]/5 rounded-full blur-[140px] pointer-events-none" />
-      <div className="absolute bottom-[20%] right-[-10%] w-[450px] h-[450px] bg-[#143D30]/5 rounded-full blur-[120px] pointer-events-none" />
+    <div className="min-h-screen bg-white md:bg-[#FAF5F0] font-sans pb-24 selection:bg-neutral-200 selection:text-black relative overflow-hidden">
+      
+      {/* Background ambient luxury glows (desktop only) */}
+      <div className="hidden md:block absolute top-[10%] left-[-10%] w-[500px] h-[500px] bg-[#C5A059]/5 rounded-full blur-[140px] pointer-events-none" />
+      <div className="hidden md:block absolute bottom-[20%] right-[-10%] w-[450px] h-[450px] bg-[#143D30]/5 rounded-full blur-[120px] pointer-events-none" />
 
       {/* Space for the fixed Navbar */}
-      <div className="pt-24 md:pt-28" />
+      <div className="pt-16 md:pt-28" />
 
       <div className="max-w-[1400px] mx-auto px-6 relative z-10">
         <div className="flex flex-col lg:flex-row gap-8 lg:gap-12 items-start">
@@ -115,20 +116,16 @@ export default function ProductDetail() {
              )}
           </div>
 
-          {/* RIGHT: Scrollable Details Column wrapped in Liquid Glass */}
+          {/* RIGHT: Scrollable Details Column */}
           <div 
-            className="w-full lg:w-[55%] text-[#1a1a1a] p-6 md:p-8 rounded-2xl relative overflow-hidden"
+            className="w-full lg:w-[55%] text-[#1a1a1a] p-6 md:p-8 rounded-2xl relative overflow-hidden bg-white shadow-xs"
             style={{
-              background: 'rgba(255, 255, 255, 0.48)',
-              backdropFilter: 'blur(30px)',
-              WebkitBackdropFilter: 'blur(30px)',
               border: '1px solid rgba(201, 164, 99, 0.18)',
-              boxShadow: '0 20px 50px -20px rgba(90,54,10,0.06), inset 0 0 0 1px rgba(255,255,255,0.6)',
             }}
           >
-            {/* Liquid Glass Blobs (for premium depth) */}
-            <div className="absolute top-[-10%] right-[-10%] w-[200px] h-[200px] bg-[#C5A059]/10 rounded-full blur-[60px] pointer-events-none" />
-            <div className="absolute bottom-[20%] left-[-10%] w-[180px] h-[180px] bg-[#C5A059]/5 rounded-full blur-[50px] pointer-events-none" />
+            {/* Liquid Glass Blobs (desktop only) */}
+            <div className="hidden md:block absolute top-[-10%] right-[-10%] w-[200px] h-[200px] bg-[#C5A059]/10 rounded-full blur-[60px] pointer-events-none" />
+            <div className="hidden md:block absolute bottom-[20%] left-[-10%] w-[180px] h-[180px] bg-[#C5A059]/5 rounded-full blur-[50px] pointer-events-none" />
 
             {/* Fabric/Type Tag Row */}
             <div className="flex items-center gap-2 mb-3 relative z-10">
@@ -167,10 +164,10 @@ export default function ProductDetail() {
                 {product.onSale && product.salePrice ? (
                   <>
                     <span className="font-sans text-xl md:text-2xl font-bold text-red-800">
-                      AED {product.salePrice.toLocaleString()}
+                      {formatPrice(product.salePrice)}
                     </span>
                     <span className="font-sans text-sm text-neutral-400 line-through">
-                      AED {product.price.toLocaleString()}
+                      {formatPrice(product.price)}
                     </span>
                     <span className="inline-block font-sans text-[8.5px] text-rose-700 bg-rose-50 px-2 py-0.5 rounded border border-rose-200 font-extrabold tracking-wider uppercase">
                       {Math.round(((product.price - product.salePrice) / product.price) * 100)}% OFF
@@ -178,7 +175,7 @@ export default function ProductDetail() {
                   </>
                 ) : (
                   <span className="font-sans text-xl md:text-2xl font-bold text-[#14261C]">
-                    AED {product.price.toLocaleString()}
+                    {formatPrice(product.price)}
                   </span>
                 )}
               </div>
@@ -405,15 +402,32 @@ export default function ProductDetail() {
 
         {/* You May Also Like Section */}
         {relatedProducts.length > 0 && (
-          <div className="mt-20 border-t border-[#C5A059]/20 pt-12 pb-8">
+          <div className="mt-16 md:mt-20 border-t border-[#C5A059]/20 pt-10 md:pt-12 pb-8">
             <h2 className="text-xl md:text-2xl text-[#14261C] font-sans font-bold mb-6 tracking-tight">You May Also Like</h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-10">
+            <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-8 lg:gap-10">
               {relatedProducts.map(p => (
                 <ProductCard key={p.id} product={p} />
               ))}
             </div>
           </div>
         )}
+      </div>
+
+      {/* MOBILE STICKY BOTTOM BUY BAR — 1-Tap Mobile Shopping */}
+      <div className="lg:hidden fixed bottom-0 left-0 right-0 z-50 bg-[#0a1910]/95 backdrop-blur-xl border-t border-[#C5A059]/30 px-4 py-3 shadow-[0_-10px_30px_rgba(0,0,0,0.3)] flex items-center justify-between gap-4">
+        <div className="flex flex-col">
+          <span className="text-[9px] font-mono uppercase tracking-widest text-[#E6C687]">TOTAL PRICE</span>
+          <span className="text-base font-mono font-bold text-white">{formatPrice(product.price)}</span>
+        </div>
+
+        <button
+          onClick={handleAddToCart}
+          disabled={product.stock === 0 || adding}
+          className="flex-1 max-w-[220px] py-3 px-5 bg-[linear-gradient(110deg,#D4AF37_0%,#C5A059_100%)] text-[#1A1A1A] font-bold text-xs uppercase tracking-wider rounded-xl shadow-lg active:scale-95 transition-all flex items-center justify-center gap-2 cursor-pointer disabled:bg-neutral-700"
+        >
+          <ShoppingBag className="w-4 h-4" />
+          <span>{product.stock === 0 ? 'OUT OF STOCK' : adding ? 'ADDING...' : 'ADD TO BAG'}</span>
+        </button>
       </div>
     </div>
   );

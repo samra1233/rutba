@@ -457,8 +457,7 @@ export default function Admin() {
   if (!isLoggedIn) {
     return (
       <div 
-        className="min-h-screen flex items-center justify-center py-16 px-4 relative overflow-hidden"
-        style={{ background: 'linear-gradient(160deg, #fdf8f1 0%, #f6ece0 30%, #fdf5eb 65%, #fefcf9 100%)' }}
+        className="min-h-screen flex items-center justify-center py-16 px-4 relative overflow-hidden bg-white"
       >
         {/* Ambient gold background glows */}
         <div className="absolute top-[-20%] left-[-10%] w-[600px] h-[600px] bg-[#C5A059]/5 rounded-full blur-[160px] pointer-events-none" />
@@ -561,8 +560,7 @@ export default function Admin() {
 
   return (
     <div 
-      className="min-h-screen select-text flex flex-col lg:flex-row relative overflow-hidden text-left p-6 gap-6 md:gap-8 animate-fadeIn" 
-      style={{ background: 'linear-gradient(160deg, #fdf8f1 0%, #f6ece0 30%, #fdf5eb 65%, #fefcf9 100%)' }}
+      className="min-h-screen select-text flex flex-col lg:flex-row relative overflow-hidden text-left p-6 gap-6 md:gap-8 animate-fadeIn bg-white" 
     >
       <div className="absolute inset-0 bg-[radial-gradient(#C5A059_1px,transparent_1px)] [background-size:32px_32px] opacity-[0.02]" />
 

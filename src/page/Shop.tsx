@@ -434,9 +434,9 @@ export default function Shop() {
   );
 
   return (
-    <div className="min-h-screen relative" style={{ background: 'linear-gradient(160deg, #fdf8f1 0%, #f6ece0 30%, #fdf5eb 65%, #fefcf9 100%)' }}>
-      {/* Ambient liquid field */}
-      <div className="fixed inset-0 pointer-events-none overflow-hidden z-0">
+    <div className="min-h-screen relative bg-white pt-20 lg:pt-28 pb-20">
+      {/* Ambient liquid field (desktop only) */}
+      <div className="hidden md:block fixed inset-0 pointer-events-none overflow-hidden z-0">
         <LiquidBlob hue="gold" size={620} className="-top-32 -left-32" />
         <LiquidBlob hue="wine" size={520} className="top-1/2 -right-40" style={{ animationDelay: '4s' }} />
         <LiquidBlob hue="emerald" size={460} className="bottom-0 left-1/3" style={{ animationDelay: '8s' }} />
@@ -585,7 +585,7 @@ export default function Shop() {
                     initial="hidden"
                     animate="show"
                     exit={{ opacity: 0, y: 15, transition: { duration: 0.2 } }}
-                    className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
+                    className="grid grid-cols-2 gap-3 sm:grid-cols-2 lg:grid-cols-3 lg:gap-6"
                   >
                     {paginatedProducts.map(product => (
                       <motion.div key={product.id} variants={fadeInUp}>

@@ -211,7 +211,7 @@ export default function Checkout() {
   };
 
   return (
-    <div className="max-w-7xl mx-auto px-4 md:px-8 py-6 space-y-8 animate-fadeIn">
+    <div className="max-w-7xl mx-auto px-4 md:px-8 py-6 pt-20 md:pt-6 space-y-6 md:space-y-8 animate-fadeIn bg-white md:bg-transparent min-h-screen">
       {/* Back to bag button */}
       <button
         onClick={() => setActivePage('shop')}
@@ -223,20 +223,18 @@ export default function Checkout() {
 
       <div className="text-center md:text-left space-y-1">
         <span className="text-[10px] uppercase font-sans tracking-[0.3em] text-[#C5A059] block font-black">SECURE CHECKOUT SYSTEM</span>
-        <h1 className="font-sans text-3xl font-black uppercase text-[#14261C] tracking-tight">Confirm Your Order</h1>
+        <h1 className="font-sans text-2xl md:text-3xl font-black uppercase text-[#14261C] tracking-tight">Confirm Your Order</h1>
       </div>
 
-      <form onSubmit={handleSubmit} className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
+      <form onSubmit={handleSubmit} className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-12 items-start">
         {/* LEFT: SHIPPING & PAYMENT FORMS (7 cols) */}
-        <div className="lg:col-span-7 space-y-8">
+        <div className="lg:col-span-7 space-y-6 md:space-y-8">
           
           {/* Shipping details */}
           <div 
-            className="p-8 rounded-[2rem] border space-y-6 shadow-sm transition-all hover:shadow-md"
+            className="p-5 sm:p-8 rounded-2xl sm:rounded-[2rem] border space-y-5 sm:space-y-6 shadow-xs bg-white"
             style={{
-              background: 'rgba(255, 255, 255, 0.65)',
-              borderColor: 'rgba(197, 160, 89, 0.22)',
-              backdropFilter: 'blur(30px)',
+              borderColor: 'rgba(197, 160, 89, 0.25)',
             }}
           >
             <div className="flex items-center gap-3 text-[#14261C] border-b border-[#C5A059]/15 pb-4">
@@ -353,11 +351,9 @@ export default function Checkout() {
 
           {/* Payment Methods */}
           <div 
-            className="p-8 rounded-[2rem] border space-y-6 shadow-sm transition-all hover:shadow-md"
+            className="p-5 sm:p-8 rounded-2xl sm:rounded-[2rem] border space-y-5 sm:space-y-6 shadow-xs bg-white"
             style={{
-              background: 'rgba(255, 255, 255, 0.65)',
-              borderColor: 'rgba(197, 160, 89, 0.22)',
-              backdropFilter: 'blur(30px)',
+              borderColor: 'rgba(197, 160, 89, 0.25)',
             }}
           >
             <div className="flex items-center gap-3 text-[#14261C] border-b border-[#C5A059]/15 pb-4">
@@ -436,7 +432,7 @@ export default function Checkout() {
                     {/* Header */}
                     <div className="flex justify-between items-start mb-4">
                       <div className="space-y-0.5">
-                        <span className="text-[8px] uppercase tracking-widest opacity-75 font-mono">ZARIHA COUTURE</span>
+                        <span className="text-[8px] uppercase tracking-widest opacity-75 font-mono">ROTBA COUTURE</span>
                         <div className="flex items-center gap-1">
                           <Sparkles className="w-3 h-3 text-[#C5A059] animate-pulse" />
                           <span className="text-[8px] font-bold tracking-widest text-[#C5A059]">PLATINUM</span>
@@ -540,11 +536,9 @@ export default function Checkout() {
 
         {/* RIGHT: ORDER SUMMARY PANEL (5 cols) */}
         <div 
-          className="lg:col-span-5 p-8 rounded-[2.5rem] border space-y-6 lg:sticky lg:top-28 shadow-sm transition-all hover:shadow-md"
+          className="lg:col-span-5 p-5 sm:p-8 rounded-2xl sm:rounded-[2.5rem] border space-y-5 sm:space-y-6 lg:sticky lg:top-28 shadow-xs bg-white"
           style={{
-            background: 'rgba(255, 255, 255, 0.65)',
-            borderColor: 'rgba(197, 160, 89, 0.22)',
-            backdropFilter: 'blur(30px)',
+            borderColor: 'rgba(197, 160, 89, 0.25)',
           }}
         >
           <div className="border-b border-[#C5A059]/15 pb-4">

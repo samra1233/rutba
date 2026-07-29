@@ -17,7 +17,7 @@ import { motion, AnimatePresence } from 'motion/react';
 import { useApp } from '../AppContext';
 import { Sparkles, Heart, ShoppingBag } from 'lucide-react';
 
-type TabType = 'ready-to-wear' | 'unstitched';
+type TabType = 'ready-to-wear' | 'unstitched' | 'bags';
 
 interface CardProps {
   product: any;
@@ -152,85 +152,16 @@ function TrendingLookbookCard({ product, index, variants, onCardClick }: CardPro
 export default function TrendingSection() {
   const { products, setActivePage } = useApp();
   const [activeTab, setActiveTab] = useState<TabType>('ready-to-wear');
-  const sliderRef = useRef<HTMLDivElement>(null);
-  const [scrollProgress, setScrollProgress] = useState(0);
-
-  // Mouse drag-to-scroll states
-  const [isDown, setIsDown] = useState(false);
-  const [startX, setStartX] = useState(0);
-  const [scrollLeftState, setScrollLeftState] = useState(0);
-  const [dragged, setDragged] = useState(false);
 
   const filteredProducts = useMemo(() => {
     if (activeTab === 'ready-to-wear') {
-      return products.filter(p => p.type === 'Embroidered').slice(0, 8);
+      return products.filter(p => p.type === 'Embroidered' || p.category === 'Ready to Wear').slice(0, 12);
+    } else if (activeTab === 'unstitched') {
+      return products.filter(p => p.type === 'Printed' || p.category === 'Unstitched').slice(0, 12);
     } else {
-      return products.filter(p => p.type === 'Printed').slice(0, 8);
+      return products.filter(p => p.category === 'Bags' || p.type === 'Bags').slice(0, 12);
     }
   }, [products, activeTab]);
-
-  // Reset scroll position and progress when activeTab changes
-  React.useEffect(() => {
-    if (sliderRef.current) {
-      sliderRef.current.scrollLeft = 0;
-      setScrollProgress(0);
-      setIsDown(false);
-      setDragged(false);
-    }
-  }, [activeTab]);
-
-  const handleScroll = () => {
-    if (sliderRef.current) {
-      const { scrollLeft, scrollWidth, clientWidth } = sliderRef.current;
-      const maxScroll = scrollWidth - clientWidth;
-
-      if (maxScroll > 0) {
-        setScrollProgress(scrollLeft / maxScroll);
-      } else {
-        setScrollProgress(0);
-      }
-    }
-  };
-
-  // Mouse drag event handlers
-  const handleMouseDown = (e: React.MouseEvent) => {
-    if (!sliderRef.current) return;
-    setIsDown(true);
-    setDragged(false);
-    // PageX relative to the slider element
-    setStartX(e.pageX - sliderRef.current.offsetLeft);
-    setScrollLeftState(sliderRef.current.scrollLeft);
-  };
-
-  const handleMouseLeave = () => {
-    setIsDown(false);
-  };
-
-  const handleMouseUp = () => {
-    setIsDown(false);
-  };
-
-  const handleMouseMove = (e: React.MouseEvent) => {
-    if (!isDown || !sliderRef.current) return;
-    e.preventDefault();
-    const x = e.pageX - sliderRef.current.offsetLeft;
-    const walk = (x - startX) * 1.5; // scroll speed multiplier
-
-    if (Math.abs(walk) > 8) {
-      setDragged(true);
-    }
-    sliderRef.current.scrollLeft = scrollLeftState - walk;
-  };
-
-  // Drag-safe card click handler
-  const handleCardClick = (productId: string, e: React.MouseEvent) => {
-    if (dragged) {
-      e.preventDefault();
-      e.stopPropagation();
-    } else {
-      setActivePage('product-detail', productId);
-    }
-  };
 
   return (
     <section
@@ -240,69 +171,67 @@ export default function TrendingSection() {
       {/* Ambient glass light glow behind slider */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[300px] rounded-full bg-[#C5A059]/5 blur-[120px] pointer-events-none" />
 
-      <div className="max-w-7xl mx-auto px-6 md:px-8 space-y-12 relative z-10">
+      <div className="max-w-7xl mx-auto px-4 md:px-8 space-y-8 md:space-y-12 relative z-10">
 
-        {/* ── Section Title & Navigation Row Centered & Animated ── */}
-        <div className="flex flex-col items-center justify-center text-center gap-8 border-b border-[#C5A059]/20 pb-8">
-          <div className="flex flex-col items-center justify-center space-y-3.5 text-center">
-            <h2
-              className="leading-none text-[#111714] font-light uppercase tracking-wide"
-              style={{
-                fontSize: 'clamp(2.2rem, 5vw, 3.2rem)',
-                letterSpacing: '0.08em'
+        {/* ── Section Title & Navigation Row ── */}
+        <div className="flex flex-col gap-4 md:gap-6 border-b border-[#C5A059]/20 pb-4 md:pb-6 text-left">
+          {/* Heading Row */}
+          <div className="flex items-center justify-between gap-4 w-full">
+            {/* Accent Line + Heading */}
+            <div className="flex items-center gap-3 border-l-[4px] md:border-l-[5px] border-[#143D30] pl-3 md:pl-4">
+              <h2
+                className="text-xl sm:text-2xl md:text-3xl lg:text-4xl uppercase tracking-wider leading-none text-[#1A1A1A]"
+                style={{ fontFamily: 'var(--font-didot)', fontWeight: 400 }}
+              >
+                <span className="text-[#1A1A1A]">SHOP </span>
+                <span className="text-[#143D30]">NOW</span>
+              </h2>
+            </div>
+
+            {/* View All Button */}
+            <button
+              onClick={() => {
+                setActivePage('shop');
               }}
+              className="px-4 py-1.5 sm:px-6 sm:py-2 bg-gradient-to-b from-[#C5A059] to-[#9E7D3B] text-white/95 border border-[#8C6D2F] rounded-full text-[11px] sm:text-xs font-semibold tracking-wider hover:scale-105 active:scale-95 transition-all shadow-md cursor-pointer shrink-0"
+              style={{ fontFamily: 'var(--font-avenir)' }}
             >
-              <span style={{ fontFamily: 'var(--font-display)' }}>Trending </span>
-              <span className="font-serif italic text-[#C5A059] capitalize" style={{ fontFamily: 'var(--font-serif)', letterSpacing: '0.02em', fontWeight: 'normal' }}>Outfits</span>
-            </h2>
+              View All
+            </button>
           </div>
 
-          {/* Tab Selection - Centered & Luxe */}
-          <div className="flex items-center justify-center">
-            <div
-              className="flex p-1.5 rounded-full border border-[#C5A059]/25 shadow-md transition-all duration-500 hover:shadow-[0_15px_35px_rgba(197,160,89,0.08)] backdrop-blur-md"
-              style={{
-                background: 'rgba(250, 245, 240, 0.75)', // Glassy cream
-              }}
-            >
-              <button
-                onClick={() => setActiveTab('ready-to-wear')}
-                className="relative px-6 py-2.5 md:px-9 md:py-3 rounded-full font-mono text-[9.5px] md:text-[10px] uppercase tracking-[0.24em] font-extrabold transition-all duration-300 cursor-pointer overflow-hidden group"
-              >
-                {activeTab === 'ready-to-wear' && (
-                  <motion.div
-                    layoutId="activeTabGlowBackground"
-                    className="absolute inset-0 bg-gradient-to-r from-[#14261C] to-[#070B09] border border-[#C5A059]/40 rounded-full z-0 shadow-md"
-                    transition={{ type: 'spring', stiffness: 350, damping: 24 }}
-                  />
-                )}
-                <span className={`relative z-10 flex items-center justify-center gap-2 transition-colors duration-300 ${activeTab === 'ready-to-wear' ? 'text-[#E8C888] font-extrabold' : 'text-neutral-500 group-hover:text-[#14261C]'}`}>
-                  {activeTab === 'ready-to-wear' && <span className="w-1.5 h-1.5 rounded-full bg-[#E8C888] animate-pulse" />}
-                  Ready To Wear
-                </span>
-              </button>
-
-              <button
-                onClick={() => setActiveTab('unstitched')}
-                className="relative px-6 py-2.5 md:px-9 md:py-3 rounded-full font-mono text-[9.5px] md:text-[10px] uppercase tracking-[0.24em] font-extrabold transition-all duration-300 cursor-pointer overflow-hidden group"
-              >
-                {activeTab === 'unstitched' && (
-                  <motion.div
-                    layoutId="activeTabGlowBackground"
-                    className="absolute inset-0 bg-gradient-to-r from-[#14261C] to-[#070B09] border border-[#C5A059]/40 rounded-full z-0 shadow-md"
-                    transition={{ type: 'spring', stiffness: 350, damping: 24 }}
-                  />
-                )}
-                <span className={`relative z-10 flex items-center justify-center gap-2 transition-colors duration-300 ${activeTab === 'unstitched' ? 'text-[#E8C888] font-extrabold' : 'text-neutral-500 group-hover:text-[#14261C]'}`}>
-                  {activeTab === 'unstitched' && <span className="w-1.5 h-1.5 rounded-full bg-[#E8C888] animate-pulse" />}
-                  Unstitched
-                </span>
-              </button>
+          {/* Tab Selection - Centered & Underlined */}
+          <div className="flex items-center justify-center pt-1 overflow-x-auto no-scrollbar">
+            <div className="flex gap-4 sm:gap-8 md:gap-12 whitespace-nowrap px-2">
+              {[
+                { id: 'ready-to-wear', label: 'Ready To Wear' },
+                { id: 'unstitched', label: 'Unstitched' },
+                { id: 'bags', label: 'Bags' }
+              ].map(tab => (
+                <button
+                  key={tab.id}
+                  onClick={() => setActiveTab(tab.id as TabType)}
+                  className="relative pb-2 font-medium text-xs sm:text-sm md:text-base tracking-wide transition-colors cursor-pointer"
+                  style={{
+                    color: activeTab === tab.id ? '#111714' : 'rgba(17, 23, 20, 0.6)',
+                    fontFamily: 'var(--font-avenir)'
+                  }}
+                >
+                  <span>{tab.label}</span>
+                  {activeTab === tab.id && (
+                    <motion.div
+                      layoutId="trendingActiveUnderline"
+                      className="absolute bottom-0 left-0 right-0 h-[2px] bg-[#111714]"
+                      transition={{ type: 'spring', stiffness: 350, damping: 25 }}
+                    />
+                  )}
+                </button>
+              ))}
             </div>
           </div>
         </div>
 
-        {/* ── Dynamic Product Slider with Mouse Drag Scrolling ── */}
+        {/* ── Dynamic Product Grid ── */}
         <div className="relative">
           <AnimatePresence mode="wait">
             <motion.div
@@ -312,42 +241,21 @@ export default function TrendingSection() {
               whileInView="show"
               viewport={{ once: true, margin: "-100px" }}
               exit={{ opacity: 0, y: -10, transition: { duration: 0.25 } }}
-              ref={sliderRef}
-              onScroll={handleScroll}
-              onMouseDown={handleMouseDown}
-              onMouseLeave={handleMouseLeave}
-              onMouseUp={handleMouseUp}
-              onMouseMove={handleMouseMove}
-              className={`flex gap-6 overflow-x-auto scrollbar-none pt-2 pb-6 px-1 ${isDown ? 'cursor-grabbing select-none' : 'cursor-grab'
-                }`}
-              style={{
-                scrollSnapType: isDown ? 'none' : 'x mandatory',
-                WebkitOverflowScrolling: 'touch',
-              }}
+              className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-6 gap-y-6 sm:gap-y-10 pt-2 pb-6"
             >
               {filteredProducts.map((product, idx) => (
-                <div
+                <TrendingLookbookCard
                   key={product.id}
-                  className="snap-start shrink-0 w-[88%] sm:w-[55%] md:w-[40%] lg:w-[32%]"
-                >
-                  <TrendingLookbookCard
-                    product={product}
-                    index={idx}
-                    variants={cardVariants}
-                    onCardClick={handleCardClick}
-                  />
-                </div>
+                  product={product}
+                  index={idx}
+                  variants={cardVariants}
+                  onCardClick={(productId, e) => {
+                    setActivePage('product-detail', productId);
+                  }}
+                />
               ))}
             </motion.div>
           </AnimatePresence>
-
-          {/* Minimalist Premium Gold Scroll Progress Bar */}
-          <div className="w-full max-w-[180px] h-[2px] bg-neutral-200/50 mx-auto mt-6 rounded-full overflow-hidden relative">
-            <div
-              className="absolute top-0 left-0 h-full bg-[#C5A059] transition-all duration-150"
-              style={{ width: `${scrollProgress * 100}%` }}
-            />
-          </div>
         </div>
 
       </div>

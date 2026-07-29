@@ -15,8 +15,8 @@ export interface Product {
   viewers: number;
   isNewArrival: boolean;
   features: string[];
-  category?: 'Ready to Wear' | 'Unstitched';
-  pieces?: '2 Piece' | '3 Piece';
+  category?: 'Ready to Wear' | 'Unstitched' | 'Undergarments' | 'Bags';
+  pieces?: '1 Piece' | '2 Piece' | '3 Piece';
   season?: string;
   sizes?: string[];
   isBestSeller?: boolean;

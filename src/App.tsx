@@ -118,7 +118,7 @@ function MainLayout() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col justify-between select-none">
+    <div className="min-h-screen flex flex-col justify-between select-none bg-white">
 
 
       {/* [NEW] Custom Cursor — magnetic + shape blur blob */}
@@ -131,21 +131,8 @@ function MainLayout() {
       {isSplashActive && <SplashLoader onComplete={() => setIsSplashActive(false)} />}
 
       {/* 1. BRAND HEADER & TOP TICKER */}
-      {activePage === 'home' ? (
+      {activePage !== 'admin' && (
         <Navbar onOpenCart={() => setIsCartOpen(true)} onOpenWishlist={() => setIsWishlistOpen(true)} />
-      ) : activePage === 'admin' ? (
-        // Hide global floating back button for secure secret Admin Portal
-        null
-      ) : (
-        <div className="fixed top-4 left-4 z-40">
-          <button
-            onClick={() => setActivePage('home')}
-            className="bg-white/10 backdrop-blur-xl border border-white/20 px-5 py-3 rounded-full flex items-center gap-2.5 cursor-pointer shadow-[0_8px_30px_rgba(0,0,0,0.1)] text-brand-emerald hover:text-brand-gold transition-all font-bold uppercase tracking-widest text-[11px]"
-          >
-            <ArrowLeft className="w-4 h-4" />
-            <span>Back to Home</span>
-          </button>
-        </div>
       )}
 
       {/* 2. MAIN PAGE DISPLAY CONTENT */}
@@ -200,7 +187,7 @@ function MainLayout() {
               </div>
 
               <div className="flex-1 pr-4">
-                <span className="block font-mono text-[9px] uppercase tracking-widest opacity-70 mb-0.5">Zariha Handloom Feed</span>
+                <span className="block font-mono text-[9px] uppercase tracking-widest opacity-70 mb-0.5">ROTBA Handloom Feed</span>
                 <span className="text-[11px] font-sans leading-normal block">{alert.message}</span>
               </div>
 
@@ -272,7 +259,7 @@ function MainLayout() {
 
       {/* 5. BRAND FOOTER */}
       {activePage === 'home' && (
-        <footer className="relative w-full rounded-t-[3.5rem] md:rounded-t-[4.5rem] overflow-hidden border-t border-l border-r border-[#C5A059]/20 shadow-[0_-15px_40px_rgba(0,0,0,0.03)] z-20">
+        <footer className="hidden md:block relative w-full rounded-t-[3.5rem] md:rounded-t-[4.5rem] overflow-hidden border-t border-l border-r border-[#C5A059]/20 shadow-[0_-15px_40px_rgba(0,0,0,0.03)] z-20">
         {/* Blurry Liquid Glass Background Container — Light Cream Edition */}
         <div
           className="pt-9 pb-7 px-6 md:px-10 text-[#2a1605] relative overflow-hidden"
@@ -349,7 +336,7 @@ function MainLayout() {
                     <button
                       onClick={() => {
                         if (link.label === 'Contact Us') {
-                          addToast("You can contact us at care@zarihaluxury.com or WhatsApp: +92 300 123 4567", "info");
+                          addToast("You can contact us at care@rotbacouture.com or WhatsApp: +92 300 123 4567", "info");
                         } else {
                           setActivePage(link.page);
                         }

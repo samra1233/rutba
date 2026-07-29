@@ -62,19 +62,16 @@ export default function ProductCard({ product }: ProductCardProps) {
         damping: 24,
         opacity: { duration: 0.4 } 
       }}
-      className="product-card group flex flex-col w-full cursor-pointer transition-all duration-300 p-3 rounded-2xl"
+      className="product-card group flex flex-col w-full cursor-pointer transition-all duration-300 p-2 sm:p-3 rounded-xl sm:rounded-2xl bg-white"
       style={{
-        background: 'rgba(255, 255, 255, 0.48)',
-        backdropFilter: 'blur(16px)',
-        WebkitBackdropFilter: 'blur(16px)',
         border: '1px solid rgba(201, 164, 99, 0.16)',
         boxShadow: '0 4px 20px -6px rgba(90, 54, 10, 0.04)',
       }}
     >
       {/* Image container frame (contained inside the glass card) */}
-      <div className="relative aspect-[3/4] w-full rounded-xl overflow-hidden bg-neutral-100/50">
-        {/* Shimmer sweep effect on group hover */}
-        <div className="absolute inset-0 z-10 pointer-events-none overflow-hidden">
+      <div className="relative aspect-[3/4] w-full rounded-lg sm:rounded-xl overflow-hidden bg-neutral-100/50">
+        {/* Shimmer sweep effect on group hover (desktop only) */}
+        <div className="hidden md:block absolute inset-0 z-10 pointer-events-none overflow-hidden">
           <motion.div
             className="absolute inset-0 w-[200%] h-full bg-gradient-to-r from-transparent via-white/30 to-transparent skew-x-[-20deg]"
             style={{ left: '-50%' }}
@@ -114,7 +111,7 @@ export default function ProductCard({ product }: ProductCardProps) {
         {/* Wishlist button */}
         <button
           onClick={handleWishlist}
-          className={`absolute top-3 right-3 z-30 w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300 cursor-pointer bg-white/95 border border-neutral-200/80 shadow-xs ${
+          className={`absolute top-3 right-3 z-30 w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300 cursor-pointer bg-white border border-neutral-200/80 shadow-xs ${
             wishlisted ? 'text-rose-700 scale-100 opacity-100' : 'text-neutral-400 hover:text-rose-700 group-hover:opacity-100 group-hover:scale-100'
           }`}
         >
@@ -125,7 +122,7 @@ export default function ProductCard({ product }: ProductCardProps) {
         <button
           onClick={handleAddToCart}
           disabled={product.stock === 0 || adding}
-          className="hidden md:flex absolute bottom-0 left-0 right-0 py-3 bg-[#14261C]/95 hover:bg-[#C5A059] text-white text-[9px] font-sans tracking-widest text-center justify-center items-center gap-1.5 translate-y-full group-hover:translate-y-0 transition-transform duration-300 cursor-pointer disabled:bg-neutral-800 disabled:cursor-not-allowed z-20 font-bold"
+          className="hidden md:flex absolute bottom-0 left-0 right-0 py-3 bg-black hover:bg-neutral-800 text-white text-[9px] font-sans tracking-widest text-center justify-center items-center gap-1.5 translate-y-full group-hover:translate-y-0 transition-transform duration-300 cursor-pointer disabled:bg-neutral-800 disabled:cursor-not-allowed z-20 font-bold"
         >
           <ShoppingBag className="w-3.5 h-3.5" />
           <span>{product.stock === 0 ? 'OUT OF STOCK' : adding ? 'ADDING...' : 'ADD TO BAG'}</span>
@@ -135,7 +132,7 @@ export default function ProductCard({ product }: ProductCardProps) {
         <button
           onClick={handleAddToCart}
           disabled={product.stock === 0 || adding}
-          className="md:hidden absolute bottom-3 right-3 z-20 w-9 h-9 rounded-full bg-white/95 border border-[#C5A059]/30 flex items-center justify-center text-[#C5A059] shadow-md active:scale-90 transition-transform"
+          className="md:hidden absolute bottom-3 right-3 z-20 w-9 h-9 rounded-full bg-white border border-[#C5A059]/40 flex items-center justify-center text-[#C5A059] shadow-md active:scale-90 transition-transform"
         >
           <ShoppingBag className="w-4 h-4" />
         </button>

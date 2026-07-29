@@ -114,7 +114,7 @@ export default function Model3DShowcase() {
   return (
     <section
       ref={containerRef}
-      className="w-full pt-2 pb-12 px-4 md:px-8 overflow-hidden relative select-none flex flex-col items-center justify-center"
+      className="w-full pt-1 pb-6 px-4 md:px-8 overflow-hidden relative select-none flex flex-col items-center justify-center"
     >
       {/* Centered Mannequin Exhibition Stage */}
       <div className="relative w-full max-w-7xl mx-auto flex items-center justify-center min-h-[500px] md:min-h-[960px]">

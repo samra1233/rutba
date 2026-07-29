@@ -11,9 +11,11 @@ import Model3DShowcase from '../components/Model3DShowcase';
 import Silk from '../components/Silk';
 import { motion, useScroll, useTransform } from 'motion/react';
 import ArabicTrailHero from '../components/ArabicTrailHero';
+import { ArrowRight } from 'lucide-react';
+import MobileHomeView from '../components/MobileHomeView';
 
 export default function Home() {
-  const { setActivePage } = useApp();
+  const { setActivePage, updateFilters } = useApp();
   const bannerRef = React.useRef<HTMLDivElement>(null);
 
   // Scroll Parallax logic on the banner element
@@ -28,24 +30,28 @@ export default function Home() {
   const imageY = useTransform(scrollYProgress, [0, 1], [-30, 30]);
 
   return (
-    <div className="pb-12" style={{ background: 'linear-gradient(160deg, #fdf8f1 0%, #f6ece0 30%, #fdf5eb 65%, #fefcf9 100%)' }}>
-      {/* 1. HERO SECTION */}
-      <section className="relative h-[100vh] min-h-[450px] w-full overflow-hidden border-b border-brand-gold/15 bg-brand-charcoal">
-        {/* Backdrop Image Layer */}
-        <div className="absolute inset-0 w-full h-full">
-          <img
-            src="/hero_showcase.jpeg"
-            alt="ROTBA Mannequins Showcase"
-            loading="eager"
-            className="w-full h-full object-cover object-[center_90%] select-none pointer-events-none"
-          />
-        </div>
-        {/* Arabic Alphabet Animate-on-MouseMove Particle Effect */}
-        <ArabicTrailHero />
-      </section>
+    <div className="pb-12 bg-white">
+      {/* ── 1. DEDICATED MOBILE APP LANDING VIEW (MOBILE ONLY) ── */}
+      <MobileHomeView />
 
-      {/* 2. SHOP BY CATEGORY — immediately after hero */}
-      <ShopByCategory />
+      {/* ── 2. DESKTOP CINEMATIC LUXURY VIEW (DESKTOP ONLY) ── */}
+      <div className="hidden md:block">
+        <section className="relative h-[100vh] min-h-[450px] w-full overflow-hidden border-b border-brand-gold/15 bg-brand-charcoal">
+          {/* Backdrop Image Layer */}
+          <div className="absolute inset-0 w-full h-full">
+            <img
+              src="/hero_showcase.jpeg"
+              alt="ROTBA Mannequins Showcase"
+              loading="eager"
+              className="w-full h-full object-cover object-[center_90%] select-none pointer-events-none"
+            />
+          </div>
+          {/* Arabic Alphabet Animate-on-MouseMove Particle Effect */}
+          <ArabicTrailHero />
+        </section>
+
+        {/* 2. SHOP BY CATEGORY — immediately after hero */}
+        <ShopByCategory />
 
       {/* Cinematic Wide Banner Divider (Infinitely Sliding Headline Image Marquee + Parallax Scroll) */}
       <motion.div
@@ -54,7 +60,7 @@ export default function Home() {
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: "-120px" }}
         transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
-        className="w-full h-[360px] md:h-[440px] overflow-hidden border-y border-[#C5A059]/25 my-16 relative bg-[#101512]"
+        className="w-full h-[360px] md:h-[440px] overflow-hidden border-y border-[#C5A059]/25 my-8 relative bg-[#101512]"
         style={{
           boxShadow: '0 20px 40px rgba(0, 0, 0, 0.05)',
         }}
@@ -137,6 +143,7 @@ export default function Home() {
         <PremiumSpotlight />
       </div>
 
+      </div> {/* End desktop container */}
     </div>
   );
 }

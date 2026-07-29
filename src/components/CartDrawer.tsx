@@ -128,9 +128,9 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
             animate={{ x: 0 }}
             exit={{ x: '100%' }}
             transition={{ type: 'spring', damping: 30, stiffness: 230 }}
-            className="fixed top-0 right-0 bottom-0 z-55 w-full max-w-md shadow-[0_0_60px_rgba(0,0,0,0.15)] flex flex-col h-full border-l border-[#C5A059]/30"
+            className="fixed top-0 right-0 bottom-0 z-55 w-screen shadow-[0_0_60px_rgba(0,0,0,0.15)] flex flex-col h-full border-l border-[#C5A059]/30"
             style={{
-              background: 'rgba(250, 245, 240, 0.85)', // Glass liquid theme matched with website bg
+              background: 'rgba(255, 255, 255, 0.85)', // Glass liquid theme matched with website bg
               backdropFilter: 'blur(35px)',
             }}
           >
@@ -142,7 +142,7 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
             </div>
  
             {/* Header Area */}
-            <div className="p-6 border-b border-[#C5A059]/20 flex items-center justify-between relative z-10 bg-[#FAF5F0]/40">
+            <div className="p-6 border-b border-[#C5A059]/20 flex items-center justify-between relative z-10 bg-white/40">
               <div className="flex items-center gap-4">
                 <motion.div 
                   whileHover={{ scale: 1.08, rotate: [0, -5, 5, 0] }}
@@ -177,13 +177,13 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
             {/* Items scroll section */}
             <div className="flex-1 overflow-y-auto p-6 space-y-6 scrollbar-none relative z-10 bg-transparent">
               
-              {/* E-commerce Interactive Free Shipping Progress Bar */}
+              {/* E-commerce Interactive Free Shipping Progress Bar (Desktop only) */}
               {resolvedItems.length > 0 && (
                 <motion.div 
                   initial={{ opacity: 0, y: -12 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.15 }}
-                  className="p-4 rounded-xl bg-white/65 border border-[#C5A059]/25 space-y-3 shadow-sm relative z-10 backdrop-blur-md"
+                  className="hidden md:block p-4 rounded-xl bg-white/65 border border-[#C5A059]/25 space-y-3 shadow-sm relative z-10 backdrop-blur-md"
                 >
                   <div className="flex justify-between items-center text-[9px] font-mono text-neutral-800">
                     <span className="tracking-widest flex items-center gap-2 font-bold text-[#C5A059] uppercase">
@@ -371,7 +371,7 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
             {/* Premium Checkout & Subtotal summary block */}
             {resolvedItems.length > 0 && (
               <div 
-                className="p-6 border-t border-[#C5A059]/25 relative z-10 space-y-5 shadow-[0_-12px_40px_rgba(197,160,89,0.06)] bg-[#FAF5F0]/60 backdrop-blur-md"
+                className="p-6 border-t border-[#C5A059]/25 relative z-10 space-y-5 shadow-[0_-12px_40px_rgba(197,160,89,0.06)] bg-white/60 backdrop-blur-md"
               >
                 {/* Security Badge & Shipping Note */}
                 <div className="flex items-center justify-between text-[10px] text-neutral-500 font-mono tracking-wider">

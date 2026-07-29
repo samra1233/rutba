@@ -102,7 +102,7 @@ interface SilkProps {
 }
 
 const Silk = ({ speed = 5, scale = 1, color = '#1f9a1c', noiseIntensity = 1.5, rotation = 0 }: SilkProps) => {
-  const meshRef = useRef<any>();
+  const meshRef = useRef<any>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const [isInView, setIsInView] = useState(false);
 

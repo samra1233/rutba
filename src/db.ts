@@ -107,6 +107,64 @@ const SEED_PRODUCTS: Product[] = [
     onSale: false
   },
   {
+    id: "ms-bag01",
+    name: "Classic Gold Embellished Clutch",
+    price: 350,
+    fabric: "Velvet",
+    type: "Bags",
+    collection: "Luxe Accessories",
+    images: [
+      "https://picsum.photos/seed/rotbabag1/800/1067",
+      "https://picsum.photos/seed/rotbabag1b/800/1067"
+    ],
+    description: "An elegant evening clutch in premium velvet with signature gold-plated embellishments and detachable chain strap.",
+    stock: 12,
+    colors: ["Black", "Gold"],
+    viewers: 9,
+    isNewArrival: true,
+    features: [
+      "Premium velvet exterior",
+      "Signature gold brass clasp",
+      "Detachable chain shoulder strap",
+      "Interior card pocket"
+    ],
+    category: "Bags",
+    pieces: "1 Piece",
+    season: "All Season",
+    sizes: ["OS"],
+    isBestSeller: true,
+    onSale: false
+  },
+  {
+    id: "ms-bag02",
+    name: "Royal Ivory Silk Handbag",
+    price: 420,
+    fabric: "Silk",
+    type: "Bags",
+    collection: "Luxe Accessories",
+    images: [
+      "https://picsum.photos/seed/rotbabag2/800/1067",
+      "https://picsum.photos/seed/rotbabag2b/800/1067"
+    ],
+    description: "Handcrafted structured silk handbag featuring traditional gold thread work, satin lining and comfortable handles.",
+    stock: 7,
+    colors: ["Ivory White", "Gold"],
+    viewers: 15,
+    isNewArrival: true,
+    features: [
+      "Pure silk outer shell",
+      "Hand-embroidered gold motifs",
+      "Luxurious satin lining",
+      "Dual top handles"
+    ],
+    category: "Bags",
+    pieces: "1 Piece",
+    season: "All Season",
+    sizes: ["OS"],
+    isBestSeller: false,
+    onSale: false
+  },
+  {
     id: "ms-001",
     name: "Embroidered 3 Piece Indigo Suit",
     price: 6699,
@@ -2249,9 +2307,10 @@ class Database {
       // 1. Sync products
       const productsRef = collection(firestore, 'products');
       const productsSnapshot = await getDocs(productsRef);
-      if (productsSnapshot.empty) {
-        console.log("Firestore products collection is empty. Seeding from SEED_PRODUCTS...");
-        for (const p of SEED_PRODUCTS) {
+      const existingDocIds = new Set(productsSnapshot.docs.map(doc => doc.id));
+      for (const p of SEED_PRODUCTS) {
+        if (!existingDocIds.has(p.id)) {
+          console.log(`Seeding missing product ${p.id} to Firestore...`);
           await setDoc(doc(firestore, 'products', p.id), p);
         }
       }
