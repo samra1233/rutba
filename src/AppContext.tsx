@@ -379,79 +379,87 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     fetchCart(userId || 'guest');
   }, [userId]);
 
-  // 4. Connect to WebSockets
+  // 4. Connect to WebSockets with retry limit for static hosting
   useEffect(() => {
+    let retryCount = 0;
+    const maxRetries = 2;
+    let isSubscribed = true;
+
     const connectWS = () => {
-      // Establish WS relative to window location
+      if (!isSubscribed || retryCount >= maxRetries) return;
+
       const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
       const wsUrl = `${protocol}//${window.location.host}/ws`;
-      
-      console.log('Connecting to WebSocket:', wsUrl);
-      const socket = new WebSocket(wsUrl);
-      wsRef.current = socket;
 
-      socket.onopen = () => {
-        console.log('WebSocket Connection Established');
-        // If viewing a product, re-register viewing state
-        if (selectedProductId && activePage === 'product-detail') {
-          socket.send(JSON.stringify({ type: 'VIEWING_PRODUCT', productId: selectedProductId }));
-        }
-      };
+      try {
+        const socket = new WebSocket(wsUrl);
+        wsRef.current = socket;
 
-      socket.onmessage = (event) => {
-        try {
-          const data = JSON.parse(event.data);
-          
-          if (data.type === 'INIT') {
-            setGlobalViewers(data.activeConnections + 5);
-          } else if (data.type === 'VIEWERS_UPDATE') {
-            // Update the viewer count of the targeted product in local state
-            setProducts(prev => prev.map(p => {
-              if (p.id === data.productId) {
-                return { ...p, viewers: data.viewers };
-              }
-              return p;
-            }));
-          } else if (data.type === 'STOCK_UPDATE') {
-            // Live update stock levels in UI instantly
-            setProducts(prev => prev.map(p => {
-              if (p.id === data.productId) {
-                return { ...p, stock: data.stock };
-              }
-              return p;
-            }));
-            if (data.message) {
-              addToast(data.message, 'info');
-            }
-          } else if (data.type === 'NEW_DROP') {
-            if (data.message) {
-              addToast(data.message, 'success');
-            }
-          } else if (data.type === 'SETTINGS_UPDATE') {
-            if (data.settings) {
-              setSettings(data.settings);
-            }
+        socket.onopen = () => {
+          retryCount = 0;
+          if (selectedProductId && activePage === 'product-detail') {
+            try {
+              socket.send(JSON.stringify({ type: 'VIEWING_PRODUCT', productId: selectedProductId }));
+            } catch (_) {}
           }
-        } catch (e) {
-          console.error('Error parsing WS event', e);
-        }
-      };
+        };
 
-      socket.onclose = () => {
-        console.log('WebSocket disconnected. Reconnecting in 3s...');
-        setTimeout(connectWS, 3000);
-      };
+        socket.onmessage = (event) => {
+          try {
+            const data = JSON.parse(event.data);
+            
+            if (data.type === 'INIT') {
+              setGlobalViewers(data.activeConnections + 5);
+            } else if (data.type === 'VIEWERS_UPDATE') {
+              setProducts(prev => prev.map(p => {
+                if (p.id === data.productId) {
+                  return { ...p, viewers: data.viewers };
+                }
+                return p;
+              }));
+            } else if (data.type === 'STOCK_UPDATE') {
+              setProducts(prev => prev.map(p => {
+                if (p.id === data.productId) {
+                  return { ...p, stock: data.stock };
+                }
+                return p;
+              }));
+              if (data.message) {
+                addToast(data.message, 'info');
+              }
+            } else if (data.type === 'NEW_DROP') {
+              if (data.message) {
+                addToast(data.message, 'success');
+              }
+            } else if (data.type === 'SETTINGS_UPDATE') {
+              if (data.settings) {
+                setSettings(data.settings);
+              }
+            }
+          } catch (_) {}
+        };
 
-      socket.onerror = (e) => {
-        console.error('WebSocket Error:', e);
-      };
+        socket.onclose = () => {
+          retryCount++;
+          if (retryCount < maxRetries && isSubscribed) {
+            setTimeout(connectWS, 4000);
+          }
+        };
+
+        socket.onerror = () => {
+          // Suppress error log on static hostings where Node WS server is not running
+        };
+      } catch (_) {}
     };
 
     connectWS();
 
     return () => {
+      isSubscribed = false;
       if (wsRef.current) {
-        wsRef.current.close();
+        try {
+          wsRef.current.close();
+        } catch (_) {}
       }
     };
   }, []);
