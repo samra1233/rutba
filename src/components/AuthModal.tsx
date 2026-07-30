@@ -46,9 +46,9 @@ export default function AuthModal() {
     e.preventDefault();
     if (!email) return;
 
-    // Trigger mock login sequence
     const resolvedName = name || email.split('@')[0];
     login(resolvedName, email, phone);
+    setAuthModalOpen(false);
   };
 
   const handleGoogleLogin = async () => {
@@ -58,20 +58,11 @@ export default function AuthModal() {
       const u = result.user;
       if (u && u.email) {
         login(u.displayName || u.email.split('@')[0], u.email, u.phoneNumber || '');
-      } else {
-        login('ROTBA Guest', 'guest@rotba.com', '03001234567');
+        setAuthModalOpen(false);
       }
     } catch (e: any) {
       console.error('Google Sign In Error:', e);
-      const errStr = String(e?.code || e?.message || e || '').toLowerCase();
-      if (errStr.includes('unauthorized-domain') || errStr.includes('unauthorized domain')) {
-        // Instant seamless fallback login so user login is never blocked on live site
-        login('ROTBA Customer', 'customer@rotbabyrutaba.com', '03001234567');
-        setAuthModalOpen(false);
-        addToast('Signed in as ROTBA Customer (Firebase domain authorization pending)', 'info');
-      } else {
-        addToast('Google login was cancelled or failed.', 'warn');
-      }
+      addToast('Google login was cancelled or failed.', 'warn');
     } finally {
       setIsLoadingGoogle(false);
     }
