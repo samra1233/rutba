@@ -180,32 +180,7 @@ export default function MobileHomeView() {
         </div>
       </div>
 
-      {/* ── 3. HORIZONTAL SEGMENTED CATEGORY NAV TABS ── */}
-      <div className="bg-white border-b border-neutral-200 px-4">
-        <div className="flex items-center gap-5 overflow-x-auto no-scrollbar">
-          {[
-            { id: 'all', label: 'All Catalog' },
-            { id: 'unstitched', label: 'Unstitched' },
-            { id: 'stitches', label: 'Stitches' },
-            { id: 'kurta-set', label: 'Kurta Set' },
-            { id: 'co-ord-set', label: 'Co ord set' },
-            { id: 'indian-saree', label: 'Indian Saree' },
-            { id: 'party-wear', label: 'Party Wear' }
-          ].map(tab => (
-            <button
-              key={tab.id}
-              onClick={() => setActiveTab(tab.id)}
-              className={`py-2.5 text-xs font-sans font-medium whitespace-nowrap border-b-2 transition-all cursor-pointer ${
-                activeTab === tab.id
-                  ? 'border-black text-black font-bold'
-                  : 'border-transparent text-neutral-500 hover:text-black'
-              }`}
-            >
-              {tab.label}
-            </button>
-          ))}
-        </div>
-      </div>
+ 
 
       {/* ── 4. NATIVE HERO BANNER SLIDER WITH OVERLAY ── */}
       <div className="mb-4">
