@@ -17,7 +17,7 @@ import { motion, AnimatePresence } from 'motion/react';
 import { useApp } from '../AppContext';
 import { Sparkles, Heart, ShoppingBag } from 'lucide-react';
 
-type TabType = 'ready-to-wear' | 'unstitched' | 'bags';
+type TabType = 'ready-to-wear' | 'unstitched' | 'party-wear';
 
 interface CardProps {
   product: any;
@@ -155,11 +155,11 @@ export default function TrendingSection() {
 
   const filteredProducts = useMemo(() => {
     if (activeTab === 'ready-to-wear') {
-      return products.filter(p => p.type === 'Embroidered' || p.category === 'Ready to Wear').slice(0, 12);
+      return products.filter(p => p.type === 'Embroidered' || p.category === 'Ready to Wear' || p.category === 'Stitches').slice(0, 12);
     } else if (activeTab === 'unstitched') {
       return products.filter(p => p.type === 'Printed' || p.category === 'Unstitched').slice(0, 12);
     } else {
-      return products.filter(p => p.category === 'Bags' || p.type === 'Bags').slice(0, 12);
+      return products.filter(p => p.category === 'Party Wear' || p.isBestSeller || p.collection?.toLowerCase().includes('festive')).slice(0, 12);
     }
   }, [products, activeTab]);
 
@@ -206,7 +206,7 @@ export default function TrendingSection() {
               {[
                 { id: 'ready-to-wear', label: 'Ready To Wear' },
                 { id: 'unstitched', label: 'Unstitched' },
-                { id: 'bags', label: 'Bags' }
+                { id: 'party-wear', label: 'Party Wear' }
               ].map(tab => (
                 <button
                   key={tab.id}

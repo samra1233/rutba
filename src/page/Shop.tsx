@@ -304,11 +304,7 @@ export default function Shop() {
             </AnimatePresence>
           </div>
 
-          <div className="h-px my-3" style={{ background: 'linear-gradient(90deg, transparent, rgba(201,164,99,0.25), transparent)' }} />
-
-          <CategoryRow active={activeFilters.category === 'Undergarments'} onClick={() => selectCategoryOnly('Undergarments')}>
-            Undergarments
-          </CategoryRow>
+ 
         </div>
       </div>
 
