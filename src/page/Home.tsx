@@ -98,27 +98,33 @@ export default function Home() {
         <div className="absolute inset-0 z-20 flex flex-col items-center justify-center text-center px-6 gap-6 md:gap-7">
           
           {/* Pill Badge */}
-          <div className="inline-flex items-center bg-[#072410]/70 backdrop-blur-md border border-white/10 rounded-full pl-1.5 pr-4 py-1.5 shadow-md">
-            <span className="bg-white text-black text-[9px] font-sans font-extrabold uppercase px-2.5 py-0.5 rounded-full tracking-wider">
-              NEW
+          <div className="inline-flex items-center bg-[#072410]/70 backdrop-blur-md border border-[#C5A059]/30 rounded-full pl-1.5 pr-4 py-1.5 shadow-md">
+            <span className="bg-[#C5A059] text-black text-[9px] font-sans font-extrabold uppercase px-2.5 py-0.5 rounded-full tracking-wider">
+              COLLECTION '26
             </span>
-            <span className="text-[10px] md:text-[11px] text-white/95 font-sans font-medium tracking-wide ml-2">
-              Just shipped v2.0
+            <span className="text-[10px] md:text-[11px] text-white/95 font-serif font-medium tracking-wide ml-2">
+              Festive Unstitched & Stitched Weaves
             </span>
           </div>
 
           {/* Heading */}
-          <h2 className="text-2xl md:text-4xl lg:text-5xl font-sans font-extrabold text-white tracking-tight leading-tight max-w-2xl">
-            Silk touch is a good<br />enhancement, Steve!
+          <h2 className="text-2xl md:text-4xl lg:text-5xl font-serif font-extrabold text-white tracking-tight leading-tight max-w-2xl">
+            Handcrafted Lawn &<br />Royal Silk Embellishments
           </h2>
 
           {/* Buttons Row */}
           <div className="flex items-center gap-3">
-            <button className="bg-white hover:bg-neutral-100 text-black text-xs md:text-sm font-sans font-bold px-6 py-3 rounded-xl transition-all cursor-pointer shadow-md active:scale-98">
-              Get started
+            <button
+              onClick={() => setActivePage('shop')}
+              className="bg-white hover:bg-neutral-100 text-black text-xs md:text-sm font-sans font-bold px-6 py-3 rounded-xl transition-all cursor-pointer shadow-md active:scale-98 uppercase tracking-wider"
+            >
+              Explore Collection
             </button>
-            <button className="bg-[#0e2714]/60 hover:bg-[#0e2714]/80 text-white/90 text-xs md:text-sm font-sans font-bold px-6 py-3 rounded-xl border border-white/10 transition-all cursor-pointer backdrop-blur-md active:scale-98">
-              Learn more
+            <button
+              onClick={() => setActivePage('about')}
+              className="bg-[#0e2714]/60 hover:bg-[#0e2714]/80 text-white/90 text-xs md:text-sm font-sans font-bold px-6 py-3 rounded-xl border border-white/20 transition-all cursor-pointer backdrop-blur-md active:scale-98 uppercase tracking-wider"
+            >
+              Our Heritage
             </button>
           </div>
 
