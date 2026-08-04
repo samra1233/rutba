@@ -269,7 +269,7 @@ export function OrderTrackingPage() {
   const [activeTab, setActiveTab] = useState<'history' | 'tracking' | 'profile'>('history');
   const [trackVal, setTrackVal] = useState('');
   const [searching, setSearching] = useState(false);
-  const { trackedOrder, trackOrder, user, logout, setAuthModalOpen, userOrders } = useApp();
+  const { trackedOrder, trackOrder, user, logout, setAuthModalOpen, userOrders, formatPrice } = useApp();
 
   const handleTrackCode = async (trackingNum: string) => {
     setTrackVal(trackingNum);
@@ -368,87 +368,81 @@ export function OrderTrackingPage() {
               <span className="text-[9px] uppercase tracking-widest text-[#C5A059] font-bold block">AUTHENTICATION REQUIRED</span>
               <h2 className="font-serif text-xl font-bold text-[#003e1c]">View Your Order Records</h2>
               <p className="text-xs text-neutral-500 font-sans max-w-sm mx-auto">
-                Sign in to see your recent unstitched suit orders, delivery history, and live tracking codes.
+                Sign in to view your real-time luxury order history and tracking statuses.
               </p>
               <button
                 onClick={() => setAuthModalOpen(true)}
-                className="mt-1 py-3 px-6 rounded-xl bg-[#003e1c] text-white font-mono text-[10px] uppercase font-bold tracking-wider hover:bg-[#002b13] transition-all cursor-pointer shadow-md active:scale-98"
+                className="py-2.5 px-6 rounded-xl bg-[#003e1c] hover:bg-[#002812] text-white font-mono text-xs uppercase tracking-wider font-bold shadow-md cursor-pointer transition-all active:scale-98"
               >
-                Log In / Create Account
+                Sign In Now
               </button>
             </div>
-          ) : userOrders && userOrders.length > 0 ? (
-            <div className="bg-white border border-[#C5A059]/25 p-5 md:p-6 rounded-2xl shadow-xs space-y-4 text-left">
-              <div className="flex items-center justify-between border-b border-neutral-100 pb-3">
-                <h3 className="font-serif text-lg font-bold text-[#003e1c]">Recent Order Records</h3>
-              </div>
-
-              <div className="space-y-3.5">
-                {userOrders.map((ord) => (
-                  <div 
-                    key={ord.id}
-                    className="p-4 rounded-xl border border-neutral-200 bg-neutral-50/60 hover:bg-white hover:border-[#C5A059]/40 transition-all space-y-3 shadow-2xs"
-                  >
-                    <div className="flex flex-wrap items-center justify-between gap-2 border-b border-neutral-200/60 pb-2.5 text-xs font-sans">
-                      <div>
-                        <span className="text-[9px] text-neutral-400 font-mono block uppercase font-bold">Order ID: {ord.id}</span>
-                        <span className="font-mono text-xs md:text-sm font-bold text-[#003e1c]">Tracking Code: {ord.trackingNumber}</span>
-                      </div>
-                      <span className={`px-2.5 py-0.5 rounded-full text-[9px] font-mono uppercase font-bold tracking-wider ${
-                        ord.status === 'Delivered' 
-                          ? 'bg-emerald-100 text-emerald-800'
-                          : ord.status === 'Shipped'
-                          ? 'bg-blue-100 text-blue-800'
-                          : 'bg-amber-100 text-amber-800'
-                      }`}>
-                        ● {ord.status}
-                      </span>
-                    </div>
-
-                    {/* Order items preview */}
-                    <div className="space-y-2">
-                      {ord.items.map((item, idx) => (
-                        <div key={idx} className="flex items-center gap-3 text-xs font-sans">
-                          {item.product?.images?.[0] && (
-                            <img
-                              src={item.product.images[0]}
-                              alt={item.product.name}
-                              className="w-12 h-15 object-cover rounded-lg border border-neutral-200 shrink-0"
-                            />
-                          )}
-                          <div className="flex-1 min-w-0">
-                            <h4 className="font-bold text-neutral-900 truncate text-xs">{item.product?.name || 'Unstitched Luxury Ensemble'}</h4>
-                            <p className="text-[10px] text-neutral-500 font-sans">Fabric: {item.product?.fabric || 'Lawn'} • Qty: {item.quantity}</p>
-                            <p className="text-[10px] text-[#C5A059] font-mono font-bold">AED {(item.product?.price * item.quantity).toLocaleString()}</p>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-
-                    {/* Order Footer & Live Track button */}
-                    <div className="flex items-center justify-between pt-2 border-t border-neutral-200/60 text-xs font-sans">
-                      <div className="text-[10px] font-sans text-neutral-500">
-                        Total Amount: <strong className="text-neutral-900 font-bold">AED {ord.total.toLocaleString()}</strong>
-                      </div>
-                      <button
-                        onClick={() => handleTrackCode(ord.trackingNumber)}
-                        className="py-2 px-3.5 rounded-xl bg-[#003e1c] hover:bg-[#002812] text-white text-[10px] font-mono uppercase tracking-wider font-bold shadow-2xs cursor-pointer flex items-center gap-1.5 active:scale-98 transition-all"
-                      >
-                        <span>Track Live Status</span>
-                        <ArrowRight className="w-3 h-3 text-[#C5A059]" />
-                      </button>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          ) : (
-            <div className="bg-white border border-neutral-200 p-8 rounded-2xl text-center space-y-3 shadow-2xs">
-              <Package className="w-10 h-10 text-[#C5A059] mx-auto opacity-70" />
+          ) : userOrders.length === 0 ? (
+            <div className="bg-white border border-neutral-200 p-8 rounded-2xl text-center space-y-2 text-neutral-500 font-sans">
+              <Package className="w-8 h-8 text-[#C5A059] mx-auto opacity-70" />
               <h3 className="font-serif text-lg font-bold text-[#003e1c]">No Orders Placed Yet</h3>
               <p className="text-xs text-neutral-500 max-w-xs mx-auto">
                 Your order records will appear here once you confirm a checkout purchase.
               </p>
+            </div>
+          ) : (
+            <div className="space-y-3.5">
+              {userOrders.map((ord) => (
+                <div 
+                  key={ord.id}
+                  className="p-4 rounded-xl border border-neutral-200 bg-neutral-50/60 hover:bg-white hover:border-[#C5A059]/40 transition-all space-y-3 shadow-2xs"
+                >
+                  <div className="flex flex-wrap items-center justify-between gap-2 border-b border-neutral-200/60 pb-2.5 text-xs font-sans">
+                    <div>
+                      <span className="text-[9px] text-neutral-400 font-mono block uppercase font-bold">Order ID: {ord.id}</span>
+                      <span className="font-mono text-xs md:text-sm font-bold text-[#003e1c]">Tracking Code: {ord.trackingNumber}</span>
+                    </div>
+                    <span className={`px-2.5 py-0.5 rounded-full text-[9px] font-mono uppercase font-bold tracking-wider ${
+                      ord.status === 'Delivered' 
+                        ? 'bg-emerald-100 text-emerald-800'
+                        : ord.status === 'Shipped'
+                        ? 'bg-blue-100 text-blue-800'
+                        : 'bg-amber-100 text-amber-800'
+                    }`}>
+                      ● {ord.status}
+                    </span>
+                  </div>
+
+                  {/* Order items preview */}
+                  <div className="space-y-2">
+                    {ord.items.map((item, idx) => (
+                      <div key={idx} className="flex items-center gap-3">
+                        {item.product?.images?.[0] && (
+                          <img
+                            src={item.product.images[0]}
+                            alt={item.product.name}
+                            className="w-12 h-15 object-cover rounded-lg border border-neutral-200 shrink-0"
+                          />
+                        )}
+                        <div className="flex-1 min-w-0">
+                          <h4 className="font-bold text-neutral-900 truncate text-xs">{item.product?.name || 'Unstitched Luxury Ensemble'}</h4>
+                          <p className="text-[10px] text-neutral-500 font-sans">Fabric: {item.product?.fabric || 'Lawn'} • Qty: {item.quantity}</p>
+                          <p className="text-[10px] text-[#C5A059] font-mono font-bold">{formatPrice((item.product?.price || 0) * item.quantity)}</p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* Order Footer & Live Track button */}
+                  <div className="flex items-center justify-between pt-2 border-t border-neutral-200/60 text-xs font-sans">
+                    <div className="text-[10px] font-sans text-neutral-500">
+                      Total Amount: <strong className="text-neutral-900 font-bold">{formatPrice(ord.total)}</strong>
+                    </div>
+                    <button
+                      onClick={() => handleTrackCode(ord.trackingNumber)}
+                      className="py-2 px-3.5 rounded-xl bg-[#003e1c] hover:bg-[#002812] text-white text-[10px] font-mono uppercase tracking-wider font-bold shadow-2xs cursor-pointer flex items-center gap-1.5 active:scale-98 transition-all"
+                    >
+                      <span>Track Live Status</span>
+                      <ArrowRight className="w-3 h-3 text-[#C5A059]" />
+                    </button>
+                  </div>
+                </div>
+              ))}
             </div>
           )}
         </div>

@@ -191,7 +191,7 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                       <Truck className="w-4.5 h-4.5 text-[#C5A059] shrink-0" />
                       {subtotal >= 500 
                         ? '✨ COMPLIMENTARY COUTURE DELIVERY UNLOCKED' 
-                        : `ADD AED ${(500 - subtotal).toLocaleString()} FOR COMPLIMENTARY SHIPPING`}
+                        : `ADD ${formatPrice(500 - subtotal)} FOR COMPLIMENTARY SHIPPING`}
                     </span>
                     <span className="font-bold text-[#C5A059]">{Math.min(100, Math.round((subtotal / 500) * 100))}%</span>
                   </div>

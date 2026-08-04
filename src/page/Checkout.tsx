@@ -385,7 +385,7 @@ export default function Checkout() {
                 <div className="space-y-1 mt-3">
                   <span className="font-sans text-xs font-black uppercase tracking-tight block">Cash on Delivery</span>
                   <span className="text-[8px] font-sans tracking-wider opacity-75 text-amber-500 font-extrabold">
-                    {settings?.codShippingFee ? `AED ${settings.codShippingFee} Delivery` : 'Standard Delivery'}
+                    {settings?.codShippingFee ? `${formatPrice(settings.codShippingFee)} Delivery` : 'Standard Delivery'}
                   </span>
                 </div>
               </button>
@@ -407,7 +407,7 @@ export default function Checkout() {
                 <div className="space-y-1 mt-3">
                   <span className="font-sans text-xs font-black uppercase tracking-tight block">Credit / Debit Card</span>
                   <span className="inline-block bg-[#C5A059] text-[#14261C] px-1.5 py-0.5 rounded text-[7px] font-sans font-black uppercase tracking-wider">
-                    {settings?.cardShippingFee ? `AED ${settings.cardShippingFee} Delivery` : 'Secure Payment'}
+                    {settings?.cardShippingFee ? `${formatPrice(settings.cardShippingFee)} Delivery` : 'Secure Payment'}
                   </span>
                 </div>
               </button>
