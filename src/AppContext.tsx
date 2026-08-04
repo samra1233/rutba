@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect, useRef } from 'react';
-import { Product, Cart, CartItem, Order, ShippingDetails, RealTimeUpdateEvent } from './types';
+import { Product, Cart, CartItem, Order, ShippingDetails, RealTimeUpdateEvent, CurrencyCode, CURRENCIES } from './types';
 import initialDb from '../zariha_db.json';
 
 interface AppContextType {
@@ -22,7 +22,7 @@ interface AppContextType {
     category: string;
     pieces: string;
   };
-  liveAlerts: { id: string; message: string; type: 'info' | 'success' | 'warn' }[];
+  liveAlerts: { id: string; name: string; city: string; action: string; timeAgo: string; image: string }[];
   globalViewers: number;
   userId: string;
   trackedOrder: Order | null;
@@ -31,26 +31,26 @@ interface AppContextType {
   user: { name: string; email: string; phone?: string } | null;
   isAuthModalOpen: boolean;
   setAuthModalOpen: (open: boolean) => void;
-  login: (name: string, email: string, phone?: string) => void;
+  login: (userData: { name: string; email: string; phone?: string }) => void;
   logout: () => void;
-  setProducts: React.Dispatch<React.SetStateAction<Product[]>>;
+  setProducts: (products: Product[]) => void;
   setActivePage: (page: string, productId?: string | null) => void;
   updateFilters: (filters: Partial<AppContextType['activeFilters']>) => void;
-  addToCart: (productId: string, quantity: number, startElement?: HTMLElement | null, imageUrl?: string) => Promise<void>;
-  updateCartQty: (productId: string, quantity: number) => Promise<void>;
+  addToCart: (productId: string, quantity: number, sourceElement?: HTMLElement | null, customImage?: string) => Promise<void>;
+  updateCartQty: (productId: string, delta: number) => Promise<void>;
   removeFromCart: (productId: string) => Promise<void>;
-  placeOrder: (shippingDetails: ShippingDetails, paymentMethod: 'card' | 'jazzcash' | 'easypaisa' | 'cod', paymentDetails?: any) => Promise<Order | null>;
-  trackOrder: (orderId: string) => Promise<Order | null>;
+  placeOrder: (shipping: ShippingDetails, total: number) => Promise<Order | null>;
+  trackOrder: (trackingNumber: string) => Promise<Order | null>;
   dismissAlert: (id: string) => void;
-  addToast: (message: string, type?: 'info' | 'success' | 'warn') => void;
-  flyingItems: { id: string; imageUrl: string; startX: number; startY: number; endX: number; endY: number }[];
-  triggerFlyToCart: (imageUrl: string, startElement: HTMLElement) => void;
+  addToast: (msg: string) => void;
+  flyingItems: { id: string; startX: number; startY: number; endX: number; endY: number; image: string }[];
+  triggerFlyToCart: (sourceEl: HTMLElement | null, customImage?: string) => void;
   isCartBusting: boolean;
   wishlist: string[];
   toggleWishlist: (productId: string) => void;
   isWishlisted: (productId: string) => boolean;
-  currency: 'PKR' | 'AED';
-  setCurrency: (cur: 'PKR' | 'AED') => void;
+  currency: CurrencyCode;
+  setCurrency: (cur: CurrencyCode) => void;
   formatPrice: (priceInPKR: number) => string;
   settings: { announcementText: string; homeMarqueeText: string; shippingFee?: number; cardShippingFee?: number; codShippingFee?: number; freeShippingThreshold?: number };
   updateSettings: (updated: Partial<{ announcementText: string; homeMarqueeText: string; shippingFee?: number; cardShippingFee?: number; codShippingFee?: number; freeShippingThreshold?: number }>) => Promise<void>;
@@ -134,45 +134,23 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   const [loading, setLoading] = useState(true);
   const [isAuthModalOpen, setAuthModalOpen] = useState<boolean>(false);
   const [wishlist, setWishlist] = useState<string[]>([]);
-  const [currency, setCurrencyState] = useState<'PKR' | 'AED'>('PKR');
+  const [currency, setCurrencyState] = useState<CurrencyCode>(() => {
+    const saved = localStorage.getItem('rotba_currency') as CurrencyCode;
+    return saved && CURRENCIES[saved] ? saved : 'PKR';
+  });
 
-  useEffect(() => {
-    const fetchUserOrders = async () => {
-      if (!userId && !user?.email) return;
-      try {
-        const query = new URLSearchParams();
-        if (userId) query.append('userId', userId);
-        if (user?.email) query.append('email', user.email);
-        
-        const res = await fetch(`/api/orders?${query.toString()}`);
-        if (res.ok) {
-          const data = await res.json();
-          setUserOrders(data);
-          if (data.length > 0 && !trackedOrder) {
-            setTrackedOrder(data[0]);
-          }
-        }
-      } catch (e) {
-        console.error('Error fetching user orders:', e);
-      }
-    };
-    fetchUserOrders();
-  }, [userId, user, trackedOrder]);
-  const [globalViewers, setGlobalViewers] = useState<number>(12);
-  const [liveAlerts, setLiveAlerts] = useState<AppContextType['liveAlerts']>([]);
-  const [flyingItems, setFlyingItems] = useState<AppContextType['flyingItems']>([]);
-  const [isCartBusting, setIsCartBusting] = useState<boolean>(false);
-
-  const setCurrency = (cur: 'PKR' | 'AED') => {
+  const setCurrency = (cur: CurrencyCode) => {
     setCurrencyState(cur);
+    localStorage.setItem('rotba_currency', cur);
   };
 
   const formatPrice = (priceInPKR: number) => {
-    if (currency === 'AED') {
-      const aedVal = Math.round(priceInPKR / 76);
-      return `AED ${aedVal.toLocaleString()}`;
+    const cur = CURRENCIES[currency] || CURRENCIES.PKR;
+    if (cur.code === 'PKR') {
+      return `PKR ${priceInPKR.toLocaleString()}`;
     }
-    return `PKR ${priceInPKR.toLocaleString()}`;
+    const converted = Math.round(priceInPKR / cur.rateInPKR);
+    return `${cur.symbol} ${converted.toLocaleString()}`;
   };
 
   const [settings, setSettings] = useState<{ announcementText: string; homeMarqueeText: string; shippingFee?: number; cardShippingFee?: number; codShippingFee?: number; freeShippingThreshold?: number }>({ announcementText: '', homeMarqueeText: '', shippingFee: 15, cardShippingFee: 15, codShippingFee: 25, freeShippingThreshold: 500 });

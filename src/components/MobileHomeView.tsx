@@ -16,11 +16,14 @@ import { useApp } from '../AppContext';
 import { motion, AnimatePresence } from 'motion/react';
 import { 
   Search, Heart, ShoppingBag, ArrowRight, Sparkles, Filter, 
-  ChevronRight, ArrowUpDown, X, Zap, ShieldCheck, Truck, RotateCcw, Flame 
+  ChevronRight, ArrowUpDown, X, Zap, ShieldCheck, Truck, RotateCcw, Flame, Globe, Check 
 } from 'lucide-react';
+import { CURRENCIES, CurrencyCode } from '../types';
 
 export default function MobileHomeView() {
   const { products, setActivePage, updateFilters, addToCart, toggleWishlist, isWishlisted, currency, setCurrency, formatPrice } = useApp();
+  const [isCurrencyModalOpen, setIsCurrencyModalOpen] = useState(false);
+  const currentCurrencyInfo = CURRENCIES[currency] || CURRENCIES.PKR;
   
   const [searchQuery, setSearchQuery] = useState('');
   const [activeTab, setActiveTab] = useState<string>('all');
@@ -146,10 +149,12 @@ export default function MobileHomeView() {
 
           {/* Currency Switcher Badge */}
           <button
-            onClick={() => setCurrency(currency === 'PKR' ? 'AED' : 'PKR')}
-            className="shrink-0 flex items-center gap-1 text-[11px] font-bold font-sans px-2.5 py-2 rounded-xl bg-[#f2f2f2] border border-neutral-200 text-neutral-900 active:scale-95 transition-transform cursor-pointer shadow-2xs"
+            onClick={() => setIsCurrencyModalOpen(true)}
+            className="shrink-0 flex items-center gap-1.5 text-[11px] font-bold font-mono px-2.5 py-2 rounded-xl bg-neutral-100 border border-[#C5A059]/30 text-[#003e1c] active:scale-95 transition-transform cursor-pointer shadow-2xs"
+            title="Change Currency"
           >
-            <span>{currency === 'PKR' ? '🇵🇰 PKR' : '🇦🇪 AED'}</span>
+            <Globe className="w-3.5 h-3.5 text-[#C5A059]" />
+            <span>{currentCurrencyInfo.flag} {currentCurrencyInfo.code}</span>
           </button>
         </div>
       </div>
@@ -432,6 +437,74 @@ export default function MobileHomeView() {
               </div>
             </div>
           </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* ── 10. CURRENCY SELECTOR MODAL POPUP ── */}
+      <AnimatePresence>
+        {isCurrencyModalOpen && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setIsCurrencyModalOpen(false)}
+              className="fixed inset-0 bg-black/60 backdrop-blur-sm"
+            />
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.9, y: 20 }}
+              className="relative w-full max-w-md bg-white rounded-3xl p-6 shadow-2xl z-10 border border-[#C5A059]/30 text-left overflow-hidden"
+            >
+              <div className="flex items-center justify-between border-b border-neutral-100 pb-4 mb-4">
+                <div className="flex items-center gap-2.5">
+                  <Globe className="w-5.5 h-5.5 text-[#003e1c]" />
+                  <div>
+                    <h3 className="font-serif text-lg font-bold text-[#003e1c]">Select Country & Currency</h3>
+                    <p className="text-[10px] font-sans text-neutral-500">Live prices auto-convert to your chosen region</p>
+                  </div>
+                </div>
+                <button
+                  onClick={() => setIsCurrencyModalOpen(false)}
+                  className="p-1.5 rounded-full hover:bg-neutral-100 text-neutral-400 hover:text-black cursor-pointer transition-colors"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+
+              <div className="space-y-2 max-h-[380px] overflow-y-auto pr-1">
+                {Object.values(CURRENCIES).map((cur) => {
+                  const isSelected = currency === cur.code;
+                  return (
+                    <button
+                      key={cur.code}
+                      onClick={() => {
+                        setCurrency(cur.code);
+                        setIsCurrencyModalOpen(false);
+                      }}
+                      className={`w-full p-3.5 rounded-2xl border flex items-center justify-between transition-all duration-300 cursor-pointer ${
+                        isSelected
+                          ? 'bg-[#003e1c] text-white border-[#C5A059] shadow-md scale-[1.01]'
+                          : 'bg-neutral-50/80 hover:bg-white text-neutral-800 border-neutral-200/80 hover:border-[#C5A059]/40'
+                      }`}
+                    >
+                      <div className="flex items-center gap-3">
+                        <span className="text-2xl leading-none">{cur.flag}</span>
+                        <div>
+                          <span className="font-bold text-xs block font-sans text-left">{cur.country}</span>
+                          <span className={`text-[10px] font-mono block text-left ${isSelected ? 'text-[#E8C888]' : 'text-neutral-400'}`}>
+                            {cur.code} • {cur.code === 'PKR' ? 'Base Currency' : `1 ${cur.code} ≈ ${cur.rateInPKR} PKR`}
+                          </span>
+                        </div>
+                      </div>
+                      {isSelected && <Check className="w-4.5 h-4.5 text-[#E8C888]" />}
+                    </button>
+                  );
+                })}
+              </div>
+            </motion.div>
+          </div>
         )}
       </AnimatePresence>
 

@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useApp } from '../AppContext';
-import { ShoppingBag, Search, Compass, Info, Sparkles, Menu, X, ArrowRight, ArrowLeft, User, Heart } from 'lucide-react';
+import { ShoppingBag, Search, Compass, Info, Sparkles, Menu, X, ArrowRight, ArrowLeft, User, Heart, Globe, Check } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
+import { CURRENCIES, CurrencyCode } from '../types';
 
 interface NavbarProps {
   onOpenCart: () => void;
@@ -12,6 +13,9 @@ export default function Navbar({ onOpenCart, onOpenWishlist }: NavbarProps) {
   const { activePage, setActivePage, cart, activeFilters, updateFilters, isCartBusting, user, setAuthModalOpen, logout, wishlist, currency, setCurrency } = useApp();
   const [searchVal, setSearchVal] = useState(activeFilters.search);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
+  const [isCurrencyModalOpen, setIsCurrencyModalOpen] = useState(false);
+
+  const currentCurrencyInfo = CURRENCIES[currency] || CURRENCIES.PKR;
 
   const cartItemsCount = cart?.items.reduce((acc, item) => acc + item.quantity, 0) || 0;
   const [isBouncing, setIsBouncing] = useState(false);
@@ -126,18 +130,14 @@ export default function Navbar({ onOpenCart, onOpenWishlist }: NavbarProps) {
               })}
             </nav>
 
-            {/* Wishlist Button */}
+            {/* Currency Selector Button (Replaces Wishlist) */}
             <button
-              onClick={onOpenWishlist}
-              className="relative p-2.5 text-brand-emerald hover:text-brand-gold transition-all cursor-pointer"
-              aria-label="Wishlist"
+              onClick={() => setIsCurrencyModalOpen(true)}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-[#C5A059]/40 bg-neutral-50/80 hover:bg-[#003e1c] hover:text-white text-[#003e1c] transition-all duration-300 cursor-pointer shadow-2xs font-mono text-xs font-bold active:scale-95"
+              title="Change Currency & Region"
             >
-              <Heart className="w-5.5 h-5.5" />
-              {wishlist && wishlist.length > 0 && (
-                <span className="absolute top-1 right-1 bg-[#C5A059] text-white text-[8px] font-bold w-4 h-4 rounded-full flex items-center justify-center border border-white">
-                  {wishlist.length}
-                </span>
-              )}
+              <Globe className="w-4 h-4 text-[#C5A059]" />
+              <span>{currentCurrencyInfo.flag} {currentCurrencyInfo.code}</span>
             </button>
 
             {/* Cart Button */}
@@ -226,15 +226,15 @@ export default function Navbar({ onOpenCart, onOpenWishlist }: NavbarProps) {
             <img src="/logo_rotba.png" alt="ROTBA Logo" className="h-18 object-contain mix-blend-multiply" />
           </button>
 
-          <div className="flex items-center gap-3 z-10">
-            {/* Wishlist */}
-            <button onClick={onOpenWishlist} className="relative p-1 text-neutral-900 hover:text-black cursor-pointer">
-              <Heart className="w-6 h-6" />
-              {wishlist && wishlist.length > 0 && (
-                <span className="absolute -top-1 -right-1 bg-[#C5A059] text-white text-[8px] font-bold w-4 h-4 rounded-full flex items-center justify-center">
-                  {wishlist.length}
-                </span>
-              )}
+          <div className="flex items-center gap-2.5 z-10">
+            {/* Currency Selector Button (Replaces Wishlist in Header) */}
+            <button
+              onClick={() => setIsCurrencyModalOpen(true)}
+              className="flex items-center gap-1 px-2.5 py-1 rounded-lg border border-[#C5A059]/40 bg-neutral-50 text-[#003e1c] cursor-pointer text-[11px] font-mono font-bold active:scale-95 shadow-2xs"
+              title="Change Currency & Country"
+            >
+              <Globe className="w-3.5 h-3.5 text-[#C5A059]" />
+              <span>{currentCurrencyInfo.flag} {currentCurrencyInfo.code}</span>
             </button>
 
             {/* Cart Shopping Bag */}
@@ -360,28 +360,19 @@ export default function Navbar({ onOpenCart, onOpenWishlist }: NavbarProps) {
                 </button>
               ))}
 
-              {/* Currency Selector in Drawer */}
-              <div className="mt-6 py-3.5 px-4 bg-white/10 rounded-2xl border border-white/15 flex items-center justify-between">
-                <span className="text-xs font-mono uppercase font-bold text-neutral-300">Select Currency</span>
-                <div className="flex gap-2">
-                  <button
-                    onClick={() => setCurrency('PKR')}
-                    className={`px-3 py-1.5 rounded-lg text-xs font-bold font-sans transition-all cursor-pointer ${
-                      currency === 'PKR' ? 'bg-[#C5A059] text-black shadow-md' : 'bg-white/10 text-white hover:bg-white/20'
-                    }`}
-                  >
-                    🇵🇰 PKR
-                  </button>
-                  <button
-                    onClick={() => setCurrency('AED')}
-                    className={`px-3 py-1.5 rounded-lg text-xs font-bold font-sans transition-all cursor-pointer ${
-                      currency === 'AED' ? 'bg-[#C5A059] text-black shadow-md' : 'bg-white/10 text-white hover:bg-white/20'
-                    }`}
-                  >
-                    🇦🇪 AED
-                  </button>
+              {/* Currency Selector Button in Mobile Menu Drawer */}
+              <button
+                onClick={() => { setIsMenuOpen(false); setIsCurrencyModalOpen(true); }}
+                className="mt-6 w-full py-3.5 px-4 bg-white/10 hover:bg-white/20 rounded-2xl border border-white/15 flex items-center justify-between transition-all cursor-pointer"
+              >
+                <div className="flex items-center gap-2 text-white">
+                  <Globe className="w-4 h-4 text-[#C5A059]" />
+                  <span className="text-xs font-mono font-bold uppercase">Region & Currency</span>
                 </div>
-              </div>
+                <span className="text-xs font-mono font-bold text-[#C5A059]">
+                  {currentCurrencyInfo.flag} {currentCurrencyInfo.code}
+                </span>
+              </button>
             </div>
 
             <div className="pt-6 border-t border-white/15 flex items-center justify-between">
@@ -400,6 +391,74 @@ export default function Navbar({ onOpenCart, onOpenWishlist }: NavbarProps) {
               )}
             </div>
           </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* ── 4. GLOBAL CURRENCY SELECTOR POPUP MODAL ── */}
+      <AnimatePresence>
+        {isCurrencyModalOpen && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setIsCurrencyModalOpen(false)}
+              className="fixed inset-0 bg-black/60 backdrop-blur-sm"
+            />
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.9, y: 20 }}
+              className="relative w-full max-w-md bg-white rounded-3xl p-6 shadow-2xl z-10 border border-[#C5A059]/30 text-left overflow-hidden"
+            >
+              <div className="flex items-center justify-between border-b border-neutral-100 pb-4 mb-4">
+                <div className="flex items-center gap-2.5">
+                  <Globe className="w-5.5 h-5.5 text-[#003e1c]" />
+                  <div>
+                    <h3 className="font-serif text-lg font-bold text-[#003e1c]">Select Country & Currency</h3>
+                    <p className="text-[10px] font-sans text-neutral-500">Live prices auto-convert to your chosen region</p>
+                  </div>
+                </div>
+                <button
+                  onClick={() => setIsCurrencyModalOpen(false)}
+                  className="p-1.5 rounded-full hover:bg-neutral-100 text-neutral-400 hover:text-black cursor-pointer transition-colors"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+
+              <div className="space-y-2 max-h-[380px] overflow-y-auto pr-1">
+                {Object.values(CURRENCIES).map((cur) => {
+                  const isSelected = currency === cur.code;
+                  return (
+                    <button
+                      key={cur.code}
+                      onClick={() => {
+                        setCurrency(cur.code);
+                        setIsCurrencyModalOpen(false);
+                      }}
+                      className={`w-full p-3.5 rounded-2xl border flex items-center justify-between transition-all duration-300 cursor-pointer ${
+                        isSelected
+                          ? 'bg-[#003e1c] text-white border-[#C5A059] shadow-md scale-[1.01]'
+                          : 'bg-neutral-50/80 hover:bg-white text-neutral-800 border-neutral-200/80 hover:border-[#C5A059]/40'
+                      }`}
+                    >
+                      <div className="flex items-center gap-3">
+                        <span className="text-2xl leading-none">{cur.flag}</span>
+                        <div>
+                          <span className="font-bold text-xs block font-sans text-left">{cur.country}</span>
+                          <span className={`text-[10px] font-mono block text-left ${isSelected ? 'text-[#E8C888]' : 'text-neutral-400'}`}>
+                            {cur.code} • {cur.code === 'PKR' ? 'Base Currency' : `1 ${cur.code} ≈ ${cur.rateInPKR} PKR`}
+                          </span>
+                        </div>
+                      </div>
+                      {isSelected && <Check className="w-4.5 h-4.5 text-[#E8C888]" />}
+                    </button>
+                  );
+                })}
+              </div>
+            </motion.div>
+          </div>
         )}
       </AnimatePresence>
     </>

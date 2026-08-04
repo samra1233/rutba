@@ -1,6 +1,27 @@
 export type FabricType = 'Lawn' | 'Chiffon' | 'Silk' | 'Cotton' | 'Organza' | string;
 export type SuitType = 'Embroidered' | 'Printed' | string;
 
+export type CurrencyCode = 'PKR' | 'AED' | 'SAR' | 'AUD' | 'SGD' | 'HKD' | 'MYR' | 'GBP';
+
+export interface CurrencyInfo {
+  code: CurrencyCode;
+  country: string;
+  flag: string;
+  symbol: string;
+  rateInPKR: number;
+}
+
+export const CURRENCIES: Record<CurrencyCode, CurrencyInfo> = {
+  PKR: { code: 'PKR', country: 'Pakistan', flag: '🇵🇰', symbol: 'PKR', rateInPKR: 1 },
+  AED: { code: 'AED', country: 'United Arab Emirates', flag: '🇦🇪', symbol: 'AED', rateInPKR: 76 },
+  SAR: { code: 'SAR', country: 'Saudi Arabia', flag: '🇸🇦', symbol: 'SAR', rateInPKR: 74.3 },
+  AUD: { code: 'AUD', country: 'Australia', flag: '🇦🇺', symbol: 'AUD', rateInPKR: 182.5 },
+  SGD: { code: 'SGD', country: 'Singapore', flag: '🇸🇬', symbol: 'SGD', rateInPKR: 206.8 },
+  HKD: { code: 'HKD', country: 'Hong Kong', flag: '🇭🇰', symbol: 'HKD', rateInPKR: 35.7 },
+  MYR: { code: 'MYR', country: 'Malaysia', flag: '🇲🇾', symbol: 'MYR', rateInPKR: 63.2 },
+  GBP: { code: 'GBP', country: 'Scotland / UK', flag: '🏴󠁧󠁢󠁳󠁣󠁴󠁿', symbol: 'GBP', rateInPKR: 352.4 },
+};
+
 export interface Product {
   id: string;
   name: string;
