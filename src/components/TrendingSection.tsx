@@ -51,7 +51,7 @@ const cardVariants = {
 };
 
 function TrendingLookbookCard({ product, index, variants, onCardClick }: CardProps) {
-  const { toggleWishlist, isWishlisted, addToCart } = useApp();
+  const { toggleWishlist, isWishlisted, addToCart, formatPrice } = useApp();
   const wishlisted = isWishlisted(product.id);
   const cardRef = useRef<HTMLDivElement>(null);
 
@@ -137,7 +137,7 @@ function TrendingLookbookCard({ product, index, variants, onCardClick }: CardPro
         </h3>
         <div className="flex items-center justify-between pt-1 border-t border-black/5">
           <span className="font-sans font-extrabold text-neutral-900 text-[14.5px] tracking-wide">
-            AED {product.price.toLocaleString()}
+            {formatPrice(product.price)}
           </span>
           <span className="font-mono text-[8.5px] text-[#C5A059] bg-[#C5A059]/10 border border-[#C5A059]/20 font-bold px-2.5 py-0.5 rounded uppercase tracking-wider">
             {product.fabric} Suit

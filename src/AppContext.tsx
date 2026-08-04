@@ -56,9 +56,63 @@ interface AppContextType {
   updateSettings: (updated: Partial<{ announcementText: string; homeMarqueeText: string; shippingFee?: number; cardShippingFee?: number; codShippingFee?: number; freeShippingThreshold?: number }>) => Promise<void>;
 }
 
-const AppContext = createContext<AppContextType | undefined>(undefined);
-
 const staticCatalog: Product[] = (initialDb && initialDb.products) ? (initialDb.products as Product[]) : [];
+
+const defaultContextValue: AppContextType = {
+  products: staticCatalog,
+  cart: null,
+  activePage: 'home',
+  selectedProductId: null,
+  activeFilters: {
+    fabric: '',
+    type: '',
+    collection: '',
+    sort: '',
+    search: '',
+    color: '',
+    sizes: '',
+    season: '',
+    sale: '',
+    bestSeller: '',
+    newArrival: '',
+    category: '',
+    pieces: ''
+  },
+  liveAlerts: [],
+  globalViewers: 12,
+  userId: '',
+  trackedOrder: null,
+  userOrders: [],
+  loading: false,
+  user: null,
+  isAuthModalOpen: false,
+  setAuthModalOpen: () => {},
+  login: () => {},
+  logout: () => {},
+  setProducts: () => {},
+  setActivePage: () => {},
+  updateFilters: () => {},
+  addToCart: async () => {},
+  updateCartQty: async () => {},
+  removeFromCart: async () => {},
+  placeOrder: async () => null,
+  trackOrder: async () => null,
+  dismissAlert: () => {},
+  addToast: () => {},
+  flyingItems: [],
+  triggerFlyToCart: () => {},
+  isCartBusting: false,
+  wishlist: [],
+  toggleWishlist: () => {},
+  isWishlisted: () => false,
+  currency: 'PKR',
+  setCurrency: () => {},
+  formatPrice: (priceInPKR: number) => `PKR ${priceInPKR.toLocaleString()}`,
+  settings: { announcementText: '', homeMarqueeText: '', shippingFee: 15, cardShippingFee: 15, codShippingFee: 25, freeShippingThreshold: 500 },
+  updateSettings: async () => {},
+};
+
+const AppContext = createContext<AppContextType>(defaultContextValue);
 
 export function AppProvider({ children }: { children: React.ReactNode }) {
   const [products, setProducts] = useState<Product[]>(staticCatalog);
@@ -440,8 +494,9 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
         };
 
         socket.onclose = () => {
+          if (!isSubscribed) return;
           retryCount++;
-          if (retryCount < maxRetries && isSubscribed) {
+          if (retryCount < maxRetries) {
             setTimeout(connectWS, 4000);
           }
         };
@@ -458,7 +513,16 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
       isSubscribed = false;
       if (wsRef.current) {
         try {
-          wsRef.current.close();
+          const socket = wsRef.current;
+          if (socket.readyState === WebSocket.CONNECTING) {
+            socket.onopen = () => {
+              try {
+                socket.close();
+              } catch (_) {}
+            };
+          } else if (socket.readyState === WebSocket.OPEN) {
+            socket.close();
+          }
         } catch (_) {}
       }
     };
@@ -643,10 +707,29 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     const trackingNumber = `ZR-${Math.floor(100000 + Math.random() * 900000)}`;
     const id = `ORD-${Math.floor(100000 + Math.random() * 900000)}`;
 
+    const verifiedItems: (CartItem & { product: Product })[] = cart.items.map(item => ({
+      ...item,
+      product: item.product || products.find(p => p.id === item.productId) || staticCatalog.find(p => p.id === item.productId) || {
+        id: item.productId,
+        name: 'Luxury Couture Article',
+        price: 0,
+        fabric: 'Unstitched',
+        type: 'Luxury Collection',
+        collection: 'Heritage',
+        images: [],
+        description: '',
+        stock: 10,
+        colors: [],
+        viewers: 1,
+        isNewArrival: false,
+        features: []
+      }
+    }));
+
     const fallbackOrder: Order = {
       id,
       userId: userId || 'guest',
-      items: cart.items,
+      items: verifiedItems,
       shippingDetails,
       paymentMethod,
       subtotal,
@@ -776,8 +859,5 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
 
 export function useApp() {
   const context = useContext(AppContext);
-  if (context === undefined) {
-    throw new Error('useApp must be used within an AppProvider');
-  }
-  return context;
+  return context || defaultContextValue;
 }

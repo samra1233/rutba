@@ -10,6 +10,7 @@ interface CartDrawerProps {
 
 // Custom performant count-up component for luxury subtotal changes
 function AnimatedPrice({ value }: { value: number }) {
+  const { formatPrice } = useApp();
   const [displayValue, setDisplayValue] = useState(value);
 
   useEffect(() => {
@@ -41,7 +42,7 @@ function AnimatedPrice({ value }: { value: number }) {
     };
   }, [value]);
 
-  return <span>AED {displayValue.toLocaleString()}</span>;
+  return <span>{formatPrice(displayValue)}</span>;
 }
 
 const containerVariants = {
@@ -83,7 +84,7 @@ const itemVariants = {
 };
 
 export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
-  const { cart, products, updateCartQty, removeFromCart, setActivePage } = useApp();
+  const { cart, products, updateCartQty, removeFromCart, setActivePage, formatPrice } = useApp();
 
   // Resolve cart items with current product details to handle real-time inventory
   const resolvedItems = (cart?.items || []).map(item => {
@@ -354,7 +355,7 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                             {/* Item Price */}
                             <div className="text-right">
                               <span className="font-serif text-sm font-semibold text-neutral-800 tracking-wide">
-                                AED {(item.product.price * item.quantity).toLocaleString()}
+                                {formatPrice(item.product.price * item.quantity)}
                               </span>
                             </div>
  

@@ -15,7 +15,7 @@ export interface Product {
   viewers: number;
   isNewArrival: boolean;
   features: string[];
-  category?: 'Ready to Wear' | 'Unstitched' | 'Undergarments' | 'Bags';
+  category?: 'Unstitched' | 'Stitches' | 'Kurta Set' | 'Co ord set' | 'Indian Saree' | 'Party Wear' | 'Ready to Wear' | string;
   pieces?: '1 Piece' | '2 Piece' | '3 Piece';
   season?: string;
   sizes?: string[];

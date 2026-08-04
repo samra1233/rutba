@@ -47,7 +47,7 @@ const itemVariants = {
 };
 
 export default function WishlistDrawer({ isOpen, onClose }: WishlistDrawerProps) {
-  const { wishlist, products, toggleWishlist, addToCart, setActivePage } = useApp();
+  const { wishlist, products, toggleWishlist, addToCart, setActivePage, formatPrice } = useApp();
 
   // Filter products that are in the global wishlist
   const resolvedItems = products.filter(p => wishlist.includes(p.id));
@@ -211,7 +211,7 @@ export default function WishlistDrawer({ isOpen, onClose }: WishlistDrawerProps)
                                 {product.fabric}
                               </span>
                               <span className="font-serif text-xs font-semibold text-neutral-800">
-                                AED {product.price.toLocaleString()}
+                                {formatPrice(product.price)}
                               </span>
                             </div>
                           </div>

@@ -37,49 +37,50 @@ export default function MobileHomeView() {
 
   // Story Rings Data (Native App Stories)
   const stories = [
-    { id: 1, title: 'New Drops', img: '/hero_showcase.jpeg', isNew: true, category: 'category', val: 'Unstitched' },
-    { id: 2, title: 'Summer Lawn', img: '/cat_summer_new.png', isNew: false, category: 'season', val: 'Summer' },
-    { id: 3, title: 'Pret Wear', img: '/cat_readytowear_new.png', isNew: false, category: 'category', val: 'Ready to Wear' },
-    { id: 4, title: 'Best Sellers', img: '/cat_bestseller_new.png', isNew: true, category: 'bestSeller', val: 'true' },
-    { id: 5, title: 'Chiffon Luxe', img: '/cat_unstitched_new.jpg', isNew: false, category: 'fabric', val: 'Chiffon' }
+    { id: 1, title: 'Unstitched', img: '/cat_unstitched_new.jpg', isNew: true, category: 'category', val: 'Unstitched' },
+    { id: 2, title: 'Stitches', img: '/cat_readytowear_new.png', isNew: false, category: 'category', val: 'Stitches' },
+    { id: 3, title: 'Kurta Set', img: '/cat_readytowear_new.png', isNew: false, category: 'category', val: 'Kurta Set' },
+    { id: 4, title: 'Co ord set', img: '/cat_bestseller_new.png', isNew: true, category: 'category', val: 'Co ord set' },
+    { id: 5, title: 'Indian Saree', img: '/cat_summer_new.png', isNew: false, category: 'category', val: 'Indian Saree' },
+    { id: 6, title: 'Party Wear', img: '/cat_bestseller_new.png', isNew: true, category: 'category', val: 'Party Wear' },
   ];
 
   // App Hero Banners
   const heroBanners = [
     {
       id: 1,
-      title: "Best of Festive Wear",
-      sub: "20,000+ Luxury Designer Items",
+      title: "Unstitched & Stitches Drop",
+      sub: "20,000+ Luxury Designer Weaves",
       img: "/hero_showcase.jpeg",
-      key: "season",
-      val: "Summer"
+      key: "category",
+      val: "Unstitched"
     },
     {
       id: 2,
-      title: "Luxury Pret Collection",
-      sub: "Handcrafted Formals & Maxis",
+      title: "Kurta & Co-ord Sets",
+      sub: "Handcrafted Formals & Sets",
       img: "/cat_readytowear_new.png",
       key: "category",
-      val: "Ready to Wear"
+      val: "Kurta Set"
     },
     {
       id: 3,
-      title: "Unstitched Lawn '26",
-      sub: "Artisan Silk & Chiffon Weaves",
+      title: "Indian Sarees & Party Wear",
+      sub: "Artisan Silk & Embellished Sarees",
       img: "/cat_bestseller_new.png",
-      key: "bestSeller",
-      val: "true"
+      key: "category",
+      val: "Indian Saree"
     }
   ];
 
   // Circular Category Avatars
   const circularCategories = [
-    { id: 'kurta', label: 'Kurta Set', img: '/cat_readytowear_new.png', key: 'category', val: 'Ready to Wear' },
-    { id: 'maxi', label: 'Maxi', img: '/cat_bestseller_new.png', key: 'bestSeller', val: 'true' },
-    { id: 'kaftan', label: 'Kaftan', img: '/cat_summer_new.png', key: 'season', val: 'Summer' },
     { id: 'unstitched', label: 'Unstitched', img: '/cat_unstitched_new.jpg', key: 'category', val: 'Unstitched' },
-    { id: 'lawn', label: 'Lawn Suit', img: '/cat_summer_new.png', key: 'season', val: 'Summer' },
-    { id: 'dupatta', label: 'Chiffon', img: '/cat_bestseller_new.png', key: 'fabric', val: 'Chiffon' }
+    { id: 'stitches', label: 'Stitches', img: '/cat_readytowear_new.png', key: 'category', val: 'Stitches' },
+    { id: 'kurta-set', label: 'Kurta Set', img: '/cat_readytowear_new.png', key: 'category', val: 'Kurta Set' },
+    { id: 'co-ord-set', label: 'Co ord set', img: '/cat_bestseller_new.png', key: 'category', val: 'Co ord set' },
+    { id: 'indian-saree', label: 'Indian Saree', img: '/cat_summer_new.png', key: 'category', val: 'Indian Saree' },
+    { id: 'party-wear', label: 'Party Wear', img: '/cat_bestseller_new.png', key: 'category', val: 'Party Wear' }
   ];
 
   const handleSearchSubmit = (e: React.FormEvent) => {
@@ -105,13 +106,17 @@ export default function MobileHomeView() {
     }
 
     if (activeTab === 'unstitched') {
-      list = list.filter(p => p.category === 'Unstitched');
-    } else if (activeTab === 'pret') {
-      list = list.filter(p => p.category === 'Ready to Wear');
-    } else if (activeTab === 'summer') {
-      list = list.filter(p => p.season === 'Summer');
-    } else if (activeTab === 'festive') {
-      list = list.filter(p => p.isBestSeller);
+      list = list.filter(p => p.category === 'Unstitched' || p.type?.toLowerCase().includes('unstitched') || p.fabric?.toLowerCase().includes('lawn'));
+    } else if (activeTab === 'stitches') {
+      list = list.filter(p => p.category === 'Stitches' || p.category === 'Ready to Wear' || p.type?.toLowerCase().includes('stitched'));
+    } else if (activeTab === 'kurta-set') {
+      list = list.filter(p => p.category === 'Kurta Set' || p.name?.toLowerCase().includes('kurta') || p.type?.toLowerCase().includes('kurta'));
+    } else if (activeTab === 'co-ord-set') {
+      list = list.filter(p => p.category === 'Co ord set' || p.name?.toLowerCase().includes('co-ord') || p.name?.toLowerCase().includes('coord'));
+    } else if (activeTab === 'indian-saree') {
+      list = list.filter(p => p.category === 'Indian Saree' || p.name?.toLowerCase().includes('saree') || p.description?.toLowerCase().includes('saree'));
+    } else if (activeTab === 'party-wear') {
+      list = list.filter(p => p.category === 'Party Wear' || p.isBestSeller || p.collection?.toLowerCase().includes('festive'));
     }
 
     return list;
@@ -155,7 +160,7 @@ export default function MobileHomeView() {
           {stories.map((st, idx) => (
             <div
               key={st.id}
-              onClick={() => setActiveStory(st.id)}
+              onClick={() => handleCategoryClick(st.category, st.val)}
               className="flex flex-col items-center gap-1.5 cursor-pointer shrink-0 group"
             >
               <div className={`p-0.5 rounded-full ${
@@ -181,9 +186,11 @@ export default function MobileHomeView() {
           {[
             { id: 'all', label: 'All Catalog' },
             { id: 'unstitched', label: 'Unstitched' },
-            { id: 'pret', label: 'Pret Wear' },
-            { id: 'summer', label: 'Summer Lawn' },
-            { id: 'festive', label: 'Festive Edit' }
+            { id: 'stitches', label: 'Stitches' },
+            { id: 'kurta-set', label: 'Kurta Set' },
+            { id: 'co-ord-set', label: 'Co ord set' },
+            { id: 'indian-saree', label: 'Indian Saree' },
+            { id: 'party-wear', label: 'Party Wear' }
           ].map(tab => (
             <button
               key={tab.id}

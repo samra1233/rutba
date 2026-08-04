@@ -9,7 +9,7 @@ interface ProductCardProps {
 }
 
 export default function ProductCard({ product }: ProductCardProps) {
-  const { addToCart, setActivePage, toggleWishlist, isWishlisted } = useApp();
+  const { addToCart, setActivePage, toggleWishlist, isWishlisted, formatPrice } = useApp();
   const [adding, setAdding] = useState(false);
   const wishlisted = isWishlisted(product.id);
 
@@ -171,14 +171,14 @@ export default function ProductCard({ product }: ProductCardProps) {
         <div className="flex items-baseline gap-2.5 pt-1 flex-wrap">
           {product.onSale && product.salePrice ? (
             <>
-              <span className="font-sans text-[17px] font-bold text-red-800">AED {product.salePrice.toLocaleString()}</span>
-              <span className="font-sans text-sm text-neutral-400 line-through">AED {product.price.toLocaleString()}</span>
+              <span className="font-sans text-[17px] font-bold text-red-800">{formatPrice(product.salePrice)}</span>
+              <span className="font-sans text-sm text-neutral-400 line-through">{formatPrice(product.price)}</span>
               <span className="font-sans text-[13px] text-rose-700 font-bold tracking-wide">
                 ({Math.round(((product.price - product.salePrice) / product.price) * 100)}% OFF)
               </span>
             </>
           ) : (
-            <span className="font-sans text-[17px] font-bold text-[#14261C]">AED {product.price.toLocaleString()}</span>
+            <span className="font-sans text-[17px] font-bold text-[#14261C]">{formatPrice(product.price)}</span>
           )}
         </div>
       </div>

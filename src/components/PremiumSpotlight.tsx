@@ -12,7 +12,7 @@ import { useApp } from '../AppContext';
 import { Sparkles, ArrowRight, ArrowLeft, Eye, Heart, ShoppingBag, Gem, ChevronLeft, ChevronRight } from 'lucide-react';
 
 export default function PremiumSpotlight() {
-  const { products, setActivePage, toggleWishlist, isWishlisted, addToCart } = useApp();
+  const { products, setActivePage, toggleWishlist, isWishlisted, addToCart, formatPrice } = useApp();
 
   const bookProducts = useMemo(() => {
     const ids = ['ms-001', 'ms-002', 'ms-003'];
@@ -148,7 +148,7 @@ export default function PremiumSpotlight() {
 
                       <div className="flex items-center justify-between pt-1">
                         <span className="text-lg sm:text-xl font-mono text-[#E6C687] font-bold">
-                          PKR {product.price.toLocaleString()}
+                          {formatPrice(product.price)}
                         </span>
                         <button
                           onClick={handleAddToCart}

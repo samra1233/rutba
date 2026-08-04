@@ -22,7 +22,7 @@ import {
 } from 'lucide-react';
 
 export default function Checkout() {
-  const { cart, products, placeOrder, setActivePage, user, setAuthModalOpen, settings } = useApp();
+  const { cart, products, placeOrder, setActivePage, user, setAuthModalOpen, settings, formatPrice } = useApp();
   const [processing, setProcessing] = useState(false);
   const [paymentMethod, setPaymentMethod] = useState<'card' | 'cod'>('cod');
   
@@ -565,7 +565,7 @@ export default function Checkout() {
                 </div>
                 <div className="text-right shrink-0 flex items-center">
                   <span className="font-sans font-black text-neutral-800 text-[13px]">
-                    AED {(item.product!.price * item.quantity).toLocaleString()}
+                    {formatPrice(item.product!.price * item.quantity)}
                   </span>
                 </div>
               </div>
@@ -578,8 +578,8 @@ export default function Checkout() {
               {subtotal < freeLimit ? (
                 <>
                   <div className="flex justify-between items-center text-[9px] font-black">
-                    <span>UAE Free Shipping Goal:</span>
-                    <span className="text-[#14261C]">AED {subtotal.toLocaleString()} / {freeLimit.toLocaleString()}</span>
+                    <span>Free Shipping Goal:</span>
+                    <span className="text-[#14261C]">{formatPrice(subtotal)} / {formatPrice(freeLimit)}</span>
                   </div>
                   <div className="w-full bg-neutral-200/50 h-1.5 rounded-full overflow-hidden">
                     <div 
@@ -589,13 +589,13 @@ export default function Checkout() {
                   </div>
                   <p className="text-[9px] text-[#C5A059] font-sans font-black flex items-center gap-1">
                     <AlertCircle className="w-3.5 h-3.5 shrink-0" />
-                    <span>Add AED {(freeLimit - subtotal).toLocaleString()} more for FREE shipping!</span>
+                    <span>Add {formatPrice(freeLimit - subtotal)} more for FREE shipping!</span>
                   </p>
                 </>
               ) : (
                 <div className="flex items-center gap-2 text-emerald-800 font-bold font-sans">
                   <span className="flex items-center justify-center w-5 h-5 bg-emerald-100 text-emerald-800 rounded-full text-[10px]">✓</span>
-                  <span>🎉 FREE UAE SHIPPING UNLOCKED!</span>
+                  <span>🎉 FREE SHIPPING UNLOCKED!</span>
                 </div>
               )}
             </div>
@@ -605,17 +605,17 @@ export default function Checkout() {
           <div className="border-t border-[#C5A059]/15 pt-5 space-y-3 text-xs font-sans">
             <div className="flex justify-between text-neutral-400 font-extrabold tracking-wider text-[10px] uppercase">
               <span>BAG SUBTOTAL</span>
-              <span className="font-extrabold text-neutral-800 font-sans">AED {subtotal.toLocaleString()}</span>
+              <span className="font-extrabold text-neutral-800 font-sans">{formatPrice(subtotal)}</span>
             </div>
             
             <div className="flex justify-between text-neutral-400 font-extrabold tracking-wider text-[10px] uppercase">
               <span>SHIPPING FEE</span>
               <span className="font-extrabold text-neutral-800 font-sans">
                 {isInternational 
-                  ? 'AED 100' 
+                  ? formatPrice(100) 
                   : shippingCost === 0 
                     ? 'FREE' 
-                    : `AED ${shippingCost.toLocaleString()}`}
+                    : formatPrice(shippingCost)}
               </span>
             </div>
 
@@ -625,7 +625,7 @@ export default function Checkout() {
                 <span className="font-sans text-xs font-black uppercase tracking-widest text-[#14261C] block">TOTAL ORDER AMOUNT</span>
                 <span className="text-[8px] font-sans text-neutral-400 uppercase tracking-widest block mt-0.5 font-extrabold">Secure Checkout Processed</span>
               </div>
-              <span className="font-sans text-xl font-black text-[#C5A059]">AED {total.toLocaleString()}</span>
+              <span className="font-sans text-xl font-black text-[#C5A059]">{formatPrice(total)}</span>
             </div>
           </div>
 
