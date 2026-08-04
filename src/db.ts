@@ -2360,8 +2360,6 @@ class Database {
     const product = this.getProduct(id);
     if (product) {
       product.viewers = Math.max(1, viewers);
-      this.save();
-      this.writeFirestoreDoc('products', id, product);
       return true;
     }
     return false;

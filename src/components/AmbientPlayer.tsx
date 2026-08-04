@@ -3,8 +3,9 @@ import { Volume2, VolumeX } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 
 export default function AmbientPlayer() {
-  const [isMuted, setIsMuted] = useState(false);
+  const [isMuted, setIsMuted] = useState(true);
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  const isPlayingRef = useRef(false);
 
   useEffect(() => {
     // Create the audio element with user-provided web.mp3
@@ -12,38 +13,36 @@ export default function AmbientPlayer() {
     audio.loop = true;
     audio.volume = 0.5; // strictly set to 50% volume
 
-    // Default to UNMUTED (music ON by default on mobile & desktop open/refresh)
     const savedMutedState = localStorage.getItem('ambient_music_muted');
-    const shouldMute = savedMutedState === 'true'; // false unless user explicitly muted
+    const shouldMute = savedMutedState === null ? true : savedMutedState === 'true';
     
     audio.muted = shouldMute;
     setIsMuted(shouldMute);
     audioRef.current = audio;
 
-    // Start playback
-    const startAudioPlayback = () => {
-      if (!audioRef.current) return;
-      audioRef.current.muted = shouldMute;
-      audioRef.current.play().then(() => {
-        setIsMuted(audioRef.current?.muted || false);
-      }).catch((err) => {
-        console.log("Autoplay waiting for touch gesture:", err);
-      });
-    };
-
-    startAudioPlayback();
-
-    // Trigger unmuted music immediately on first touch/interaction on mobile or desktop
-    const handleUserGesture = () => {
-      if (audioRef.current) {
-        audioRef.current.muted = false;
-        setIsMuted(false);
-        localStorage.setItem('ambient_music_muted', 'false');
-        audioRef.current.play().catch(() => {});
+    const playAudio = async () => {
+      if (!audioRef.current || isPlayingRef.current || audioRef.current.muted) return;
+      try {
+        isPlayingRef.current = true;
+        await audioRef.current.play();
+      } catch (_) {
+        // Autoplay blocked by browser policy until explicit interaction
+      } finally {
+        isPlayingRef.current = false;
       }
     };
 
-    const gestures = ['click', 'touchstart', 'pointerdown', 'scroll', 'touchend'];
+    if (!shouldMute) {
+      playAudio();
+    }
+
+    const handleUserGesture = () => {
+      if (audioRef.current && !shouldMute && audioRef.current.paused) {
+        playAudio();
+      }
+    };
+
+    const gestures = ['click', 'touchstart', 'keydown'];
     gestures.forEach(evt => {
       window.addEventListener(evt, handleUserGesture, { passive: true, once: true });
     });
@@ -53,26 +52,35 @@ export default function AmbientPlayer() {
         window.removeEventListener(evt, handleUserGesture);
       });
       if (audioRef.current) {
-        audioRef.current.pause();
+        try {
+          audioRef.current.pause();
+        } catch (_) {}
       }
       audioRef.current = null;
     };
   }, []);
 
-  const toggleMute = () => {
+  const toggleMute = async () => {
     if (!audioRef.current) return;
 
-    const newMuted = !audioRef.current.muted;
-    audioRef.current.muted = newMuted;
+    const newMuted = !isMuted;
     setIsMuted(newMuted);
+    audioRef.current.muted = newMuted;
     localStorage.setItem('ambient_music_muted', String(newMuted));
 
     if (!newMuted) {
-      audioRef.current.play().catch((err) => {
-        console.error("Playback failed on toggle unmuting:", err);
-      });
+      if (audioRef.current.paused && !isPlayingRef.current) {
+        try {
+          isPlayingRef.current = true;
+          await audioRef.current.play();
+        } catch (_) {} finally {
+          isPlayingRef.current = false;
+        }
+      }
     } else {
-      audioRef.current.pause();
+      try {
+        audioRef.current.pause();
+      } catch (_) {}
     }
   };
 
