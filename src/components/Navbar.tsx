@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useApp } from '../AppContext';
-import { ShoppingBag, Search, Compass, Info, Sparkles, Menu, X, ArrowRight, ArrowLeft, User, Heart, Globe, Check } from 'lucide-react';
+import { ShoppingBag, Search, Compass, Info, Sparkles, Menu, X, ArrowRight, ArrowLeft, User, Heart, Globe, Check, ChevronDown, Coins, Headphones, Package, RotateCcw, ShieldCheck, RefreshCw, FileText, Truck } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { CURRENCIES, CurrencyCode } from '../types';
 
@@ -23,6 +23,7 @@ export default function Navbar({ onOpenCart, onOpenWishlist }: NavbarProps) {
 
   // Fullscreen overlay menu state
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [expandedDrawerSection, setExpandedDrawerSection] = useState<'customerCare' | 'quickLinks' | null>(null);
 
   // Hide-on-scroll state for desktop
   const [headerVisible, setHeaderVisible] = useState(true);
@@ -130,14 +131,15 @@ export default function Navbar({ onOpenCart, onOpenWishlist }: NavbarProps) {
               })}
             </nav>
 
-            {/* Currency Selector Button (Replaces Wishlist) */}
+            {/* Premium Luxury Currency Selector Trigger */}
             <button
               onClick={() => setIsCurrencyModalOpen(true)}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-[#C5A059]/40 bg-neutral-50/80 hover:bg-[#003e1c] hover:text-white text-[#003e1c] transition-all duration-300 cursor-pointer shadow-2xs font-mono text-xs font-bold active:scale-95"
+              className="group flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-[#C5A059]/40 bg-white/90 hover:bg-[#003e1c] hover:border-[#C5A059] text-neutral-900 hover:text-white transition-all duration-300 cursor-pointer shadow-2xs active:scale-95 relative overflow-hidden"
               title="Change Currency & Region"
             >
-              <Globe className="w-4 h-4 text-[#C5A059]" />
-              <span>{currentCurrencyInfo.flag} {currentCurrencyInfo.code}</span>
+              <Globe className="w-4 h-4 text-[#C5A059] group-hover:rotate-12 transition-transform duration-300" />
+              <span className="font-mono text-xs font-bold tracking-wider">{currentCurrencyInfo.code}</span>
+              <ChevronDown className="w-3.5 h-3.5 text-[#C5A059] group-hover:translate-y-0.5 transition-transform" />
             </button>
 
             {/* Cart Button */}
@@ -227,14 +229,15 @@ export default function Navbar({ onOpenCart, onOpenWishlist }: NavbarProps) {
           </button>
 
           <div className="flex items-center gap-2.5 z-10">
-            {/* Currency Selector Button (Replaces Wishlist in Header) */}
+            {/* Premium Luxury Currency Selector Trigger (Mobile) */}
             <button
               onClick={() => setIsCurrencyModalOpen(true)}
-              className="flex items-center gap-1 px-2.5 py-1 rounded-lg border border-[#C5A059]/40 bg-neutral-50 text-[#003e1c] cursor-pointer text-[11px] font-mono font-bold active:scale-95 shadow-2xs"
-              title="Change Currency & Country"
+              className="flex items-center gap-1 px-2.5 py-1 rounded-full border border-[#C5A059]/40 bg-white/90 active:bg-[#003e1c] text-neutral-900 active:text-white transition-all cursor-pointer text-[11px] font-mono font-bold shadow-2xs active:scale-95"
+              title="Change Currency & Region"
             >
               <Globe className="w-3.5 h-3.5 text-[#C5A059]" />
-              <span>{currentCurrencyInfo.flag} {currentCurrencyInfo.code}</span>
+              <span>{currentCurrencyInfo.code}</span>
+              <ChevronDown className="w-3 h-3 text-[#C5A059]" />
             </button>
 
             {/* Cart Shopping Bag */}
@@ -348,31 +351,71 @@ export default function Navbar({ onOpenCart, onOpenWishlist }: NavbarProps) {
               <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-white/50" />
             </form>
 
-            <div className="space-y-4 my-auto">
-              {['home', 'shop', 'about'].map((id) => (
-                <button
-                  key={id}
-                  onClick={() => handleNavClick(id)}
-                  className="w-full text-left text-2xl font-serif uppercase tracking-wider text-white hover:text-[#C5A059] py-2 border-b border-white/10 flex items-center justify-between"
-                >
-                  <span>{id === 'home' ? 'Home Page' : id === 'shop' ? 'Shop Catalog' : 'Our Story'}</span>
-                  <ArrowRight className="w-5 h-5 text-[#C5A059]" />
-                </button>
-              ))}
+            <div className="space-y-4 my-auto max-h-[65vh] overflow-y-auto pr-1">
+              {/* Navigation Links & Customer Care Accordion */}
+              <div className="space-y-1">
+                <span className="text-[10px] font-mono uppercase font-bold tracking-widest text-[#C5A059] block mb-2">Navigation Menu</span>
+                
+                {['home', 'shop', 'about'].map((id) => (
+                  <button
+                    key={id}
+                    onClick={() => handleNavClick(id)}
+                    className="w-full text-left text-lg font-serif uppercase tracking-wider text-white hover:text-[#C5A059] py-2.5 border-b border-white/10 flex items-center justify-between cursor-pointer transition-colors"
+                  >
+                    <span>{id === 'home' ? 'Home Page' : id === 'shop' ? 'Shop Catalog' : 'Our Story'}</span>
+                    <ArrowRight className="w-4 h-4 text-[#C5A059]" />
+                  </button>
+                ))}
 
-              {/* Currency Selector Button in Mobile Menu Drawer */}
-              <button
-                onClick={() => { setIsMenuOpen(false); setIsCurrencyModalOpen(true); }}
-                className="mt-6 w-full py-3.5 px-4 bg-white/10 hover:bg-white/20 rounded-2xl border border-white/15 flex items-center justify-between transition-all cursor-pointer"
-              >
-                <div className="flex items-center gap-2 text-white">
-                  <Globe className="w-4 h-4 text-[#C5A059]" />
-                  <span className="text-xs font-mono font-bold uppercase">Region & Currency</span>
+                {/* Customer Care Accordion Menu Item */}
+                <div>
+                  <button
+                    onClick={() => setExpandedDrawerSection(expandedDrawerSection === 'customerCare' ? null : 'customerCare')}
+                    className="w-full text-left text-lg font-serif uppercase tracking-wider text-white hover:text-[#C5A059] py-2.5 border-b border-white/10 flex items-center justify-between cursor-pointer transition-colors"
+                  >
+                    <div className="flex items-center gap-2.5">
+                      <Headphones className="w-4 h-4 text-[#C5A059]" />
+                      <span>Customer Care</span>
+                    </div>
+                    <ChevronDown className={`w-4 h-4 text-[#C5A059] transition-transform duration-300 ${expandedDrawerSection === 'customerCare' ? 'rotate-180' : ''}`} />
+                  </button>
+
+                  <AnimatePresence>
+                    {expandedDrawerSection === 'customerCare' && (
+                      <motion.div
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: 'auto', opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        className="overflow-hidden bg-white/5 rounded-xl my-2 p-1.5 space-y-0.5 border border-white/10"
+                      >
+                        {[
+                          { label: 'Order Tracking', page: 'tracking', icon: Truck },
+                          { label: 'Shipping & Delivery', page: 'policies', icon: Package },
+                          { label: 'Order Cancellation', page: 'policies', icon: RotateCcw },
+                          { label: 'Privacy Policy', page: 'policies', icon: ShieldCheck },
+                          { label: 'Refund Policy', page: 'policies', icon: RefreshCw },
+                          { label: 'Terms & Conditions', page: 'policies', icon: FileText }
+                        ].map((link, idx) => {
+                          const IconComp = link.icon;
+                          return (
+                            <button
+                              key={idx}
+                              onClick={() => { setIsMenuOpen(false); setActivePage(link.page); }}
+                              className="w-full flex items-center justify-between p-2.5 rounded-lg text-xs font-sans text-white/80 hover:text-white hover:bg-white/10 transition-all text-left cursor-pointer"
+                            >
+                              <div className="flex items-center gap-2.5">
+                                <IconComp className="w-3.5 h-3.5 text-[#C5A059]" />
+                                <span>{link.label}</span>
+                              </div>
+                              <ArrowRight className="w-3 h-3 text-[#C5A059]/60" />
+                            </button>
+                          );
+                        })}
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
                 </div>
-                <span className="text-xs font-mono font-bold text-[#C5A059]">
-                  {currentCurrencyInfo.flag} {currentCurrencyInfo.code}
-                </span>
-              </button>
+              </div>
             </div>
 
             <div className="pt-6 border-t border-white/15 flex items-center justify-between">
@@ -444,7 +487,16 @@ export default function Navbar({ onOpenCart, onOpenWishlist }: NavbarProps) {
                       }`}
                     >
                       <div className="flex items-center gap-3">
-                        <span className="text-2xl leading-none">{cur.flag}</span>
+                        <div className="w-7 h-5 rounded-sm overflow-hidden border border-black/15 shadow-2xs shrink-0 flex items-center justify-center bg-neutral-100">
+                          <img
+                            src={`https://flagcdn.com/w40/${cur.flagCode}.png`}
+                            alt={`${cur.country} flag`}
+                            className="w-full h-full object-cover"
+                            onError={(e) => {
+                              (e.target as HTMLElement).style.display = 'none';
+                            }}
+                          />
+                        </div>
                         <div>
                           <span className="font-bold text-xs block font-sans text-left">{cur.country}</span>
                           <span className={`text-[10px] font-mono block text-left ${isSelected ? 'text-[#E8C888]' : 'text-neutral-400'}`}>

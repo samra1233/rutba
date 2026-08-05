@@ -52,14 +52,10 @@ export default function WishlistDrawer({ isOpen, onClose }: WishlistDrawerProps)
   // Filter products that are in the global wishlist
   const resolvedItems = products.filter(p => wishlist.includes(p.id));
 
-  const handleAddToBag = async (productId: string, e: React.MouseEvent, imageUrl: string) => {
-    e.stopPropagation();
-    const btnEl = e.currentTarget as HTMLElement;
-    const cardEl = btnEl.closest('.wishlist-item');
-    const imageEl = cardEl?.querySelector('img') as HTMLElement || btnEl;
-    
-    // Add to cart with fly animation
-    await addToCart(productId, 1, imageEl, imageUrl);
+  const handleViewDetails = (productId: string, e?: React.MouseEvent) => {
+    if (e) e.stopPropagation();
+    onClose();
+    setActivePage('product-detail', productId);
   };
 
   const handleItemClick = (productId: string) => {
@@ -216,14 +212,14 @@ export default function WishlistDrawer({ isOpen, onClose }: WishlistDrawerProps)
                             </div>
                           </div>
  
-                          {/* Quick Add To Bag CTA */}
+                          {/* View Outfit Details CTA */}
                           <div className="mt-3.5">
                             <button
-                              onClick={(e) => handleAddToBag(product.id, e, product.images[0])}
+                              onClick={(e) => handleViewDetails(product.id, e)}
                               className="w-full group/btn relative overflow-hidden py-2 px-4 rounded-full bg-[#070B09] border border-black/5 hover:bg-[#C5A059] text-white hover:text-black font-mono text-[9px] uppercase tracking-[0.2em] font-bold transition-all duration-300 cursor-pointer flex items-center justify-center gap-2 shadow-sm"
                             >
-                              <ShoppingBag className="w-3.5 h-3.5" />
-                              <span>Add to bag</span>
+                              <ArrowRight className="w-3.5 h-3.5 group-hover/btn:translate-x-0.5 transition-transform" />
+                              <span>View Outfit Details</span>
                             </button>
                           </div>
                         </div>

@@ -7,19 +7,20 @@ export interface CurrencyInfo {
   code: CurrencyCode;
   country: string;
   flag: string;
+  flagCode: string;
   symbol: string;
   rateInPKR: number;
 }
 
 export const CURRENCIES: Record<CurrencyCode, CurrencyInfo> = {
-  PKR: { code: 'PKR', country: 'Pakistan', flag: '🇵🇰', symbol: 'PKR', rateInPKR: 1 },
-  AED: { code: 'AED', country: 'United Arab Emirates', flag: '🇦🇪', symbol: 'AED', rateInPKR: 76 },
-  SAR: { code: 'SAR', country: 'Saudi Arabia', flag: '🇸🇦', symbol: 'SAR', rateInPKR: 74.3 },
-  AUD: { code: 'AUD', country: 'Australia', flag: '🇦🇺', symbol: 'AUD', rateInPKR: 182.5 },
-  SGD: { code: 'SGD', country: 'Singapore', flag: '🇸🇬', symbol: 'SGD', rateInPKR: 206.8 },
-  HKD: { code: 'HKD', country: 'Hong Kong', flag: '🇭🇰', symbol: 'HKD', rateInPKR: 35.7 },
-  MYR: { code: 'MYR', country: 'Malaysia', flag: '🇲🇾', symbol: 'MYR', rateInPKR: 63.2 },
-  GBP: { code: 'GBP', country: 'Scotland / UK', flag: '🏴󠁧󠁢󠁳󠁣󠁴󠁿', symbol: 'GBP', rateInPKR: 352.4 },
+  PKR: { code: 'PKR', country: 'Pakistan', flag: '🇵🇰', flagCode: 'pk', symbol: 'PKR', rateInPKR: 1 },
+  AED: { code: 'AED', country: 'United Arab Emirates', flag: '🇦🇪', flagCode: 'ae', symbol: 'AED', rateInPKR: 76 },
+  SAR: { code: 'SAR', country: 'Saudi Arabia', flag: '🇸🇦', flagCode: 'sa', symbol: 'SAR', rateInPKR: 74.3 },
+  AUD: { code: 'AUD', country: 'Australia', flag: '🇦🇺', flagCode: 'au', symbol: 'AUD', rateInPKR: 182.5 },
+  SGD: { code: 'SGD', country: 'Singapore', flag: '🇸🇬', flagCode: 'sg', symbol: 'SGD', rateInPKR: 206.8 },
+  HKD: { code: 'HKD', country: 'Hong Kong', flag: '🇭🇰', flagCode: 'hk', symbol: 'HKD', rateInPKR: 35.7 },
+  MYR: { code: 'MYR', country: 'Malaysia', flag: '🇲🇾', flagCode: 'my', symbol: 'MYR', rateInPKR: 63.2 },
+  GBP: { code: 'GBP', country: 'Scotland / UK', flag: '🏴󠁧󠁢󠁳󠁣󠁴󠁿', flagCode: 'gb', symbol: 'GBP', rateInPKR: 352.4 },
 };
 
 export interface Product {
@@ -48,6 +49,9 @@ export interface Product {
 export interface CartItem {
   productId: string;
   quantity: number;
+  selectedSize?: string;
+  selectedCategory?: string;
+  selectedColor?: string;
   product?: Product;
 }
 

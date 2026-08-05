@@ -408,21 +408,42 @@ export function OrderTrackingPage() {
                     </span>
                   </div>
 
-                  {/* Order items preview */}
-                  <div className="space-y-2">
+                  {/* Order items preview with Full Specifications */}
+                  <div className="space-y-2.5">
                     {ord.items.map((item, idx) => (
-                      <div key={idx} className="flex items-center gap-3">
+                      <div key={idx} className="flex items-start gap-3 p-3 rounded-xl bg-white border border-neutral-200/70 shadow-2xs">
                         {item.product?.images?.[0] && (
                           <img
                             src={item.product.images[0]}
                             alt={item.product.name}
-                            className="w-12 h-15 object-cover rounded-lg border border-neutral-200 shrink-0"
+                            className="w-14 h-18 object-cover rounded-lg border border-neutral-200 shrink-0"
                           />
                         )}
-                        <div className="flex-1 min-w-0">
-                          <h4 className="font-bold text-neutral-900 truncate text-xs">{item.product?.name || 'Unstitched Luxury Ensemble'}</h4>
-                          <p className="text-[10px] text-neutral-500 font-sans">Fabric: {item.product?.fabric || 'Lawn'} • Qty: {item.quantity}</p>
-                          <p className="text-[10px] text-[#C5A059] font-mono font-bold">{formatPrice((item.product?.price || 0) * item.quantity)}</p>
+                        <div className="flex-1 min-w-0 space-y-1 text-left">
+                          <div className="flex items-start justify-between gap-2">
+                            <h4 className="font-bold text-neutral-900 text-xs font-serif leading-tight">
+                              {item.product?.name || 'Luxury Ensemble'}
+                            </h4>
+                            <span className="font-mono text-xs font-bold text-[#003e1c] shrink-0">
+                              {formatPrice((item.product?.price || 0) * item.quantity)}
+                            </span>
+                          </div>
+
+                          <div className="flex flex-wrap gap-1.5 pt-0.5">
+                            {/* Category Badge */}
+                            <span className="inline-block font-mono text-[9px] uppercase tracking-wider text-[#003e1c] bg-[#003e1c]/10 px-2 py-0.5 rounded font-bold border border-[#003e1c]/15">
+                              Category: {(item as any).selectedCategory || item.product?.category || 'Unstitched'}
+                            </span>
+                            {/* Size Badge */}
+                            <span className="inline-block font-mono text-[9px] uppercase tracking-wider text-[#C5A059] bg-[#C5A059]/10 px-2 py-0.5 rounded font-bold border border-[#C5A059]/20">
+                              Size: {(item as any).selectedSize || item.product?.pieces || 'Unstitched'}
+                            </span>
+                          </div>
+
+                          <div className="flex items-center justify-between text-[10px] text-neutral-500 font-sans pt-1">
+                            <span>Fabric: <strong className="text-neutral-700 font-medium">{item.product?.fabric || 'Lawn'}</strong></span>
+                            <span>Qty: <strong className="text-neutral-900 font-bold">{item.quantity}</strong></span>
+                          </div>
                         </div>
                       </div>
                     ))}
@@ -538,13 +559,28 @@ export function OrderTrackingPage() {
                   </div>
                 </div>
 
-                <div className="space-y-2 p-4 bg-neutral-50 rounded-xl border border-neutral-150">
-                  <strong className="text-[#003e1c] font-serif text-sm block border-b border-neutral-200 pb-1.5 font-bold">Items Record</strong>
+                <div className="space-y-2.5 p-4 bg-neutral-50 rounded-xl border border-neutral-150">
+                  <strong className="text-[#003e1c] font-serif text-sm block border-b border-neutral-200 pb-1.5 font-bold">Items Record ({trackedOrder.items.length})</strong>
                   <div className="space-y-2 font-sans text-xs">
                     {trackedOrder.items.map((item, idx) => (
-                      <div key={idx} className="flex items-center gap-2 justify-between">
-                        <span className="truncate max-w-[200px] font-medium text-neutral-800">{item.product?.name || 'Unstitched Article'}</span>
-                        <strong className="text-neutral-900 shrink-0">x{item.quantity}</strong>
+                      <div key={idx} className="flex items-start gap-2.5 p-2 rounded-lg bg-white border border-neutral-200/80">
+                        {item.product?.images?.[0] && (
+                          <img src={item.product.images[0]} alt={item.product.name} className="w-10 h-13 object-cover rounded shrink-0 border border-neutral-200" />
+                        )}
+                        <div className="flex-1 min-w-0 space-y-0.5 text-left">
+                          <div className="flex justify-between items-start gap-1">
+                            <span className="font-bold text-neutral-800 text-[11px] font-serif leading-tight">{item.product?.name || 'Unstitched Article'}</span>
+                            <strong className="text-[#003e1c] font-mono text-[10px] shrink-0">x{item.quantity}</strong>
+                          </div>
+                          <div className="flex flex-wrap gap-1 pt-0.5">
+                            <span className="text-[8px] font-mono uppercase font-bold text-[#003e1c] bg-[#003e1c]/10 px-1.5 py-0.5 rounded">
+                              {(item as any).selectedCategory || item.product?.category || 'Unstitched'}
+                            </span>
+                            <span className="text-[8px] font-mono uppercase font-bold text-[#C5A059] bg-[#C5A059]/10 px-1.5 py-0.5 rounded">
+                              {(item as any).selectedSize || item.product?.pieces || 'Unstitched'}
+                            </span>
+                          </div>
+                        </div>
                       </div>
                     ))}
                   </div>

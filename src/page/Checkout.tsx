@@ -24,7 +24,7 @@ import {
 export default function Checkout() {
   const { cart, products, placeOrder, setActivePage, user, setAuthModalOpen, settings, formatPrice } = useApp();
   const [processing, setProcessing] = useState(false);
-  const [paymentMethod, setPaymentMethod] = useState<'card' | 'cod'>('cod');
+  const [paymentMethod, setPaymentMethod] = useState<'card'>('card');
   
   // Credit Card fields
   const [cardNumber, setCardNumber] = useState('');
@@ -40,7 +40,8 @@ export default function Checkout() {
     phone: user?.phone || '',
     address: '',
     city: '',
-    country: 'United Arab Emirates'
+    postalCode: '',
+    country: 'Pakistan'
   });
 
   // Intercept guest checkout
@@ -110,18 +111,14 @@ export default function Checkout() {
   const subtotal = resolvedItems.reduce((acc, item) => acc + (item.product!.price * item.quantity), 0);
   
   const cardShippingFee = typeof settings?.cardShippingFee !== 'undefined' ? Number(settings.cardShippingFee) : 15;
-  const codShippingFee = typeof settings?.codShippingFee !== 'undefined' ? Number(settings.codShippingFee) : 25;
   const freeLimit = typeof settings?.freeShippingThreshold !== 'undefined' ? Number(settings.freeShippingThreshold) : 500;
 
-  const isInternational = shipping.country && 
-    shipping.country.toLowerCase() !== 'united arab emirates' && 
-    shipping.country.toLowerCase() !== 'uae';
+  const isLocalPakistan = shipping.country && shipping.country.toLowerCase() === 'pakistan';
+  const courierService = isLocalPakistan ? "TCS Express Courier" : "NexGen Worldwide Express";
     
-  let shippingCost = isInternational 
-    ? 100 
-    : (paymentMethod === 'card' ? cardShippingFee : codShippingFee);
+  let shippingCost = isLocalPakistan ? cardShippingFee : 100;
     
-  if (!isInternational && subtotal >= freeLimit) {
+  if (isLocalPakistan && subtotal >= freeLimit) {
     shippingCost = 0;
   }
 
@@ -158,56 +155,46 @@ export default function Checkout() {
     e.preventDefault();
 
     // Field validations
-    if (!shipping.name || !shipping.email || !shipping.phone || !shipping.address || !shipping.city) {
-      alert('Please fill in all shipping details.');
+    if (!shipping.name || !shipping.email || !shipping.phone || !shipping.address || !shipping.city || !shipping.postalCode) {
+      alert('Please fill in all shipping details, including City and Postal Code.');
       return;
     }
 
-    if (paymentMethod === 'card') {
-      const cleanCard = cardNumber.replace(/\s/g, '');
-      if (cleanCard.length < 16) {
-        alert('Please enter a valid 16-digit credit card number.');
-        return;
-      }
-      if (!cardName) {
-        alert('Please enter the cardholder name.');
-        return;
-      }
-      if (!cardExpiry || !/^\d{2}\/\d{2}$/.test(cardExpiry)) {
-        alert('Please enter expiry date in MM/YY format.');
-        return;
-      }
-      if (cardCvc.length < 3) {
-        alert('Please enter your 3-digit CVV/CVC code.');
-        return;
-      }
+    const cleanCard = cardNumber.replace(/\s/g, '');
+    if (cleanCard.length < 16) {
+      alert('Please enter a valid 16-digit credit card number.');
+      return;
+    }
+    if (!cardName) {
+      alert('Please enter the cardholder name.');
+      return;
+    }
+    if (!cardExpiry || !/^\d{2}\/\d{2}$/.test(cardExpiry)) {
+      alert('Please enter expiry date in MM/YY format.');
+      return;
+    }
+    if (cardCvc.length < 3) {
+      alert('Please enter your 3-digit CVV/CVC code.');
+      return;
     }
 
     setProcessing(true);
 
-    // Simulate payment API sandbox delay
-    const delay = paymentMethod === 'cod' ? 1200 : 2500;
-    
     setTimeout(async () => {
-      let paymentDetails = undefined;
-      
-      if (paymentMethod === 'card') {
-        const cleanCard = cardNumber.replace(/\s/g, '');
-        paymentDetails = {
-          accountNumber: `•••• •••• •••• ${cleanCard.slice(-4)}`,
-          cardHolder: cardName,
-          transactionId: `ZAR-CARD-${Math.floor(100000 + Math.random() * 900000)}`
-        };
-      }
+      const paymentDetails = {
+        accountNumber: `•••• •••• •••• ${cleanCard.slice(-4)}`,
+        cardHolder: cardName,
+        transactionId: `ZAR-CARD-${Math.floor(100000 + Math.random() * 900000)}`
+      };
       
       const order = await placeOrder(
         shipping,
-        paymentMethod,
+        'card',
         paymentDetails
       );
       
       setProcessing(false);
-    }, delay);
+    }, 2200);
   };
 
   return (
@@ -322,14 +309,30 @@ export default function Checkout() {
                     required
                     value={shipping.city}
                     onChange={handleInputChange}
-                    placeholder="e.g. Lahore, Karachi, Islamabad"
+                    placeholder="e.g. Lahore, Karachi, Dubai, Sydney"
                     className="w-full bg-white/90 border border-neutral-200/80 rounded-xl pl-11 pr-4 py-3.5 text-neutral-800 placeholder-neutral-400 focus:outline-hidden focus:border-[#C5A059] focus:ring-4 focus:ring-[#C5A059]/5 transition-all font-medium text-xs"
                   />
                 </div>
               </div>
 
               <div className="space-y-1.5">
-                <label className="font-bold text-neutral-500 tracking-wider uppercase text-[10px] block">Country</label>
+                <label className="font-bold text-neutral-500 tracking-wider uppercase text-[10px] block">Postal Code / Zip Code</label>
+                <div className="relative">
+                  <MapPin className="absolute left-4 top-3.5 w-4 h-4 text-[#C5A059]" />
+                  <input
+                    type="text"
+                    name="postalCode"
+                    required
+                    value={shipping.postalCode}
+                    onChange={handleInputChange}
+                    placeholder="e.g. 54000 / Postal Code"
+                    className="w-full bg-white/90 border border-neutral-200/80 rounded-xl pl-11 pr-4 py-3.5 text-neutral-800 placeholder-neutral-400 focus:outline-hidden focus:border-[#C5A059] focus:ring-4 focus:ring-[#C5A059]/5 transition-all font-medium text-xs"
+                  />
+                </div>
+              </div>
+
+              <div className="space-y-1.5 sm:col-span-2">
+                <label className="font-bold text-neutral-500 tracking-wider uppercase text-[10px] block">Country & Regional Service</label>
                 <div className="relative">
                   <Globe className="absolute left-4 top-3.5 w-4 h-4 text-[#C5A059] pointer-events-none z-10" />
                   <select
@@ -338,13 +341,32 @@ export default function Checkout() {
                     onChange={handleInputChange}
                     className="w-full bg-white/90 border border-neutral-200/80 rounded-xl pl-11 pr-4 py-3.5 text-neutral-800 focus:outline-hidden focus:border-[#C5A059] focus:ring-4 focus:ring-[#C5A059]/5 transition-all font-medium text-xs appearance-none cursor-pointer"
                   >
-                    <option value="Pakistan">Pakistan (Nationwide Shipping)</option>
-                    <option value="United Arab Emirates">United Arab Emirates</option>
-                    <option value="United Kingdom">United Kingdom</option>
-                    <option value="United States">United States</option>
-                    <option value="Canada">Canada</option>
+                    <option value="Pakistan">Pakistan (Local TCS Express Courier)</option>
+                    <option value="Saudi Arabia">Saudi Arabia (NexGen Worldwide Express)</option>
+                    <option value="United Arab Emirates">United Arab Emirates (NexGen Worldwide Express)</option>
+                    <option value="Australia">Australia (NexGen Worldwide Express)</option>
+                    <option value="Singapore">Singapore (NexGen Worldwide Express)</option>
+                    <option value="Hong Kong">Hong Kong (NexGen Worldwide Express)</option>
+                    <option value="Malaysia">Malaysia (NexGen Worldwide Express)</option>
+                    <option value="Scotland">Scotland / UK (NexGen Worldwide Express)</option>
                   </select>
                 </div>
+              </div>
+
+              {/* Assigned Courier Service Badge */}
+              <div className="sm:col-span-2 p-3.5 rounded-xl bg-[#003e1c]/5 border border-[#003e1c]/20 flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <div className="w-8 h-8 rounded-lg bg-[#003e1c]/10 flex items-center justify-center text-[#003e1c] shrink-0">
+                    <Truck className="w-4 h-4" />
+                  </div>
+                  <div>
+                    <span className="text-[9.5px] font-mono uppercase font-bold text-[#003e1c] block">Assigned Shipping Partner</span>
+                    <span className="text-xs font-bold text-neutral-900 font-sans">{courierService}</span>
+                  </div>
+                </div>
+                <span className="text-[9.5px] font-mono font-bold bg-[#003e1c] text-white px-2.5 py-1 rounded-md uppercase tracking-wider">
+                  {isLocalPakistan ? 'TCS Local' : 'NexGen Worldwide'}
+                </span>
               </div>
             </div>
           </div>
@@ -361,61 +383,13 @@ export default function Checkout() {
                 <CreditCard className="w-5 h-5" />
               </div>
               <div>
-                <h2 className="font-sans text-lg font-black uppercase tracking-wide text-[#14261C]">2. Payment Method</h2>
-                <p className="text-[10px] font-sans text-neutral-400 uppercase tracking-wider font-extrabold">Choose your preferred payment method</p>
+                <h2 className="font-sans text-lg font-black uppercase tracking-wide text-[#14261C]">2. Secure Online Payment</h2>
+                <p className="text-[10px] font-sans text-neutral-400 uppercase tracking-wider font-extrabold">256-Bit Encrypted Card Payment Gateway</p>
               </div>
             </div>
 
-            {/* Selection Grid */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              {/* Cash on Delivery */}
-              <button
-                type="button"
-                onClick={() => setPaymentMethod('cod')}
-                className={`p-4 rounded-2xl border text-left flex flex-col justify-between min-h-[100px] transition-all duration-300 cursor-pointer group relative overflow-hidden ${
-                  paymentMethod === 'cod'
-                    ? 'bg-[#14261C] border-[#C5A059] text-white shadow-[0_8px_20px_rgba(20,38,28,0.15)] scale-[1.02]'
-                    : 'bg-white/70 backdrop-blur-md border-neutral-200/80 text-neutral-600 hover:border-[#C5A059]/40 hover:bg-white hover:text-black shadow-2xs'
-                }`}
-              >
-                <div className="flex justify-between items-start w-full">
-                  <span className="text-[8px] font-sans uppercase tracking-widest opacity-60 font-black">COD</span>
-                  <Truck className={`w-4 h-4 ${paymentMethod === 'cod' ? 'text-[#C5A059]' : 'text-neutral-400'}`} />
-                </div>
-                <div className="space-y-1 mt-3">
-                  <span className="font-sans text-xs font-black uppercase tracking-tight block">Cash on Delivery</span>
-                  <span className="text-[8px] font-sans tracking-wider opacity-75 text-amber-500 font-extrabold">
-                    {settings?.codShippingFee ? `${formatPrice(settings.codShippingFee)} Delivery` : 'Standard Delivery'}
-                  </span>
-                </div>
-              </button>
-
-              {/* Credit / Debit Card (Visa) */}
-              <button
-                type="button"
-                onClick={() => setPaymentMethod('card')}
-                className={`p-4 rounded-2xl border text-left flex flex-col justify-between min-h-[100px] transition-all duration-300 cursor-pointer group relative overflow-hidden ${
-                  paymentMethod === 'card'
-                    ? 'bg-[#14261C] border-[#C5A059] text-white shadow-[0_8px_20px_rgba(20,38,28,0.15)] scale-[1.02]'
-                    : 'bg-white/70 backdrop-blur-md border-neutral-200/80 text-neutral-600 hover:border-[#C5A059]/40 hover:bg-white hover:text-black shadow-2xs'
-                }`}
-              >
-                <div className="flex justify-between items-start w-full">
-                  <span className="text-[8px] font-sans uppercase tracking-widest opacity-60 font-black">ONLINE CARD</span>
-                  <CreditCard className={`w-4 h-4 ${paymentMethod === 'card' ? 'text-[#C5A059]' : 'text-neutral-400'}`} />
-                </div>
-                <div className="space-y-1 mt-3">
-                  <span className="font-sans text-xs font-black uppercase tracking-tight block">Credit / Debit Card</span>
-                  <span className="inline-block bg-[#C5A059] text-[#14261C] px-1.5 py-0.5 rounded text-[7px] font-sans font-black uppercase tracking-wider">
-                    {settings?.cardShippingFee ? `${formatPrice(settings.cardShippingFee)} Delivery` : 'Secure Payment'}
-                  </span>
-                </div>
-              </button>
-            </div>
-
             {/* Credit Card Interactive Panel */}
-            {paymentMethod === 'card' && (
-              <div className="space-y-6 pt-4 animate-fadeIn">
+            <div className="space-y-6 pt-2 animate-fadeIn">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
                   
                   {/* Realtime Visa Card UI */}
@@ -528,8 +502,6 @@ export default function Checkout() {
 
                 </div>
               </div>
-            )}
-
 
           </div>
         </div>
@@ -573,12 +545,12 @@ export default function Checkout() {
           </div>
 
           {/* Free Shipping Progress bar */}
-          {!isInternational && (
+          {isLocalPakistan && (
             <div className="p-4 bg-white/70 border border-[#C5A059]/15 rounded-2xl text-[10px] space-y-2 font-sans text-neutral-600 shadow-3xs font-bold">
               {subtotal < freeLimit ? (
                 <>
                   <div className="flex justify-between items-center text-[9px] font-black">
-                    <span>Free Shipping Goal:</span>
+                    <span>Local Free Shipping Goal:</span>
                     <span className="text-[#14261C]">{formatPrice(subtotal)} / {formatPrice(freeLimit)}</span>
                   </div>
                   <div className="w-full bg-neutral-200/50 h-1.5 rounded-full overflow-hidden">
@@ -589,13 +561,13 @@ export default function Checkout() {
                   </div>
                   <p className="text-[9px] text-[#C5A059] font-sans font-black flex items-center gap-1">
                     <AlertCircle className="w-3.5 h-3.5 shrink-0" />
-                    <span>Add {formatPrice(freeLimit - subtotal)} more for FREE shipping!</span>
+                    <span>Add {formatPrice(freeLimit - subtotal)} more for FREE local TCS shipping!</span>
                   </p>
                 </>
               ) : (
                 <div className="flex items-center gap-2 text-emerald-800 font-bold font-sans">
                   <span className="flex items-center justify-center w-5 h-5 bg-emerald-100 text-emerald-800 rounded-full text-[10px]">✓</span>
-                  <span>🎉 FREE SHIPPING UNLOCKED!</span>
+                  <span>🎉 FREE TCS LOCAL SHIPPING UNLOCKED!</span>
                 </div>
               )}
             </div>
@@ -609,9 +581,9 @@ export default function Checkout() {
             </div>
             
             <div className="flex justify-between text-neutral-400 font-extrabold tracking-wider text-[10px] uppercase">
-              <span>SHIPPING FEE</span>
+              <span>SHIPPING FEE ({isLocalPakistan ? 'TCS Local' : 'NexGen Worldwide'})</span>
               <span className="font-extrabold text-neutral-800 font-sans">
-                {isInternational 
+                {!isLocalPakistan 
                   ? formatPrice(100) 
                   : shippingCost === 0 
                     ? 'FREE' 
@@ -623,7 +595,7 @@ export default function Checkout() {
             <div className="border-t border-[#C5A059]/20 pt-4 flex justify-between items-center text-brand-emerald">
               <div>
                 <span className="font-sans text-xs font-black uppercase tracking-widest text-[#14261C] block">TOTAL ORDER AMOUNT</span>
-                <span className="text-[8px] font-sans text-neutral-400 uppercase tracking-widest block mt-0.5 font-extrabold">Secure Checkout Processed</span>
+                <span className="text-[8px] font-sans text-neutral-400 uppercase tracking-widest block mt-0.5 font-extrabold">256-Bit Encrypted Payment</span>
               </div>
               <span className="font-sans text-xl font-black text-[#C5A059]">{formatPrice(total)}</span>
             </div>
@@ -638,22 +610,12 @@ export default function Checkout() {
             {processing ? (
               <>
                 <Loader2 className="w-4 h-4 animate-spin text-brand-gold" />
-                <span>
-                  {paymentMethod === 'cod' 
-                    ? 'PLACING COD ORDER...' 
-                    : `CONNECTING BANK SIMULATOR...`
-                  }
-                </span>
+                <span>CONNECTING PAYMENT GATEWAY...</span>
               </>
             ) : (
               <>
                 <Lock className="w-3.5 h-3.5 text-[#C5A059] group-hover:text-black transition-colors" />
-                <span>
-                  {paymentMethod === 'cod' 
-                    ? 'PLACE SECURE COD ORDER' 
-                    : 'PROCESS VISA CARD PAYMENT'
-                  }
-                </span>
+                <span>PROCESS CARD PAYMENT ({formatPrice(total)})</span>
               </>
             )}
           </button>

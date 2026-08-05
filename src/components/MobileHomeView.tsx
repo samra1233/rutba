@@ -42,37 +42,37 @@ export default function MobileHomeView() {
   const stories = [
     { id: 1, title: 'Unstitched', img: '/cat_unstitched_new.jpg', isNew: true, category: 'category', val: 'Unstitched' },
     { id: 2, title: 'Stitches', img: '/cat_readytowear_new.png', isNew: false, category: 'category', val: 'Stitches' },
-    { id: 3, title: 'Kurta Set', img: '/cat_readytowear_new.png', isNew: false, category: 'category', val: 'Kurta Set' },
-    { id: 4, title: 'Co ord set', img: '/cat_bestseller_new.png', isNew: true, category: 'category', val: 'Co ord set' },
-    { id: 5, title: 'Indian Saree', img: '/cat_summer_new.png', isNew: false, category: 'category', val: 'Indian Saree' },
-    { id: 6, title: 'Party Wear', img: '/cat_bestseller_new.png', isNew: true, category: 'category', val: 'Party Wear' },
+    { id: 3, title: 'Farshi Shalwar', img: '/cat_bestseller_new.png', isNew: true, category: 'type', val: 'Farshi' },
+    { id: 4, title: 'Chiffon Dupatta', img: '/cat_summer_new.png', isNew: false, category: 'type', val: 'Chiffon' },
+    { id: 5, title: 'Embroidered', img: '/cat_unstitched_new.jpg', isNew: true, category: 'type', val: 'Embroidered' },
+    { id: 6, title: 'New Arrivals', img: '/cat_bestseller_new.png', isNew: true, category: 'collection', val: 'New Arrivals 26' },
   ];
 
   // App Hero Banners
   const heroBanners = [
     {
       id: 1,
-      title: "Unstitched & Stitches Drop",
-      sub: "20,000+ Luxury Designer Weaves",
+      title: "Unstitched Lawn Collection",
+      sub: "Embroidered 3-Piece Luxury Lawn & Cotton",
       img: "/hero_showcase.jpeg",
       key: "category",
       val: "Unstitched"
     },
     {
       id: 2,
-      title: "Kurta & Co-ord Sets",
-      sub: "Handcrafted Formals & Sets",
+      title: "Stitched & Farshi Suits",
+      sub: "Artisan Tailored Luxury Ensembles",
       img: "/cat_readytowear_new.png",
       key: "category",
-      val: "Kurta Set"
+      val: "Stitches"
     },
     {
       id: 3,
-      title: "Indian Sarees & Party Wear",
-      sub: "Artisan Silk & Embellished Sarees",
+      title: "Chiffon & Silk Weaves",
+      sub: "Festive Embroidered Prints & Dupattas",
       img: "/cat_bestseller_new.png",
-      key: "category",
-      val: "Indian Saree"
+      key: "collection",
+      val: "New Arrivals 26"
     }
   ];
 
@@ -80,10 +80,10 @@ export default function MobileHomeView() {
   const circularCategories = [
     { id: 'unstitched', label: 'Unstitched', img: '/cat_unstitched_new.jpg', key: 'category', val: 'Unstitched' },
     { id: 'stitches', label: 'Stitches', img: '/cat_readytowear_new.png', key: 'category', val: 'Stitches' },
-    { id: 'kurta-set', label: 'Kurta Set', img: '/cat_readytowear_new.png', key: 'category', val: 'Kurta Set' },
-    { id: 'co-ord-set', label: 'Co ord set', img: '/cat_bestseller_new.png', key: 'category', val: 'Co ord set' },
-    { id: 'indian-saree', label: 'Indian Saree', img: '/cat_summer_new.png', key: 'category', val: 'Indian Saree' },
-    { id: 'party-wear', label: 'Party Wear', img: '/cat_bestseller_new.png', key: 'category', val: 'Party Wear' }
+    { id: 'farshi', label: 'Farshi Shalwar', img: '/cat_bestseller_new.png', key: 'type', val: 'Farshi' },
+    { id: 'chiffon', label: 'Chiffon Dupatta', img: '/cat_summer_new.png', key: 'type', val: 'Chiffon' },
+    { id: 'embroidered', label: 'Embroidered', img: '/cat_unstitched_new.jpg', key: 'type', val: 'Embroidered' },
+    { id: 'new-arrivals', label: 'New Arrivals', img: '/cat_bestseller_new.png', key: 'collection', val: 'New Arrivals 26' }
   ];
 
   const handleSearchSubmit = (e: React.FormEvent) => {
@@ -99,9 +99,14 @@ export default function MobileHomeView() {
     setActivePage('shop');
   };
 
+  // Clean products list excluding any irrelevant non-clothing categories
+  const relevantProducts = useMemo(() => {
+    return products.filter(p => p.category !== 'Undergarments' && p.category !== 'Bags' && p.images && p.images.length > 0);
+  }, [products]);
+
   // Filtered Products List
   const filteredProducts = useMemo(() => {
-    let list = [...products];
+    let list = [...relevantProducts];
 
     if (searchQuery.trim()) {
       const q = searchQuery.toLowerCase();
@@ -111,19 +116,17 @@ export default function MobileHomeView() {
     if (activeTab === 'unstitched') {
       list = list.filter(p => p.category === 'Unstitched' || p.type?.toLowerCase().includes('unstitched') || p.fabric?.toLowerCase().includes('lawn'));
     } else if (activeTab === 'stitches') {
-      list = list.filter(p => p.category === 'Stitches' || p.category === 'Ready to Wear' || p.type?.toLowerCase().includes('stitched'));
-    } else if (activeTab === 'kurta-set') {
-      list = list.filter(p => p.category === 'Kurta Set' || p.name?.toLowerCase().includes('kurta') || p.type?.toLowerCase().includes('kurta'));
-    } else if (activeTab === 'co-ord-set') {
-      list = list.filter(p => p.category === 'Co ord set' || p.name?.toLowerCase().includes('co-ord') || p.name?.toLowerCase().includes('coord'));
-    } else if (activeTab === 'indian-saree') {
-      list = list.filter(p => p.category === 'Indian Saree' || p.name?.toLowerCase().includes('saree') || p.description?.toLowerCase().includes('saree'));
-    } else if (activeTab === 'party-wear') {
-      list = list.filter(p => p.category === 'Party Wear' || p.isBestSeller || p.collection?.toLowerCase().includes('festive'));
+      list = list.filter(p => p.category === 'Stitches' || p.category === 'Ready to Wear' || p.type?.toLowerCase().includes('stitched') || p.name?.toLowerCase().includes('stitched'));
+    } else if (activeTab === 'farshi') {
+      list = list.filter(p => p.name?.toLowerCase().includes('farshi') || p.description?.toLowerCase().includes('farshi'));
+    } else if (activeTab === 'chiffon') {
+      list = list.filter(p => p.description?.toLowerCase().includes('chiffon') || p.name?.toLowerCase().includes('chiffon'));
+    } else if (activeTab === 'embroidered') {
+      list = list.filter(p => p.type === 'Embroidered' || p.name?.toLowerCase().includes('embroidered'));
     }
 
     return list;
-  }, [products, searchQuery, activeTab]);
+  }, [relevantProducts, searchQuery, activeTab]);
 
   return (
     <div className="block md:hidden bg-[#f9f9f9] min-h-screen pt-18 pb-20 text-[#1A1A1A] font-sans selection:bg-black selection:text-white">
@@ -146,16 +149,6 @@ export default function MobileHomeView() {
               </button>
             )}
           </form>
-
-          {/* Currency Switcher Badge */}
-          <button
-            onClick={() => setIsCurrencyModalOpen(true)}
-            className="shrink-0 flex items-center gap-1.5 text-[11px] font-bold font-mono px-2.5 py-2 rounded-xl bg-neutral-100 border border-[#C5A059]/30 text-[#003e1c] active:scale-95 transition-transform cursor-pointer shadow-2xs"
-            title="Change Currency"
-          >
-            <Globe className="w-3.5 h-3.5 text-[#C5A059]" />
-            <span>{currentCurrencyInfo.flag} {currentCurrencyInfo.code}</span>
-          </button>
         </div>
       </div>
 
@@ -165,19 +158,19 @@ export default function MobileHomeView() {
           {stories.map((st, idx) => (
             <div
               key={st.id}
-              onClick={() => handleCategoryClick(st.category, st.val)}
+              onClick={() => setActiveStory(st.id)}
               className="flex flex-col items-center gap-1.5 cursor-pointer shrink-0 group"
             >
-              <div className={`p-0.5 rounded-full ${
+              <div className={`p-[2px] rounded-full ${
                 st.isNew 
-                  ? 'bg-gradient-to-tr from-[#D4AF37] via-[#C5A059] to-[#8C6D31] animate-pulse' 
-                  : 'bg-neutral-200'
+                  ? 'bg-gradient-to-tr from-[#D4AF37] via-[#C5A059] to-[#8C6D31]' 
+                  : 'bg-neutral-300'
               }`}>
-                <div className="w-15 h-15 rounded-full p-0.5 bg-white overflow-hidden shadow-xs">
+                <div className="rounded-full p-[2px] bg-white overflow-hidden shadow-sm" style={{ width: 72, height: 72 }}>
                   <img src={st.img} alt={st.title} loading="eager" decoding="async" className="w-full h-full object-cover rounded-full group-active:scale-95 transition-transform" />
                 </div>
               </div>
-              <span className="text-[10px] font-sans font-semibold text-neutral-800 tracking-tight text-center">
+              <span className="text-[11px] font-sans font-semibold text-neutral-800 tracking-tight text-center">
                 {st.title}
               </span>
             </div>
@@ -187,9 +180,12 @@ export default function MobileHomeView() {
 
  
 
-      {/* ── 4. NATIVE HERO BANNER SLIDER WITH OVERLAY ── */}
-      <div className="mb-4">
-        <div className="relative w-full aspect-[16/10] overflow-hidden bg-neutral-900">
+      {/* ── 4. NATIVE HERO BANNER SLIDER (FULL SCREEN FIT, ELEGANT TEXT PRESENTATION) ── */}
+      <div className="mb-5 w-full">
+        <div
+          onClick={() => handleCategoryClick(heroBanners[heroSlide].key, heroBanners[heroSlide].val)}
+          className="relative w-full aspect-[1/1] overflow-hidden bg-neutral-900 cursor-pointer group"
+        >
           <AnimatePresence mode="wait">
             <motion.img
               key={heroSlide}
@@ -203,32 +199,26 @@ export default function MobileHomeView() {
             />
           </AnimatePresence>
 
-          {/* Hero Content (No Shadow Overlay, No Golden Bar) */}
-          <div className="absolute inset-0 flex flex-col justify-end p-5 text-left">
-            <h2 className="text-2xl font-sans font-extrabold text-white tracking-tight leading-tight drop-shadow-md">
-              {heroBanners[heroSlide].title}
-            </h2>
-            
-            <p className="text-xs font-sans text-white/90 mt-1 font-medium tracking-wide drop-shadow-xs">
-              {heroBanners[heroSlide].sub}
-            </p>
-
-            <button
-              onClick={() => handleCategoryClick(heroBanners[heroSlide].key, heroBanners[heroSlide].val)}
-              className="mt-3 py-2.5 px-5 bg-white text-black font-sans font-bold text-xs uppercase tracking-wider rounded-xl shadow-lg self-start active:scale-95 transition-transform flex items-center gap-2"
-            >
-              <span>EXPLORE NOW</span>
-              <ArrowRight className="w-3.5 h-3.5 text-black" />
-            </button>
+          {/* Hero Content — Pure Image without Any Shadow Layer */}
+          <div className="absolute inset-0 flex flex-col justify-end p-5 pb-6 text-left z-10">
+            <div className="space-y-1 max-w-[90%]">
+              <h2 className="text-2xl font-serif font-extrabold text-white tracking-tight leading-snug">
+                {heroBanners[heroSlide].title}
+              </h2>
+              
+              <p className="text-xs font-sans text-white/95 font-medium tracking-wide leading-relaxed">
+                {heroBanners[heroSlide].sub}
+              </p>
+            </div>
           </div>
 
           {/* Dots Indicator */}
-          <div className="absolute bottom-3 right-4 flex gap-1.5 z-10">
+          <div className="absolute bottom-4 right-4 flex gap-1.5 z-20">
             {heroBanners.map((_, i) => (
               <button
                 key={i}
-                onClick={() => setHeroSlide(i)}
-                className={`w-2 h-2 rounded-full transition-all ${heroSlide === i ? 'bg-white w-4' : 'bg-white/50'}`}
+                onClick={(e) => { e.stopPropagation(); setHeroSlide(i); }}
+                className={`h-2 rounded-full transition-all ${heroSlide === i ? 'bg-[#C5A059] w-5' : 'bg-white/60 w-2'}`}
               />
             ))}
           </div>
@@ -241,22 +231,30 @@ export default function MobileHomeView() {
           <h3 className="text-base font-sans font-bold text-neutral-900 tracking-tight">
             Shop By Category
           </h3>
-          <span className="text-xs font-semibold text-neutral-500">Swipe All &rarr;</span>
+          <button
+            onClick={() => setActivePage('shop')}
+            className="text-xs font-semibold text-[#003e1c] active:opacity-70 transition-opacity cursor-pointer"
+          >
+            View All &rarr;
+          </button>
         </div>
 
-        <div className="grid grid-cols-3 sm:grid-cols-4 gap-3 gap-y-4">
+        <div className="grid grid-cols-3 sm:grid-cols-4 gap-4 gap-y-5">
           {circularCategories.map(cat => (
             <div
               key={cat.id}
               onClick={() => handleCategoryClick(cat.key, cat.val)}
-              className="flex flex-col items-center gap-1.5 cursor-pointer group"
+              className="flex flex-col items-center gap-2 cursor-pointer group"
             >
-              <div className="w-20 h-20 rounded-full bg-[#f4eee8] p-1 border border-neutral-200/80 shadow-2xs overflow-hidden group-active:scale-95 transition-transform">
+              <div
+                className="rounded-full bg-[#f4eee8] overflow-hidden group-active:scale-95 transition-transform shrink-0"
+                style={{ width: 110, height: 110, padding: 5, border: '2px solid rgba(197,160,89,0.4)', boxShadow: '0 4px 12px rgba(0,0,0,0.10)' }}
+              >
                 <div className="w-full h-full rounded-full overflow-hidden bg-neutral-200">
-                  <img src={cat.img} alt={cat.label} loading="eager" decoding="async" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                  <img src={cat.img} alt={cat.label} loading="eager" decoding="async" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" style={{ objectPosition: 'center top' }} />
                 </div>
               </div>
-              <span className="text-[11px] font-sans font-medium text-neutral-800 text-center tracking-tight">
+              <span className="text-[12px] font-sans font-semibold text-neutral-900 text-center tracking-tight leading-tight">
                 {cat.label}
               </span>
             </div>
@@ -279,21 +277,36 @@ export default function MobileHomeView() {
         </div>
 
         <div className="flex gap-3 overflow-x-auto no-scrollbar pr-4">
-          {products.slice(0, 5).map((prod, pIdx) => (
+          {relevantProducts.slice(0, 6).map((prod, pIdx) => (
             <div
               key={prod.id}
               onClick={() => setActivePage('product-detail', prod.id)}
-              className="w-40 shrink-0 bg-white rounded-2xl p-2 border border-neutral-200 shadow-2xs flex flex-col justify-between cursor-pointer active:scale-98 transition-transform"
+              className="w-44 shrink-0 bg-white rounded-2xl overflow-hidden border border-neutral-100 shadow-sm flex flex-col cursor-pointer active:scale-97 transition-all duration-200"
             >
-              <div className="relative aspect-[3/4] w-full rounded-xl overflow-hidden bg-neutral-100 mb-2">
-                <img src={prod.images[0]} alt={prod.name} loading={pIdx < 2 ? "eager" : "lazy"} decoding="async" className="w-full h-full object-cover" />
-                <span className="absolute top-2 left-2 bg-[#7C1F1F] text-white text-[8px] font-mono font-bold px-1.5 py-0.5 rounded">
-                  HOT
+              {/* Image */}
+              <div className="relative w-full bg-neutral-50" style={{ aspectRatio: '3/4' }}>
+                <img
+                  src={prod.images[0]}
+                  alt={prod.name}
+                  loading={pIdx < 2 ? 'eager' : 'lazy'}
+                  decoding="async"
+                  className="w-full h-full object-cover"
+                />
+                <span className="absolute top-2 left-2 bg-[#C5A059] text-black text-[8px] font-bold px-2 py-0.5 rounded-full tracking-wider">
+                  TRENDING
                 </span>
+                <button
+                  onClick={(e) => { e.stopPropagation(); toggleWishlist(prod.id); }}
+                  className="absolute top-2 right-2 w-7 h-7 rounded-full bg-white/90 flex items-center justify-center shadow cursor-pointer"
+                >
+                  <Heart className={`w-3.5 h-3.5 ${isWishlisted(prod.id) ? 'fill-rose-500 text-rose-500' : 'text-neutral-400'}`} />
+                </button>
               </div>
-              <div className="text-left space-y-0.5">
-                <h4 className="text-[11px] font-sans font-bold text-neutral-900 truncate">{prod.name}</h4>
-                <p className="text-xs font-mono font-bold text-[#003e1c]">{formatPrice(prod.price)}</p>
+              {/* Info */}
+              <div className="px-3 py-2.5 space-y-1">
+                <p className="text-[9px] font-medium text-[#C5A059] uppercase tracking-widest truncate">{prod.fabric || 'Lawn'}</p>
+                <h4 className="text-[12px] font-semibold text-neutral-900 leading-snug line-clamp-2" style={{ fontFamily: 'Georgia, serif' }}>{prod.name}</h4>
+                <p className="text-[13px] font-bold text-[#003e1c]">{formatPrice(prod.price)}</p>
               </div>
             </div>
           ))}
@@ -301,77 +314,99 @@ export default function MobileHomeView() {
       </div>
 
       {/* ── 8. NATIVE 2-COLUMN APP PRODUCT FEED ── */}
-      <div className="px-4 space-y-3">
-        <div className="flex items-center justify-between">
-          <h3 className="text-base font-sans font-bold text-neutral-900 tracking-tight">
-            All Products ({filteredProducts.length})
+      <div className="px-3 space-y-3 pb-4">
+        <div className="flex items-center justify-between px-1">
+          <h3 className="text-[15px] font-semibold text-neutral-900 tracking-tight" style={{ fontFamily: 'Georgia, serif' }}>
+            All Products <span className="text-[#C5A059]">({filteredProducts.length})</span>
           </h3>
-          <button onClick={() => setActivePage('shop')} className="text-xs font-bold text-[#003e1c]">
-            Filter Catalog &rarr;
+          <button onClick={() => setActivePage('shop')} className="text-xs font-semibold text-[#003e1c] active:opacity-60">
+            View All &rarr;
           </button>
         </div>
 
-        <div className="grid grid-cols-2 gap-3">
+        <div className="grid grid-cols-2 gap-3 items-stretch">
           {filteredProducts.map((product, pIdx) => {
-            const originalPrice = Math.round(product.price * 1.18);
             const wishlisted = isWishlisted(product.id);
+            const originalPrice = Math.round(product.price * 1.15);
 
             return (
               <div
                 key={product.id}
                 onClick={() => setActivePage('product-detail', product.id)}
-                className="bg-white rounded-2xl overflow-hidden border border-neutral-200/90 shadow-2xs flex flex-col justify-between p-2 cursor-pointer active:scale-98 transition-transform"
+                className="bg-white rounded-2xl overflow-hidden border border-neutral-100 shadow-sm flex flex-col h-full cursor-pointer active:scale-97 transition-all duration-200"
               >
-                {/* Image Container */}
-                <div className="relative aspect-[3/4] w-full rounded-xl overflow-hidden bg-neutral-100 mb-2">
-                  <img src={product.images[0]} alt={product.name} loading={pIdx < 4 ? "eager" : "lazy"} decoding="async" className="w-full h-full object-cover" />
-                  
-                  {/* Sale Tag */}
-                  <span className="absolute top-2 left-2 bg-[#7C1F1F] text-white text-[8px] font-mono font-bold px-2 py-0.5 rounded-md shadow-2xs">
-                    18% OFF
-                  </span>
+                {/* Image — taller, full bleed, no padding */}
+                <div className="relative w-full bg-neutral-50 shrink-0" style={{ aspectRatio: '3/4' }}>
+                  <img
+                    src={product.images[0]}
+                    alt={product.name}
+                    loading={pIdx < 4 ? 'eager' : 'lazy'}
+                    decoding="async"
+                    className="w-full h-full object-cover"
+                  />
 
-                  {/* Wishlist Button */}
-                  <button
-                    onClick={(e) => { e.stopPropagation(); toggleWishlist(product.id); }}
-                    className="absolute top-2 right-2 w-7 h-7 rounded-full bg-white/95 flex items-center justify-center shadow-xs cursor-pointer active:scale-90 transition-transform"
-                  >
-                    <Heart className={`w-3.5 h-3.5 ${wishlisted ? 'fill-rose-600 text-rose-600' : 'text-neutral-400'}`} />
-                  </button>
-
-                  {product.stock === 0 && (
-                    <span className="absolute bottom-2 left-2 text-[8px] bg-black/80 text-white font-bold px-2 py-0.5 rounded-md">
-                      OUT OF STOCK
+                  {/* Sale badge — only if truly on sale */}
+                  {product.onSale && (
+                    <span className="absolute top-2 left-2 bg-[#7C1F1F] text-white text-[8px] font-bold px-2 py-0.5 rounded-full tracking-wide">
+                      SALE
                     </span>
                   )}
+
+                  {/* Out of stock overlay */}
+                  {product.stock === 0 && (
+                    <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
+                      <span className="text-white text-[9px] font-bold tracking-widest bg-black/60 px-3 py-1 rounded-full">
+                        SOLD OUT
+                      </span>
+                    </div>
+                  )}
+
+                  {/* Wishlist */}
+                  <button
+                    onClick={(e) => { e.stopPropagation(); toggleWishlist(product.id); }}
+                    className="absolute top-2 right-2 w-7 h-7 rounded-full bg-white/90 backdrop-blur-sm flex items-center justify-center shadow cursor-pointer active:scale-90 transition-transform"
+                  >
+                    <Heart className={`w-3.5 h-3.5 ${wishlisted ? 'fill-rose-500 text-rose-500' : 'text-neutral-400'}`} />
+                  </button>
                 </div>
 
-                {/* Info & Add to Cart */}
-                <div className="space-y-1 text-left">
-                  <span className="text-[8.5px] font-mono uppercase text-[#C5A059] font-bold block truncate">
-                    ROTBA • {product.fabric || 'SUMMER LAWN'}
-                  </span>
-                  
-                  <h4 className="text-xs font-sans font-semibold text-neutral-900 leading-tight line-clamp-1">
-                    {product.name}
-                  </h4>
-                  
-                  <div className="flex items-baseline gap-1.5 pt-0.5">
-                    <span className="text-xs font-mono font-bold text-[#003e1c]">
-                      {formatPrice(product.price)}
-                    </span>
-                    <span className="text-[9.5px] font-mono text-neutral-400 line-through">
-                      {formatPrice(originalPrice)}
-                    </span>
+                {/* Info Section — Flex-1 with Fixed Title Height for 100% Equal Card Alignment */}
+                <div className="p-3 flex-1 flex flex-col justify-between gap-2">
+                  <div className="space-y-1">
+                    {/* Brand + fabric */}
+                    <p className="text-[9px] font-medium text-[#C5A059] uppercase tracking-widest truncate">
+                      ROTBA &nbsp;•&nbsp; {product.fabric || 'Lawn'}
+                    </p>
+
+                    {/* Product name — Fixed height for 2 lines so 1-line and 2-line names align equally */}
+                    <h4
+                      className="text-[12px] font-medium text-neutral-900 leading-snug line-clamp-2 min-h-[34px] flex items-start"
+                      style={{ fontFamily: 'Georgia, serif' }}
+                    >
+                      {product.name}
+                    </h4>
+
+                    {/* Price row */}
+                    <div className="flex items-baseline gap-2 pt-0.5">
+                      <span className="text-[13px] font-bold text-[#003e1c]">
+                        {formatPrice(product.price)}
+                      </span>
+                      {product.onSale && (
+                        <span className="text-[10px] text-neutral-400 line-through">
+                          {formatPrice(originalPrice)}
+                        </span>
+                      )}
+                    </div>
                   </div>
 
+                  {/* Add to bag — mt-auto guarantees every button is locked on the exact same bottom line */}
                   <button
                     onClick={(e) => { e.stopPropagation(); addToCart(product.id, 1, null, product.images[0]); }}
                     disabled={product.stock === 0}
-                    className="w-full mt-2 py-2.5 bg-black text-white font-bold text-[10px] uppercase tracking-wider rounded-xl shadow-2xs active:scale-95 transition-transform flex items-center justify-center gap-1.5 disabled:bg-neutral-400 cursor-pointer"
+                    className="w-full mt-auto py-2 bg-[#003e1c] text-white text-[10px] font-semibold tracking-widest uppercase rounded-xl flex items-center justify-center gap-1.5 active:scale-95 transition-transform disabled:bg-neutral-300 disabled:text-neutral-500 cursor-pointer shadow-xs"
                   >
-                    <ShoppingBag className="w-3.5 h-3.5" />
-                    <span>ADD TO BAG</span>
+                    <ShoppingBag className="w-3 h-3" />
+                    <span>{product.stock === 0 ? 'Sold Out' : 'Add to Bag'}</span>
                   </button>
                 </div>
               </div>
@@ -380,64 +415,89 @@ export default function MobileHomeView() {
         </div>
       </div>
 
-      {/* ── 9. INSTAGRAM STORY MODAL VIEWER ── */}
+      {/* ── 9. INDEPENDENT SINGLE STORY MODAL VIEWER ── */}
       <AnimatePresence>
-        {activeStory !== null && (
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.95 }}
-            className="fixed inset-0 z-50 bg-black flex flex-col justify-between p-4 text-white"
-          >
-            {/* Story Top Progress Bar */}
-            <div className="flex gap-1.5 z-10 pt-2">
-              <div className="h-1 flex-1 bg-white/30 rounded-full overflow-hidden">
-                <motion.div
-                  initial={{ width: '0%' }}
-                  animate={{ width: '100%' }}
-                  transition={{ duration: 4 }}
-                  onAnimationComplete={() => setActiveStory(null)}
-                  className="h-full bg-white"
-                />
-              </div>
-            </div>
+        {activeStory !== null && (() => {
+          const currentStory = stories.find(s => s.id === activeStory);
+          if (!currentStory) return null;
 
-            {/* Header Close */}
-            <div className="flex items-center justify-between z-10 py-2">
-              <div className="flex items-center gap-2">
-                <img src="/logo_rotba.png" alt="ROTBA" className="h-6 object-contain brightness-200" />
-                <span className="text-xs font-bold font-sans">ROTBA Official Story</span>
+          return (
+            <motion.div
+              key={activeStory}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="fixed inset-0 z-[100] bg-black flex flex-col"
+            >
+              {/* Single Story Top Progress Bar */}
+              <div className="z-10 px-4 pt-3">
+                <div className="h-[3px] w-full bg-white/30 rounded-full overflow-hidden">
+                  <motion.div
+                    key={activeStory}
+                    initial={{ width: '0%' }}
+                    animate={{ width: '100%' }}
+                    transition={{ duration: 5, ease: 'linear' }}
+                    onAnimationComplete={() => setActiveStory(null)}
+                    className="h-full bg-[#C5A059] rounded-full"
+                  />
+                </div>
               </div>
-              <button onClick={() => setActiveStory(null)} className="p-2 text-white">
-                <X className="w-6 h-6" />
-              </button>
-            </div>
 
-            {/* Story Image Content */}
-            <div className="relative flex-1 rounded-2xl overflow-hidden my-2">
-              <img
-                src={stories.find(s => s.id === activeStory)?.img || '/hero_showcase.jpeg'}
-                alt="Story"
-                className="w-full h-full object-cover"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent flex flex-col justify-end p-6 text-left">
-                <h3 className="text-2xl font-sans font-bold text-white mb-2">
-                  {stories.find(s => s.id === activeStory)?.title}
-                </h3>
+              {/* Header */}
+              <div className="flex items-center justify-between z-10 px-4 py-3">
+                <div className="flex items-center gap-2.5">
+                  <div className="w-9 h-9 rounded-full overflow-hidden border-2 border-[#C5A059] shrink-0 shadow-md">
+                    <img src={currentStory.img} alt={currentStory.title} className="w-full h-full object-cover" />
+                  </div>
+                  <div>
+                    <span className="text-xs font-bold font-sans text-white block tracking-wide">ROTBA Couture</span>
+                    <span className="text-[10px] text-[#C5A059] font-mono uppercase font-semibold">{currentStory.title} Story</span>
+                  </div>
+                </div>
                 <button
-                  onClick={() => {
-                    const st = stories.find(s => s.id === activeStory);
-                    if (st) handleCategoryClick(st.category, st.val);
-                    setActiveStory(null);
-                  }}
-                  className="w-full py-3 bg-[#C5A059] text-black font-bold text-xs uppercase tracking-wider rounded-xl shadow-lg"
+                  onClick={() => setActiveStory(null)}
+                  className="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-white transition-colors cursor-pointer"
                 >
-                  SHOP THIS STORY NOW
+                  <X className="w-5 h-5" />
                 </button>
               </div>
-            </div>
-          </motion.div>
-        )}
+
+              {/* Story Full Screen Image */}
+              <div className="relative flex-1 overflow-hidden">
+                <motion.img
+                  key={activeStory}
+                  initial={{ opacity: 0, scale: 1.04 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 0.3 }}
+                  src={currentStory.img}
+                  alt={currentStory.title}
+                  className="w-full h-full object-cover"
+                />
+
+                {/* Bottom Gradient Overlay */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent pointer-events-none" />
+
+                {/* Story Content Bottom */}
+                <div className="absolute bottom-0 left-0 right-0 p-6 z-20">
+                  <span className="text-[10px] font-mono uppercase tracking-widest text-[#C5A059] font-bold block mb-1">Exclusive Spotlight</span>
+                  <h3 className="text-2xl font-serif font-extrabold text-white mb-3 leading-tight">
+                    {currentStory.title}
+                  </h3>
+                  <button
+                    onClick={() => {
+                      handleCategoryClick(currentStory.category, currentStory.val);
+                      setActiveStory(null);
+                    }}
+                    className="w-full py-3.5 bg-[#C5A059] text-black font-bold text-xs uppercase tracking-widest rounded-2xl shadow-xl active:scale-95 transition-transform flex items-center justify-center gap-2 cursor-pointer"
+                  >
+                    <ShoppingBag className="w-4 h-4" />
+                    Shop {currentStory.title} Collection
+                  </button>
+                </div>
+              </div>
+            </motion.div>
+          );
+        })()}
       </AnimatePresence>
 
       {/* ── 10. CURRENCY SELECTOR MODAL POPUP ── */}
@@ -490,7 +550,16 @@ export default function MobileHomeView() {
                       }`}
                     >
                       <div className="flex items-center gap-3">
-                        <span className="text-2xl leading-none">{cur.flag}</span>
+                        <div className="w-7 h-5 rounded-sm overflow-hidden border border-black/15 shadow-2xs shrink-0 flex items-center justify-center bg-neutral-100">
+                          <img
+                            src={`https://flagcdn.com/w40/${cur.flagCode}.png`}
+                            alt={`${cur.country} flag`}
+                            className="w-full h-full object-cover"
+                            onError={(e) => {
+                              (e.target as HTMLElement).style.display = 'none';
+                            }}
+                          />
+                        </div>
                         <div>
                           <span className="font-bold text-xs block font-sans text-left">{cur.country}</span>
                           <span className={`text-[10px] font-mono block text-left ${isSelected ? 'text-[#E8C888]' : 'text-neutral-400'}`}>

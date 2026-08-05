@@ -36,7 +36,7 @@ interface AppContextType {
   setProducts: React.Dispatch<React.SetStateAction<Product[]>>;
   setActivePage: (page: string, productId?: string | null) => void;
   updateFilters: (filters: Partial<AppContextType['activeFilters']>) => void;
-  addToCart: (productId: string, quantity: number, startElement?: HTMLElement | null, imageUrl?: string) => Promise<void>;
+  addToCart: (productId: string, quantity: number, startElement?: HTMLElement | null, imageUrl?: string, selectedSize?: string, selectedCategory?: string, selectedColor?: string) => Promise<void>;
   updateCartQty: (productId: string, quantity: number) => Promise<void>;
   removeFromCart: (productId: string) => Promise<void>;
   placeOrder: (shippingDetails: ShippingDetails, paymentMethod: 'card' | 'jazzcash' | 'easypaisa' | 'cod', paymentDetails?: any) => Promise<Order | null>;
@@ -149,10 +149,17 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
         
         const res = await fetch(`/api/orders?${query.toString()}`);
         if (res.ok) {
-          const data = await res.json();
-          setUserOrders(data);
-          if (data.length > 0 && !trackedOrder) {
-            setTrackedOrder(data[0]);
+          const data: Order[] = await res.json();
+          const hydratedOrders = data.map(ord => ({
+            ...ord,
+            items: ord.items.map(item => ({
+              ...item,
+              product: item.product || products.find(p => p.id === item.productId) || staticCatalog.find(p => p.id === item.productId)
+            }))
+          }));
+          setUserOrders(hydratedOrders as Order[]);
+          if (hydratedOrders.length > 0 && !trackedOrder) {
+            setTrackedOrder(hydratedOrders[0] as Order);
           }
         }
       } catch (e) {
@@ -160,7 +167,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
       }
     };
     fetchUserOrders();
-  }, [userId, user, trackedOrder]);
+  }, [userId, user, trackedOrder, products]);
   const [globalViewers, setGlobalViewers] = useState<number>(12);
   const [liveAlerts, setLiveAlerts] = useState<AppContextType['liveAlerts']>([]);
   const [flyingItems, setFlyingItems] = useState<AppContextType['flyingItems']>([]);
@@ -620,6 +627,9 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
       return {
         productId: item.productId,
         quantity: item.quantity,
+        selectedSize: item.selectedSize,
+        selectedCategory: item.selectedCategory,
+        selectedColor: item.selectedColor,
         product: item.product || prod
       };
     });
@@ -649,20 +659,44 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
-  const addToCart = async (productId: string, quantity: number, startElement?: HTMLElement | null, imageUrl?: string) => {
+  const addToCart = async (
+    productId: string, 
+    quantity: number, 
+    startElement?: HTMLElement | null, 
+    imageUrl?: string,
+    selectedSize?: string,
+    selectedCategory?: string,
+    selectedColor?: string
+  ) => {
     const currentItems = cart?.items || [];
-    const existingIndex = currentItems.findIndex(item => item.productId === productId);
     const prod = products.find(p => p.id === productId) || staticCatalog.find(p => p.id === productId);
+    const sizeToSet = selectedSize || prod?.pieces || 'Unstitched';
+    const catToSet = selectedCategory || prod?.category || 'Unstitched';
+    const colorToSet = selectedColor || (prod?.colors?.[0] || '');
+
+    const existingIndex = currentItems.findIndex(item => 
+      item.productId === productId && (item.selectedSize || 'Unstitched') === sizeToSet
+    );
     
     let updatedItems = [...currentItems];
     if (existingIndex > -1) {
       updatedItems[existingIndex] = {
         ...updatedItems[existingIndex],
         quantity: updatedItems[existingIndex].quantity + quantity,
+        selectedSize: sizeToSet,
+        selectedCategory: catToSet,
+        selectedColor: colorToSet,
         product: updatedItems[existingIndex].product || prod
       };
     } else {
-      updatedItems.push({ productId, quantity, product: prod });
+      updatedItems.push({ 
+        productId, 
+        quantity, 
+        selectedSize: sizeToSet,
+        selectedCategory: catToSet,
+        selectedColor: colorToSet,
+        product: prod 
+      });
     }
 
     // Check stock limits if available
@@ -759,13 +793,20 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
       });
 
       if (res.ok) {
-        const order = await res.json();
+        const rawOrder = await res.json();
+        const hydratedOrder: Order = {
+          ...rawOrder,
+          items: (rawOrder.items || []).map((item: any) => ({
+            ...item,
+            product: item.product || products.find(p => p.id === item.productId) || staticCatalog.find(p => p.id === item.productId)
+          }))
+        };
         setCart({ userId: userId || 'guest', items: [] });
         localStorage.removeItem('rotba_guest_cart');
-        setTrackedOrder(order);
-        setUserOrders(prev => [order, ...prev]);
+        setTrackedOrder(hydratedOrder);
+        setUserOrders(prev => [hydratedOrder, ...prev]);
         setActivePage('orders');
-        return order;
+        return hydratedOrder;
       }
     } catch (e) {
       console.log('Order created locally:', e);
@@ -785,8 +826,15 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
       const res = await fetch(`/api/orders/${orderId}`);
       if (res.ok) {
         const data = await res.json();
-        setTrackedOrder(data);
-        return data;
+        const hydratedOrder: Order = {
+          ...data,
+          items: (data.items || []).map((item: any) => ({
+            ...item,
+            product: item.product || products.find(p => p.id === item.productId) || staticCatalog.find(p => p.id === item.productId)
+          }))
+        };
+        setTrackedOrder(hydratedOrder);
+        return hydratedOrder;
       } else {
         addToast('Invalid order reference or tracking number.', 'warn');
       }

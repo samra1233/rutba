@@ -93,7 +93,7 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
       ...item,
       product
     };
-  }).filter(item => item.product !== undefined) as { productId: string; quantity: number; product: any }[];
+  }).filter(item => item.product !== undefined) as { productId: string; quantity: number; selectedSize?: string; selectedCategory?: string; selectedColor?: string; product: any }[];
 
   const subtotal = resolvedItems.reduce((acc, item) => acc + (item.product.price * item.quantity), 0);
   const totalItems = resolvedItems.reduce((acc, item) => acc + item.quantity, 0);
@@ -312,6 +312,9 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                             <div className="flex flex-wrap gap-1.5">
                               <span className="inline-block font-mono text-[8px] uppercase tracking-wider text-[#C5A059] bg-[#C5A059]/10 px-2 py-0.5 rounded border border-[#C5A059]/20 font-bold">
                                 {item.product.fabric}
+                              </span>
+                              <span className="inline-block font-mono text-[8px] uppercase tracking-wider text-[#003e1c] bg-[#003e1c]/10 px-2 py-0.5 rounded border border-[#003e1c]/15 font-bold">
+                                Size: {item.selectedSize || item.product.pieces || 'Unstitched'}
                               </span>
                               <span className="inline-block font-mono text-[8px] uppercase tracking-wider text-neutral-600 bg-neutral-200/50 px-2 py-0.5 rounded border border-neutral-300/30">
                                 {item.product.type}

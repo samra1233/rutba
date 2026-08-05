@@ -15,6 +15,7 @@ export default function ProductDetail() {
   // Accordion states
   const [openCare, setOpenCare] = useState(false);
   const [openDisclaimer, setOpenDisclaimer] = useState(false);
+  const [showSizeChart, setShowSizeChart] = useState(false);
 
   const product = products.find(p => p.id === selectedProductId);
   const relatedProducts = products.filter(p => p.id !== selectedProductId).slice(0, 3);
@@ -36,7 +37,8 @@ export default function ProductDetail() {
   const handleAddToCart = async () => {
     setAdding(true);
     const imageEl = document.querySelector('.main-product-image') as HTMLElement;
-    await addToCart(product.id, quantity, imageEl, product.images[activeImageIdx]);
+    const sizeToSave = selectedSize || product.pieces || 'Unstitched';
+    await addToCart(product.id, quantity, imageEl, product.images[activeImageIdx], sizeToSave, product.category, selectedColor);
     setTimeout(() => setAdding(false), 800);
   };
 
@@ -57,6 +59,7 @@ export default function ProductDetail() {
   const sizes = ['S', 'M', 'L', 'XL'];
 
   return (
+    <>
     <div className="min-h-screen bg-white md:bg-[#FAF5F0] font-sans pb-24 selection:bg-neutral-200 selection:text-black relative overflow-hidden">
       
       {/* Background ambient luxury glows (desktop only) */}
@@ -221,7 +224,10 @@ export default function ProductDetail() {
             <div className="mb-5 relative z-10">
               <div className="flex justify-between items-end mb-2.5">
                 <span className="text-[11px] text-neutral-800 uppercase tracking-widest font-extrabold font-sans">Select Size</span>
-                <button className="flex items-center gap-1.5 text-xs text-neutral-500 hover:text-black transition-colors underline decoration-neutral-300 underline-offset-4 hover:decoration-black font-semibold">
+                <button
+                  onClick={() => setShowSizeChart(true)}
+                  className="flex items-center gap-1.5 text-xs text-neutral-500 hover:text-black transition-colors underline decoration-neutral-300 underline-offset-4 hover:decoration-black font-semibold cursor-pointer"
+                >
                   <Ruler className="w-3.5 h-3.5 text-[#C5A059]" /> Size Chart
                 </button>
               </div>
@@ -430,6 +436,64 @@ export default function ProductDetail() {
         </button>
       </div>
     </div>
+
+    {/* ── SIZE CHART MODAL ── */}
+    <AnimatePresence>
+      {showSizeChart && (
+        <>
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setShowSizeChart(false)}
+            className="fixed inset-0 z-[200] bg-black/70 backdrop-blur-sm cursor-pointer"
+          />
+          <motion.div
+            initial={{ opacity: 0, scale: 0.92, y: 30 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.92, y: 30 }}
+            transition={{ type: 'spring', stiffness: 280, damping: 26 }}
+            className="fixed inset-0 z-[201] flex items-center justify-center p-4 pointer-events-none"
+          >
+            <div className="relative bg-[#0a0a0a] rounded-3xl overflow-hidden shadow-2xl border border-[#C5A059]/30 pointer-events-auto w-full max-w-lg max-h-[90vh] flex flex-col">
+              {/* Header */}
+              <div className="flex items-center justify-between px-5 py-4 border-b border-[#C5A059]/20 shrink-0">
+                <div className="flex items-center gap-2.5">
+                  <Ruler className="w-4 h-4 text-[#C5A059]" />
+                  <div>
+                    <h3 className="font-serif text-base font-bold text-white tracking-wide">Size Chart</h3>
+                    <p className="text-[10px] font-mono text-[#C5A059] uppercase tracking-widest">All measurements in Inches</p>
+                  </div>
+                </div>
+                <button
+                  onClick={() => setShowSizeChart(false)}
+                  className="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-white transition-colors cursor-pointer"
+                >
+                  <span className="text-lg leading-none">&times;</span>
+                </button>
+              </div>
+
+              {/* Size Chart Image */}
+              <div className="overflow-y-auto flex-1">
+                <img
+                  src="/size_chart.png"
+                  alt="ROTBA Size Chart"
+                  className="w-full object-contain"
+                />
+              </div>
+
+              {/* Footer Note */}
+              <div className="px-5 py-3 border-t border-[#C5A059]/15 shrink-0 bg-[#111]">
+                <p className="text-[10px] text-neutral-400 font-sans text-center leading-relaxed">
+                  Measurements are approximate. For custom stitching queries contact us on WhatsApp.
+                </p>
+              </div>
+            </div>
+          </motion.div>
+        </>
+      )}
+    </AnimatePresence>
+    </>
   );
 }
 
