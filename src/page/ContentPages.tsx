@@ -1,6 +1,11 @@
 import React, { useState, useRef } from 'react';
 import { useApp } from '../AppContext';
-import { ShieldCheck, MapPin, Phone, Mail, Clock, HelpCircle, Map, Eye, Search, AlertCircle, CheckCircle, Package, ArrowRight } from 'lucide-react';
+import { 
+  ShieldCheck, MapPin, Phone, Mail, Clock, HelpCircle, Map, Eye, Search, AlertCircle, CheckCircle, Package, ArrowRight,
+  Truck, Sparkles, Globe, ChevronRight, CreditCard, Calendar, User, Copy, FileText, Check, ExternalLink, RefreshCw, X,
+  Crown, Award, LogOut, CheckCircle2
+} from 'lucide-react';
+import { motion, AnimatePresence } from 'motion/react';
 
 // --- ABOUT / OUR STORY PAGE ---
 export function AboutPage() {
@@ -143,9 +148,9 @@ export function ContactPage() {
             <div className="flex items-start gap-3">
               <Phone className="w-4 h-4 text-brand-gold shrink-0 mt-0.5" />
               <div>
-                <strong className="text-neutral-800 block">Concierge Phone Support:</strong>
-                <span>+92 (42) 111-ROTBA (111-768-222)</span>
-                <span className="block opacity-75 mt-0.5">Mon–Sat: 10:00 AM – 8:00 PM PKT</span>
+                <strong className="text-neutral-800 block">WhatsApp Customer Concierge:</strong>
+                <span>+971 54 343 7195</span>
+                <span className="block opacity-75 mt-0.5">24/7 Global WhatsApp Support</span>
               </div>
             </div>
 
@@ -160,7 +165,7 @@ export function ContactPage() {
             <div className="flex items-start gap-3">
               <Clock className="w-4 h-4 text-brand-gold shrink-0 mt-0.5" />
               <div>
-                <strong className="text-neutral-800 block">Nationwide Deliveries:</strong>
+                <strong className="text-neutral-800 block">Nationwide & International Deliveries:</strong>
                 <span>Standard processing and packing takes 24 hours. Dispatch timelines are tracked daily.</span>
               </div>
             </div>
@@ -169,7 +174,7 @@ export function ContactPage() {
           <div className="pt-2 border-t border-brand-gold/15">
             <div className="bg-brand-emerald text-brand-cream text-[11px] p-3 rounded-lg border border-brand-gold/15 flex items-center gap-2">
               <HelpCircle className="w-4.5 h-4.5 text-brand-gold shrink-0" />
-              <span>Fast Whatsapp support active: <strong>+92 300 123 4567</strong></span>
+              <span>Fast WhatsApp support active: <strong>+971 54 343 7195</strong></span>
             </div>
           </div>
         </div>
@@ -264,18 +269,58 @@ export function ContactPage() {
   );
 }
 
+export const getCourierPartner = (country?: string) => {
+  if (!country) return 'TCS Express Courier';
+  const c = country.trim().toLowerCase();
+  if (c.includes('pakistan') || c === 'pk') return 'TCS Express Courier';
+  return 'NexGen Worldwide Express';
+};
+
+export const getCountryFlag = (country?: string) => {
+  if (!country) return '🇵🇰';
+  const c = country.trim().toLowerCase();
+  if (c.includes('pakistan')) return '🇵🇰';
+  if (c.includes('united states') || c.includes('usa') || c.includes('us')) return '🇺🇸';
+  if (c.includes('emirates') || c.includes('uae') || c.includes('dubai')) return '🇦🇪';
+  if (c.includes('saudi')) return '🇸🇦';
+  if (c.includes('australia')) return '🇦🇺';
+  if (c.includes('singapore')) return '🇸🇬';
+  if (c.includes('hong kong')) return '🇭🇰';
+  if (c.includes('malaysia')) return '🇲🇾';
+  if (c.includes('scotland') || c.includes('uk') || c.includes('kingdom')) return '🇬🇧';
+  return '🌐';
+};
+
 // --- ORDER TRACKING & MOBILE ACCOUNT PROFILE PAGE ---
 export function OrderTrackingPage() {
-  const [activeTab, setActiveTab] = useState<'history' | 'tracking' | 'profile'>('history');
+  const [activeTab, setActiveTab] = useState<'history' | 'tracking'>('history');
+  const [selectedModalOrder, setSelectedModalOrder] = useState<any | null>(null);
   const [trackVal, setTrackVal] = useState('');
   const [searching, setSearching] = useState(false);
-  const { trackedOrder, trackOrder, user, logout, setAuthModalOpen, userOrders, formatPrice } = useApp();
+  const [copiedCode, setCopiedCode] = useState<string | null>(null);
+  const { trackedOrder, trackOrder, user, logout, setAuthModalOpen, userOrders, formatPrice, addToast } = useApp();
+
+  const formatTrackingNumber = (code: string) => {
+    if (!code) return 'RR-488189';
+    if (code.startsWith('RR-')) return code;
+    const digits = code.replace(/^[A-Za-z]+-?/, '');
+    return `RR-${digits || '488189'}`;
+  };
+
+  const handleCopy = (code: string) => {
+    const formatted = formatTrackingNumber(code);
+    navigator.clipboard.writeText(formatted);
+    setCopiedCode(formatted);
+    addToast(`Tracking code ${formatted} copied to clipboard!`, 'success');
+    setTimeout(() => setCopiedCode(null), 2000);
+  };
 
   const handleTrackCode = async (trackingNum: string) => {
-    setTrackVal(trackingNum);
+    const formatted = formatTrackingNumber(trackingNum);
+    setTrackVal(formatted);
     setActiveTab('tracking');
     setSearching(true);
-    await trackOrder(trackingNum);
+    await trackOrder(formatted);
     setSearching(false);
   };
 
@@ -293,11 +338,11 @@ export function OrderTrackingPage() {
     const targetIdx = statuses.indexOf(step);
 
     if (targetIdx < activeIdx) {
-      return 'bg-[#003e1c] text-white'; // completed
+      return 'bg-[#0d1a13] text-white border-2 border-[#C5A059] shadow-sm'; // completed
     } else if (targetIdx === activeIdx) {
-      return 'bg-[#C5A059] text-white font-bold scale-110 shadow-md'; // active
+      return 'bg-[#C5A059] text-black font-extrabold scale-110 shadow-lg ring-4 ring-[#C5A059]/30'; // active
     } else {
-      return 'bg-neutral-200 text-neutral-400'; // pending
+      return 'bg-neutral-100 text-neutral-400 border border-neutral-300'; // pending
     }
   };
 
@@ -311,234 +356,374 @@ export function OrderTrackingPage() {
     }
   };
 
-  return (
-    <div className="max-w-3xl mx-auto px-4 md:px-8 py-6 pt-20 md:pt-6 space-y-5">
-      {/* Page Title & Segment Tab Switcher */}
-      <div className="text-center space-y-3">
-        <span className="text-[9px] uppercase font-mono tracking-[0.3em] text-[#C5A059] font-bold block">
-          ROTBA ATELIER PORTAL
-        </span>
-        <h1 className="font-serif text-2xl md:text-3xl font-bold text-[#003e1c]">
-          Account & Order Tracking
-        </h1>
+  const activeOrdersCount = userOrders ? userOrders.filter(o => o.status !== 'Delivered' && o.status !== 'Cancelled').length : 0;
 
-        {/* Segmented Control Bar */}
-        <div className="flex p-1 rounded-2xl bg-neutral-100 border border-neutral-200/90 max-w-md mx-auto">
-          <button
-            onClick={() => setActiveTab('history')}
-            className={`flex-1 py-2.5 rounded-xl font-mono text-[9.5px] uppercase tracking-wider font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer ${
-              activeTab === 'history' 
-                ? 'bg-[#003e1c] text-white shadow-sm' 
-                : 'text-neutral-500 hover:text-black'
-            }`}
-          >
-            <Package className="w-3.5 h-3.5" />
-            My Orders ({userOrders ? userOrders.length : 0})
-          </button>
-          <button
-            onClick={() => setActiveTab('tracking')}
-            className={`flex-1 py-2.5 rounded-xl font-mono text-[9.5px] uppercase tracking-wider font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer ${
-              activeTab === 'tracking' 
-                ? 'bg-[#003e1c] text-white shadow-sm' 
-                : 'text-neutral-500 hover:text-black'
-            }`}
-          >
-            <Search className="w-3.5 h-3.5" />
-            Live Track
-          </button>
-          <button
-            onClick={() => setActiveTab('profile')}
-            className={`flex-1 py-2.5 rounded-xl font-mono text-[9.5px] uppercase tracking-wider font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer ${
-              activeTab === 'profile' 
-                ? 'bg-[#003e1c] text-white shadow-sm' 
-                : 'text-neutral-500 hover:text-black'
-            }`}
-          >
-            <ShieldCheck className="w-3.5 h-3.5" />
-            Profile
-          </button>
+  return (
+    <div className="max-w-3xl mx-auto px-4 md:px-8 py-6 pt-20 md:pt-6 space-y-6 animate-fadeIn font-sans">
+      
+      {/* ── 1. SLEEK MINIMAL MOBILE USER HEADER BAR ── */}
+      <motion.div 
+        initial={{ opacity: 0, y: -10 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="bg-white border border-[#C5A059]/30 rounded-3xl p-4 sm:p-5 shadow-sm flex items-center justify-between gap-3 text-left relative overflow-hidden"
+      >
+        <div className="flex items-center gap-3 min-w-0">
+          <div className="w-12 h-12 rounded-2xl bg-[#0d1a13] text-[#E8C888] font-serif font-bold text-lg flex items-center justify-center shrink-0 border border-[#C5A059]/40 shadow-sm">
+            {user ? user.name.charAt(0).toUpperCase() : <User className="w-5 h-5 text-[#C5A059]" />}
+          </div>
+          <div className="min-w-0 space-y-0.5">
+            <div className="flex items-center gap-1.5">
+              <span className="font-serif font-bold text-[#0d1a13] text-base truncate">
+                {user ? user.name : 'Guest Customer'}
+              </span>
+              {user && <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 shrink-0" />}
+            </div>
+            <p className="text-[11px] text-neutral-500 font-sans truncate">
+              {user ? user.email : 'Track your unstitched suit orders'}
+            </p>
+          </div>
         </div>
+
+        <div className="shrink-0">
+          {user ? (
+            <button
+              onClick={logout}
+              className="px-3.5 py-1.5 rounded-full bg-rose-50 hover:bg-rose-100 text-rose-700 font-mono text-[10px] font-extrabold uppercase tracking-wider transition-all border border-rose-200/60 cursor-pointer active:scale-95 flex items-center gap-1"
+            >
+              <LogOut className="w-3 h-3 text-rose-600" />
+              <span>Sign Out</span>
+            </button>
+          ) : (
+            <button
+              onClick={() => setAuthModalOpen(true)}
+              className="px-4 py-2 rounded-full bg-[#0d1a13] hover:bg-[#C5A059] text-white hover:text-black font-mono text-[10px] font-black uppercase tracking-wider transition-all shadow-sm cursor-pointer active:scale-95 flex items-center gap-1.5"
+            >
+              <User className="w-3.5 h-3.5 text-[#C5A059]" />
+              <span>Sign In</span>
+            </button>
+          )}
+        </div>
+      </motion.div>
+
+      {/* ── 2. NATIVE MOBILE FLOATING SEGMENTED TAB BAR ── */}
+      <div className="p-1.5 rounded-full bg-white border border-[#C5A059]/30 shadow-md flex items-center justify-between max-w-md mx-auto relative z-10">
+        <button
+          onClick={() => setActiveTab('history')}
+          className={`flex-1 py-3 rounded-full font-mono text-[10px] uppercase tracking-wider font-extrabold transition-all duration-300 flex items-center justify-center gap-2 cursor-pointer ${
+            activeTab === 'history' 
+              ? 'bg-[#0d1a13] text-white shadow-md scale-[1.02]' 
+              : 'text-neutral-500 hover:text-neutral-900'
+          }`}
+        >
+          <Package className={`w-4 h-4 ${activeTab === 'history' ? 'text-[#C5A059]' : ''}`} />
+          <span>My Orders</span>
+          {userOrders && userOrders.length > 0 && (
+            <span className={`px-1.5 py-0.2 rounded-full text-[8.5px] ${activeTab === 'history' ? 'bg-[#C5A059] text-black font-bold' : 'bg-neutral-200 text-neutral-700'}`}>
+              {userOrders.length}
+            </span>
+          )}
+        </button>
+
+        <button
+          onClick={() => setActiveTab('tracking')}
+          className={`flex-1 py-3 rounded-full font-mono text-[10px] uppercase tracking-wider font-extrabold transition-all duration-300 flex items-center justify-center gap-2 cursor-pointer ${
+            activeTab === 'tracking' 
+              ? 'bg-[#0d1a13] text-white shadow-md scale-[1.02]' 
+              : 'text-neutral-500 hover:text-neutral-900'
+          }`}
+        >
+          <Search className={`w-4 h-4 ${activeTab === 'tracking' ? 'text-[#C5A059]' : ''}`} />
+          <span>Live Track</span>
+        </button>
       </div>
 
-      {/* ── TAB 1: MY ORDERS HISTORY ── */}
+      {/* ── 3. TAB 1: MY ORDERS HISTORY (HIGH-END LUXURY MOBILE CARDS) ── */}
       {activeTab === 'history' && (
-        <div className="space-y-4">
-          {!user ? (
-            <div className="bg-white border border-[#C5A059]/25 p-6 rounded-2xl text-center space-y-3 shadow-xs">
-              <span className="text-[9px] uppercase tracking-widest text-[#C5A059] font-bold block">AUTHENTICATION REQUIRED</span>
-              <h2 className="font-serif text-xl font-bold text-[#003e1c]">View Your Order Records</h2>
-              <p className="text-xs text-neutral-500 font-sans max-w-sm mx-auto">
-                Sign in to view your real-time luxury order history and tracking statuses.
-              </p>
+        <div className="space-y-5">
+          {!user && userOrders.length === 0 ? (
+            <div className="bg-white border border-[#C5A059]/30 p-8 rounded-[2.5rem] text-center space-y-4 shadow-sm">
+              <div className="w-14 h-14 rounded-2xl bg-[#0d1a13]/5 border border-[#C5A059]/25 flex items-center justify-center mx-auto text-[#C5A059]">
+                <Package className="w-7 h-7" />
+              </div>
+              <div className="space-y-1">
+                <span className="text-[9px] uppercase tracking-widest text-[#C5A059] font-bold block">AUTHENTICATION REQUIRED</span>
+                <h2 className="font-serif text-xl font-bold text-[#0d1a13]">Sign In to View Orders</h2>
+                <p className="text-xs text-neutral-500 font-sans max-w-xs mx-auto">
+                  Access your full order history, live delivery status, and digital invoices.
+                </p>
+              </div>
               <button
                 onClick={() => setAuthModalOpen(true)}
-                className="py-2.5 px-6 rounded-xl bg-[#003e1c] hover:bg-[#002812] text-white font-mono text-xs uppercase tracking-wider font-bold shadow-md cursor-pointer transition-all active:scale-98"
+                className="py-3 px-8 rounded-full bg-[#0d1a13] hover:bg-[#C5A059] text-white hover:text-black font-mono text-xs uppercase tracking-widest font-bold shadow-lg cursor-pointer transition-all active:scale-95"
               >
                 Sign In Now
               </button>
             </div>
           ) : userOrders.length === 0 ? (
-            <div className="bg-white border border-neutral-200 p-8 rounded-2xl text-center space-y-2 text-neutral-500 font-sans">
-              <Package className="w-8 h-8 text-[#C5A059] mx-auto opacity-70" />
-              <h3 className="font-serif text-lg font-bold text-[#003e1c]">No Orders Placed Yet</h3>
+            <div className="bg-white border border-neutral-200 p-10 rounded-[2.5rem] text-center space-y-3 text-neutral-500 font-sans shadow-2xs">
+              <Package className="w-10 h-10 text-[#C5A059] mx-auto opacity-80 animate-bounce" />
+              <h3 className="font-serif text-lg font-bold text-[#0d1a13]">No Orders Placed Yet</h3>
               <p className="text-xs text-neutral-500 max-w-xs mx-auto">
-                Your order records will appear here once you confirm a checkout purchase.
+                Your luxury suit purchases will appear here once confirmed at checkout.
               </p>
             </div>
           ) : (
-            <div className="space-y-3.5">
-              {userOrders.map((ord) => (
-                <div 
-                  key={ord.id}
-                  className="p-4 rounded-xl border border-neutral-200 bg-neutral-50/60 hover:bg-white hover:border-[#C5A059]/40 transition-all space-y-3 shadow-2xs"
-                >
-                  <div className="flex flex-wrap items-center justify-between gap-2 border-b border-neutral-200/60 pb-2.5 text-xs font-sans">
-                    <div>
-                      <span className="text-[9px] text-neutral-400 font-mono block uppercase font-bold">Order ID: {ord.id}</span>
-                      <span className="font-mono text-xs md:text-sm font-bold text-[#003e1c]">Tracking Code: {ord.trackingNumber}</span>
-                    </div>
-                    <span className={`px-2.5 py-0.5 rounded-full text-[9px] font-mono uppercase font-bold tracking-wider ${
-                      ord.status === 'Delivered' 
-                        ? 'bg-emerald-100 text-emerald-800'
-                        : ord.status === 'Shipped'
-                        ? 'bg-blue-100 text-blue-800'
-                        : 'bg-amber-100 text-amber-800'
-                    }`}>
-                      ● {ord.status}
-                    </span>
-                  </div>
+            <div className="space-y-4">
+              {/* All Purchases Header */}
+              <div className="flex items-center justify-between border-b border-neutral-100 pb-2">
+                <span className="px-4 py-2 rounded-full bg-[#0d1a13] text-[#E8C888] border border-[#C5A059]/40 font-mono text-[9px] uppercase tracking-wider font-extrabold shadow-xs">
+                  ALL PURCHASES ({userOrders.length})
+                </span>
+              </div>
 
-                  {/* Order items preview with Full Specifications */}
-                  <div className="space-y-2.5">
-                    {ord.items.map((item, idx) => (
-                      <div key={idx} className="flex items-start gap-3 p-3 rounded-xl bg-white border border-neutral-200/70 shadow-2xs">
-                        {item.product?.images?.[0] && (
-                          <img
-                            src={item.product.images[0]}
-                            alt={item.product.name}
-                            className="w-14 h-18 object-cover rounded-lg border border-neutral-200 shrink-0"
-                          />
-                        )}
-                        <div className="flex-1 min-w-0 space-y-1 text-left">
-                          <div className="flex items-start justify-between gap-2">
-                            <h4 className="font-bold text-neutral-900 text-xs font-serif leading-tight">
-                              {item.product?.name || 'Luxury Ensemble'}
-                            </h4>
-                            <span className="font-mono text-xs font-bold text-[#003e1c] shrink-0">
-                              {formatPrice((item.product?.price || 0) * item.quantity)}
-                            </span>
-                          </div>
+              {/* Order Cards List */}
+              <div className="space-y-4">
+                {userOrders.map((ord) => {
+                  const countryFlag = getCountryFlag(ord.shippingDetails?.country);
+                  const courierName = getCourierPartner(ord.shippingDetails?.country);
+                  const isDelivered = ord.status === 'Delivered';
+                  const formattedRRCode = formatTrackingNumber(ord.trackingNumber);
 
-                          <div className="flex flex-wrap gap-1.5 pt-0.5">
-                            {/* Category Badge */}
-                            <span className="inline-block font-mono text-[9px] uppercase tracking-wider text-[#003e1c] bg-[#003e1c]/10 px-2 py-0.5 rounded font-bold border border-[#003e1c]/15">
-                              Category: {(item as any).selectedCategory || item.product?.category || 'Unstitched'}
-                            </span>
-                            {/* Size Badge */}
-                            <span className="inline-block font-mono text-[9px] uppercase tracking-wider text-[#C5A059] bg-[#C5A059]/10 px-2 py-0.5 rounded font-bold border border-[#C5A059]/20">
-                              Size: {(item as any).selectedSize || item.product?.pieces || 'Unstitched'}
-                            </span>
-                          </div>
+                  return (
+                    <motion.div 
+                      key={ord.id}
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      className="p-4 sm:p-5 rounded-3xl border border-[#C5A059]/30 bg-white hover:border-[#C5A059] transition-all space-y-4 shadow-sm text-left relative overflow-hidden group"
+                    >
+                      {/* 1. Header Bar: Country Flag + Courier + Live Status Badge */}
+                      <div className="flex items-center justify-between gap-2 border-b border-neutral-100 pb-3 text-xs font-sans">
+                        <div className="flex items-center gap-2 min-w-0">
+                          <span className="text-lg shrink-0">{countryFlag}</span>
+                          <span className="text-[9px] font-mono uppercase font-bold text-[#0d1a13] bg-[#0d1a13]/5 border border-[#0d1a13]/10 px-2.5 py-0.5 rounded-full truncate">
+                            {courierName}
+                          </span>
+                        </div>
 
-                          <div className="flex items-center justify-between text-[10px] text-neutral-500 font-sans pt-1">
-                            <span>Fabric: <strong className="text-neutral-700 font-medium">{item.product?.fabric || 'Lawn'}</strong></span>
-                            <span>Qty: <strong className="text-neutral-900 font-bold">{item.quantity}</strong></span>
+                        <span className={`px-3 py-0.5 rounded-full text-[9px] font-mono uppercase font-black tracking-wider border shrink-0 ${
+                          isDelivered
+                            ? 'bg-emerald-50 text-emerald-800 border-emerald-300'
+                            : ord.status === 'Shipped'
+                            ? 'bg-blue-50 text-blue-800 border-blue-300'
+                            : 'bg-amber-50 text-amber-800 border-amber-300'
+                        }`}>
+                          ● {ord.status}
+                        </span>
+                      </div>
+
+                      {/* 2. Registered Tracking Code Banner */}
+                      <div className="p-3.5 rounded-2xl bg-[#0d1a13] text-white flex items-center justify-between gap-3 shadow-xs">
+                        <div>
+                          <span className="text-[8px] font-mono text-[#E8C888] uppercase font-extrabold block tracking-wider">TRACKING CODE</span>
+                          <strong className="text-sm font-mono font-black text-white block tracking-widest mt-0.5">{formattedRRCode}</strong>
+                        </div>
+                        <button
+                          onClick={() => handleCopy(formattedRRCode)}
+                          className="px-3 py-1.5 rounded-xl bg-white/10 hover:bg-[#C5A059] hover:text-black text-white text-[9.5px] font-mono font-extrabold transition-all border border-white/15 cursor-pointer flex items-center gap-1 shrink-0"
+                        >
+                          {copiedCode === formattedRRCode ? <Check className="w-3 h-3 text-emerald-400" /> : <Copy className="w-3 h-3 text-[#E8C888]" />}
+                          <span>{copiedCode === formattedRRCode ? 'COPIED' : 'COPY'}</span>
+                        </button>
+                      </div>
+
+                      {/* 3. Items Preview List */}
+                      <div className="space-y-2">
+                        {ord.items.map((item: any, idx: number) => (
+                          <div key={idx} className="flex items-center gap-3 p-3 rounded-2xl bg-neutral-50 border border-neutral-200/60">
+                            {item.product?.images?.[0] && (
+                              <img
+                                src={item.product.images[0]}
+                                alt={item.product.name}
+                                className="w-14 h-16 object-cover rounded-xl border border-neutral-200 shrink-0"
+                              />
+                            )}
+                            <div className="flex-1 min-w-0 text-left space-y-0.5">
+                              <div className="flex justify-between items-start gap-1">
+                                <h4 className="font-serif font-bold text-neutral-900 text-xs truncate leading-snug">
+                                  {item.product?.name || 'Luxury Unstitched Suite'}
+                                </h4>
+                                <span className="font-mono text-xs font-black text-[#0d1a13] shrink-0">
+                                  {formatPrice((item.product?.price || 0) * item.quantity)}
+                                </span>
+                              </div>
+                              
+                              <div className="flex items-center justify-between text-[10px] text-neutral-500 font-sans pt-0.5">
+                                <span className="bg-neutral-200/60 px-2 py-0.5 rounded font-mono font-bold text-[#0d1a13] text-[8.5px] uppercase">
+                                  {item.selectedCategory || item.product?.category || 'Unstitched'} • {item.selectedSize || item.product?.pieces || '3 Piece'}
+                                </span>
+                                <span>Qty: <strong className="text-neutral-800 font-bold">{item.quantity}</strong></span>
+                              </div>
+                            </div>
                           </div>
+                        ))}
+                      </div>
+
+                      {/* 4. Footer Summary & Action Bar */}
+                      <div className="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-neutral-100 text-xs font-sans">
+                        <div className="space-y-0.5">
+                          <span className="text-[8.5px] text-neutral-400 font-mono uppercase font-bold block">TOTAL AMOUNT</span>
+                          <strong className="text-[#C5A059] font-black text-sm">{formatPrice(ord.total)}</strong>
+                        </div>
+
+                        <div className="flex items-center gap-2">
+                          <button
+                            onClick={() => setSelectedModalOrder(ord)}
+                            className="py-2 px-3.5 rounded-full bg-[#0d1a13]/5 hover:bg-[#0d1a13] text-[#0d1a13] hover:text-white border border-[#0d1a13]/15 text-[10px] font-mono font-extrabold uppercase tracking-wider transition-all cursor-pointer flex items-center gap-1 active:scale-95"
+                          >
+                            <FileText className="w-3 h-3 text-[#C5A059]" />
+                            <span>Full Form</span>
+                          </button>
+
+                          <button
+                            onClick={() => handleTrackCode(formattedRRCode)}
+                            className="py-2 px-3.5 rounded-full bg-[#0d1a13] hover:bg-[#C5A059] text-white hover:text-black text-[10px] font-mono font-black uppercase tracking-wider shadow-xs transition-all cursor-pointer flex items-center gap-1 active:scale-95"
+                          >
+                            <span>Track Live</span>
+                            <ArrowRight className="w-3 h-3 text-[#C5A059]" />
+                          </button>
                         </div>
                       </div>
-                    ))}
-                  </div>
-
-                  {/* Order Footer & Live Track button */}
-                  <div className="flex items-center justify-between pt-2 border-t border-neutral-200/60 text-xs font-sans">
-                    <div className="text-[10px] font-sans text-neutral-500">
-                      Total Amount: <strong className="text-neutral-900 font-bold">{formatPrice(ord.total)}</strong>
-                    </div>
-                    <button
-                      onClick={() => handleTrackCode(ord.trackingNumber)}
-                      className="py-2 px-3.5 rounded-xl bg-[#003e1c] hover:bg-[#002812] text-white text-[10px] font-mono uppercase tracking-wider font-bold shadow-2xs cursor-pointer flex items-center gap-1.5 active:scale-98 transition-all"
-                    >
-                      <span>Track Live Status</span>
-                      <ArrowRight className="w-3 h-3 text-[#C5A059]" />
-                    </button>
-                  </div>
-                </div>
-              ))}
+                    </motion.div>
+                  );
+                })}
+              </div>
             </div>
           )}
         </div>
       )}
 
-      {/* ── TAB 2: LIVE TRACK SHIPMENT ── */}
+      {/* ── 4. TAB 2: LIVE TRACK SHIPMENT RADAR (HIGH-TECH LOGISTICS TERMINAL) ── */}
       {activeTab === 'tracking' && (
-        <div className="space-y-4">
-          <div className="bg-white border border-[#C5A059]/25 p-5 md:p-6 rounded-2xl shadow-xs space-y-4 text-left">
-            <div className="text-center space-y-1">
-              <span className="text-[9px] uppercase font-mono tracking-widest text-[#C5A059] font-bold block">CARRIER RADAR</span>
-              <h2 className="font-serif text-xl font-bold text-[#003e1c]">Track Your Shipment</h2>
-              <p className="font-sans text-xs text-neutral-500 max-w-sm mx-auto">
-                Enter your order tracking code or select an order from your history.
+        <div className="space-y-5">
+          {/* Radar Terminal Input Card */}
+          <div 
+            className="rounded-[2.5rem] p-6 text-white shadow-2xl border border-[#C5A059]/40 space-y-5 text-left relative overflow-hidden"
+            style={{
+              background: 'radial-gradient(circle at 50% 0%, #1e3d2c 0%, #0d1a13 75%, #08100c 100%)',
+            }}
+          >
+            <div className="text-center space-y-1.5">
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#C5A059]/15 border border-[#C5A059]/30">
+                <Truck className="w-3.5 h-3.5 text-[#E8C888]" />
+                <span className="text-[9px] uppercase font-mono tracking-[0.25em] text-[#E8C888] font-bold">CARRIER DISPATCH RADAR</span>
+              </div>
+              <h2 className="font-serif text-2xl font-bold text-white tracking-tight">Track Your Shipment</h2>
+              <p className="font-sans text-xs text-neutral-300 max-w-xs mx-auto opacity-90">
+                Enter your <code className="text-[#E8C888] font-mono font-bold">RR-</code> tracking code to query real-time logistics.
               </p>
             </div>
 
-            {/* Track Search Bar */}
-            <form onSubmit={handleTrackSubmit} className="flex gap-2 max-w-md mx-auto pt-1">
+            {/* Track Search Form */}
+            <form onSubmit={handleTrackSubmit} className="flex flex-col sm:flex-row gap-2.5 max-w-md mx-auto pt-1">
               <div className="relative flex-1">
                 <input
                   type="text"
                   required
-                  placeholder="e.g. ZR-123456 or ORD-789012"
+                  placeholder="e.g. RR-488189 or ORD-875157"
                   value={trackVal}
                   onChange={(e) => setTrackVal(e.target.value)}
-                  className="w-full bg-neutral-50 text-xs text-neutral-800 placeholder-neutral-400 pl-10 pr-4 py-3 rounded-xl border border-neutral-200 focus:outline-hidden focus:border-[#C5A059] transition-all font-sans font-medium"
+                  className="w-full bg-white/10 text-white placeholder-neutral-400 pl-11 pr-4 py-3.5 rounded-2xl border border-white/20 focus:outline-hidden focus:border-[#C5A059] focus:ring-4 focus:ring-[#C5A059]/20 transition-all font-mono font-bold text-xs shadow-inner"
                 />
-                <Search className="w-4 h-4 text-[#C5A059] absolute left-3.5 top-3.5 pointer-events-none" />
+                <Search className="w-4 h-4 text-[#E8C888] absolute left-4 top-4 pointer-events-none" />
+                {trackVal && (
+                  <button type="button" onClick={() => setTrackVal('')} className="absolute right-3.5 top-3.5 text-neutral-400 hover:text-white">
+                    <X className="w-4 h-4" />
+                  </button>
+                )}
               </div>
               <button
                 type="submit"
                 disabled={searching}
-                className="py-3 px-5 bg-[#003e1c] hover:bg-[#002b13] text-white text-xs font-mono uppercase tracking-widest font-bold rounded-xl transition-all cursor-pointer disabled:bg-neutral-400 shrink-0"
+                className="py-3.5 px-7 bg-gradient-to-r from-[#C5A059] to-[#E8C888] text-black text-xs font-mono uppercase tracking-widest font-black rounded-2xl transition-all cursor-pointer hover:opacity-90 disabled:opacity-50 shrink-0 shadow-lg active:scale-95"
               >
-                {searching ? 'Querying...' : 'Track'}
+                {searching ? 'Locating...' : 'Track Cargo'}
               </button>
             </form>
+
+            {/* Quick Sample Tracking Chips */}
+            {userOrders && userOrders.length > 0 && (
+              <div className="pt-2 border-t border-white/10 text-center">
+                <span className="text-[8.5px] font-mono text-neutral-400 uppercase font-bold block mb-2">QUICK TRACK YOUR RECENT ORDERS:</span>
+                <div className="flex flex-wrap justify-center gap-2">
+                  {userOrders.slice(0, 3).map(o => (
+                    <button
+                      key={o.id}
+                      onClick={() => handleTrackCode(o.trackingNumber)}
+                      className="px-3 py-1 rounded-full bg-white/10 hover:bg-[#C5A059] text-white hover:text-black font-mono text-[9.5px] font-extrabold transition-all border border-white/15 cursor-pointer"
+                    >
+                      {o.trackingNumber} ({o.shippingDetails?.city})
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
 
-          {/* Tracking Result View */}
+          {/* Detailed Live Tracking Report View */}
           {trackedOrder ? (
-            <div className="bg-white border border-[#C5A059]/25 p-5 md:p-6 rounded-2xl space-y-6 shadow-xs animate-fadeIn text-left">
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 border-b border-neutral-100 pb-4 text-xs font-sans">
-                <div className="p-3 bg-neutral-50 rounded-xl border border-neutral-150">
-                  <span className="text-neutral-400 font-mono text-[9px] block uppercase font-bold">Tracking Code</span>
-                  <strong className="text-[#003e1c] text-sm font-bold block mt-0.5">{trackedOrder.trackingNumber}</strong>
+            <motion.div 
+              initial={{ opacity: 0, scale: 0.98 }}
+              animate={{ opacity: 1, scale: 1 }}
+              className="bg-white border border-[#C5A059]/40 p-6 rounded-[2.5rem] space-y-6 shadow-2xl text-left relative overflow-hidden"
+            >
+              {/* Header Summary Grid */}
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 border-b border-neutral-100 pb-5 text-xs font-sans">
+                <div className="p-3.5 bg-neutral-50/90 rounded-2xl border border-neutral-200/80 relative">
+                  <span className="text-neutral-400 font-mono text-[8.5px] block uppercase font-extrabold">Tracking Code</span>
+                  <strong className="text-[#0d1a13] text-xs sm:text-sm font-mono font-bold block mt-0.5">{trackedOrder.trackingNumber}</strong>
+                  <button 
+                    onClick={() => handleCopy(trackedOrder.trackingNumber)}
+                    className="absolute top-2 right-2 text-neutral-400 hover:text-[#C5A059]"
+                    title="Copy"
+                  >
+                    <Copy className="w-3.5 h-3.5" />
+                  </button>
                 </div>
-                <div className="p-3 bg-neutral-50 rounded-xl border border-neutral-150">
-                  <span className="text-neutral-400 font-mono text-[9px] block uppercase font-bold">Order ID</span>
-                  <strong className="text-neutral-800 text-xs font-bold block mt-0.5">{trackedOrder.id}</strong>
+                
+                <div className="p-3.5 bg-neutral-50/90 rounded-2xl border border-neutral-200/80">
+                  <span className="text-neutral-400 font-mono text-[8.5px] block uppercase font-extrabold">Order Reference</span>
+                  <strong className="text-neutral-800 text-xs font-mono font-bold block mt-0.5">{trackedOrder.id}</strong>
                 </div>
-                <div className="p-3 bg-neutral-50 rounded-xl border border-neutral-150">
-                  <span className="text-neutral-400 font-mono text-[9px] block uppercase font-bold">Order Date</span>
+
+                <div className="p-3.5 bg-neutral-50/90 rounded-2xl border border-neutral-200/80">
+                  <span className="text-neutral-400 font-mono text-[8.5px] block uppercase font-extrabold">Courier Partner</span>
+                  <div className="flex items-center gap-1.5 mt-0.5">
+                    <span>{getCountryFlag(trackedOrder.shippingDetails?.country)}</span>
+                    <strong className="text-[#C5A059] text-xs font-bold block truncate">
+                      {getCourierPartner(trackedOrder.shippingDetails?.country)}
+                    </strong>
+                  </div>
+                </div>
+
+                <div className="p-3.5 bg-neutral-50/90 rounded-2xl border border-neutral-200/80">
+                  <span className="text-neutral-400 font-mono text-[8.5px] block uppercase font-extrabold">Order Date</span>
                   <strong className="text-neutral-800 text-xs font-bold block mt-0.5">
-                    {new Date(trackedOrder.createdAt).toLocaleDateString(undefined, { dateStyle: 'medium' })}
+                    {new Date(trackedOrder.createdAt).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })}
                   </strong>
                 </div>
               </div>
 
-              {/* Stepper progress visualization */}
+              {/* Stepper Progress Visualization */}
               <div className="space-y-4 pt-1">
-                <h3 className="font-serif text-sm font-bold text-[#003e1c] uppercase tracking-wide">Live Dispatch Status</h3>
-                <div className="relative px-2">
-                  <div className="absolute top-4 left-6 right-6 h-1 bg-neutral-200 z-0" />
+                <div className="flex items-center justify-between">
+                  <h3 className="font-serif text-sm font-bold text-[#0d1a13] uppercase tracking-wider">Live Cargo Dispatch Timeline</h3>
+                  <span className="bg-[#0d1a13] text-[#E8C888] px-3.5 py-1 rounded-full text-[9px] font-mono uppercase font-black tracking-widest border border-[#C5A059]/40">
+                    ● {trackedOrder.status}
+                  </span>
+                </div>
+
+                <div className="relative px-2 py-3">
+                  <div className="absolute top-8 left-6 right-6 h-2 bg-neutral-200 rounded-full z-0" />
                   <div 
-                    className={`absolute top-4 left-6 h-1 bg-[#003e1c] z-0 transition-all duration-1000 ${getStepProgressWidth(trackedOrder.status)}`}
+                    className={`absolute top-8 left-6 h-2 bg-[#0d1a13] rounded-full z-0 transition-all duration-1000 ${getStepProgressWidth(trackedOrder.status)}`}
                   />
                   <div className="relative z-10 flex justify-between">
                     {(['Pending', 'Processing', 'Shipped', 'Delivered'] as const).map((step, idx) => (
-                      <div key={step} className="flex flex-col items-center gap-1.5">
-                        <span className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-mono transition-all ${getStepStatusClass(step, trackedOrder.status)}`}>
+                      <div key={step} className="flex flex-col items-center gap-2">
+                        <span className={`w-10 h-10 rounded-full flex items-center justify-center text-xs font-mono font-bold transition-all ${getStepStatusClass(step, trackedOrder.status)}`}>
                           0{idx + 1}
                         </span>
-                        <span className="text-[9.5px] font-mono uppercase tracking-wider text-neutral-700 font-bold bg-white px-1">
+                        <span className="text-[9.5px] font-mono uppercase tracking-wider text-neutral-800 font-extrabold bg-white px-2 py-0.5 rounded-md border border-neutral-200">
                           {step}
                         </span>
                       </div>
@@ -547,108 +732,352 @@ export function OrderTrackingPage() {
                 </div>
               </div>
 
-              {/* Order Details & Items breakdown */}
-              <div className="pt-4 grid grid-cols-1 md:grid-cols-2 gap-5 text-xs text-neutral-600 font-sans border-t border-neutral-100">
-                <div className="space-y-2 p-4 bg-neutral-50 rounded-xl border border-neutral-150">
-                  <strong className="text-[#003e1c] font-serif text-sm block border-b border-neutral-200 pb-1.5 font-bold">Delivery Details</strong>
-                  <div className="space-y-1.5 font-sans text-xs">
-                    <div className="flex justify-between"><span>Consignee:</span><strong className="text-neutral-900">{trackedOrder.shippingDetails.name}</strong></div>
-                    <div className="flex justify-between"><span>Destination:</span><strong className="text-neutral-900">{trackedOrder.shippingDetails.city}, {trackedOrder.shippingDetails.country}</strong></div>
-                    <div className="flex justify-between"><span>Courier Partner:</span><strong className="text-neutral-900">{trackedOrder.shippingDetails.country?.toLowerCase() === 'pakistan' ? 'TCS Express' : 'DHL Worldwide'}</strong></div>
-                    <div className="flex justify-between"><span>Status Code:</span><strong className="text-[#C5A059] font-bold">{trackedOrder.status.toUpperCase()}</strong></div>
+              {/* 3-Card Detailed Report Breakdown */}
+              <div className="pt-4 space-y-4 border-t border-neutral-100 font-sans text-xs">
+                
+                {/* Card 1: Delivery & Consignee Details */}
+                <div className="p-5 bg-neutral-50/90 rounded-3xl border border-neutral-200/80 space-y-3 shadow-2xs">
+                  <div className="flex items-center justify-between border-b border-neutral-200 pb-2.5">
+                    <strong className="text-[#0d1a13] font-serif text-sm font-bold flex items-center gap-2">
+                      <MapPin className="w-4 h-4 text-[#C5A059]" />
+                      <span>Delivery & Consignee Details</span>
+                    </strong>
+                    <span className="bg-[#0d1a13] text-white px-3 py-0.5 rounded-full text-[9px] font-mono font-bold uppercase tracking-wider">
+                      {getCourierPartner(trackedOrder.shippingDetails?.country)}
+                    </span>
+                  </div>
+                  
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-neutral-700">
+                    <div>
+                      <span className="text-[9.5px] text-neutral-400 font-mono uppercase font-bold block">Consignee Name:</span>
+                      <strong className="text-neutral-900 text-xs font-semibold">{trackedOrder.shippingDetails?.name || 'Customer'}</strong>
+                    </div>
+                    <div>
+                      <span className="text-[9.5px] text-neutral-400 font-mono uppercase font-bold block">Contact Phone & Email:</span>
+                      <strong className="text-neutral-900 text-xs font-semibold">{trackedOrder.shippingDetails?.phone} • {trackedOrder.shippingDetails?.email}</strong>
+                    </div>
+                    <div>
+                      <span className="text-[9.5px] text-neutral-400 font-mono uppercase font-bold block">Complete Street Address:</span>
+                      <span className="text-neutral-800 text-xs font-medium">{trackedOrder.shippingDetails?.address}</span>
+                    </div>
+                    <div>
+                      <span className="text-[9.5px] text-neutral-400 font-mono uppercase font-bold block">City, Postal Code & Country:</span>
+                      <strong className="text-neutral-900 text-xs font-semibold">
+                        {getCountryFlag(trackedOrder.shippingDetails?.country)} {trackedOrder.shippingDetails?.city} {trackedOrder.shippingDetails?.postalCode ? `(${trackedOrder.shippingDetails.postalCode})` : ''}, {trackedOrder.shippingDetails?.country}
+                      </strong>
+                    </div>
                   </div>
                 </div>
 
-                <div className="space-y-2.5 p-4 bg-neutral-50 rounded-xl border border-neutral-150">
-                  <strong className="text-[#003e1c] font-serif text-sm block border-b border-neutral-200 pb-1.5 font-bold">Items Record ({trackedOrder.items.length})</strong>
-                  <div className="space-y-2 font-sans text-xs">
+                {/* Card 2: Purchased Items & Specifications */}
+                <div className="p-5 bg-neutral-50/90 rounded-3xl border border-neutral-200/80 space-y-3 shadow-2xs">
+                  <div className="flex items-center justify-between border-b border-neutral-200 pb-2.5">
+                    <strong className="text-[#0d1a13] font-serif text-sm font-bold flex items-center gap-2">
+                      <Package className="w-4 h-4 text-[#C5A059]" />
+                      <span>Purchased Ensembles & Specs ({trackedOrder.items.length})</span>
+                    </strong>
+                  </div>
+
+                  <div className="space-y-3">
                     {trackedOrder.items.map((item, idx) => (
-                      <div key={idx} className="flex items-start gap-2.5 p-2 rounded-lg bg-white border border-neutral-200/80">
+                      <div key={idx} className="flex items-center gap-4 p-3.5 rounded-2xl bg-white border border-neutral-200/80 shadow-2xs">
                         {item.product?.images?.[0] && (
-                          <img src={item.product.images[0]} alt={item.product.name} className="w-10 h-13 object-cover rounded shrink-0 border border-neutral-200" />
+                          <img 
+                            src={item.product.images[0]} 
+                            alt={item.product.name} 
+                            className="w-14 h-18 object-cover rounded-xl border border-neutral-200 shrink-0 shadow-2xs" 
+                          />
                         )}
-                        <div className="flex-1 min-w-0 space-y-0.5 text-left">
-                          <div className="flex justify-between items-start gap-1">
-                            <span className="font-bold text-neutral-800 text-[11px] font-serif leading-tight">{item.product?.name || 'Unstitched Article'}</span>
-                            <strong className="text-[#003e1c] font-mono text-[10px] shrink-0">x{item.quantity}</strong>
+                        <div className="flex-1 min-w-0 space-y-1">
+                          <div className="flex justify-between items-start gap-2">
+                            <h4 className="font-bold text-neutral-900 text-xs font-serif leading-tight">{item.product?.name || 'Unstitched Couture Ensemble'}</h4>
+                            <span className="font-mono text-xs font-bold text-[#0d1a13] shrink-0">
+                              {formatPrice((item.product?.price || 0) * item.quantity)}
+                            </span>
                           </div>
-                          <div className="flex flex-wrap gap-1 pt-0.5">
-                            <span className="text-[8px] font-mono uppercase font-bold text-[#003e1c] bg-[#003e1c]/10 px-1.5 py-0.5 rounded">
+                          
+                          <div className="flex flex-wrap gap-1.5 pt-0.5">
+                            <span className="font-mono text-[8.5px] uppercase font-bold text-[#0d1a13] bg-[#0d1a13]/10 px-2 py-0.5 rounded-md border border-[#0d1a13]/15">
                               {(item as any).selectedCategory || item.product?.category || 'Unstitched'}
                             </span>
-                            <span className="text-[8px] font-mono uppercase font-bold text-[#C5A059] bg-[#C5A059]/10 px-1.5 py-0.5 rounded">
-                              {(item as any).selectedSize || item.product?.pieces || 'Unstitched'}
+                            <span className="font-mono text-[8.5px] uppercase font-bold text-[#C5A059] bg-[#C5A059]/10 px-2 py-0.5 rounded-md border border-[#C5A059]/20">
+                              Size: {(item as any).selectedSize || item.product?.pieces || '3 Piece'}
                             </span>
+                          </div>
+
+                          <div className="flex items-center justify-between text-[10px] text-neutral-500 pt-1">
+                            <span>Fabric: <strong className="text-neutral-800">{item.product?.fabric || 'Lawn'}</strong></span>
+                            <span>Unit Price: <strong className="text-neutral-800">{formatPrice(item.product?.price || 0)}</strong> × <strong className="text-neutral-900 font-bold">{item.quantity}</strong></span>
                           </div>
                         </div>
                       </div>
                     ))}
                   </div>
                 </div>
+
+                {/* Card 3: Financial Receipt & Payment Info */}
+                <div className="p-5 bg-white rounded-3xl border border-[#C5A059]/30 space-y-3 shadow-sm">
+                  <div className="flex justify-between items-center text-xs border-b border-neutral-100 pb-2.5">
+                    <span className="text-neutral-500 font-medium">Payment Method:</span>
+                    <strong className="text-neutral-900 font-bold uppercase font-mono">
+                      {trackedOrder.paymentMethod === 'card' 
+                        ? 'Credit Card Payment' 
+                        : trackedOrder.paymentMethod === 'cod' 
+                        ? 'Cash on Delivery (COD)' 
+                        : trackedOrder.paymentMethod}
+                    </strong>
+                  </div>
+                  
+                  {trackedOrder.paymentDetails && (
+                    <div className="flex justify-between items-center text-[11px] text-neutral-500 border-b border-neutral-100 pb-2 font-mono">
+                      <span>Transaction Ref / Card:</span>
+                      <span className="text-neutral-800 font-bold">
+                        {trackedOrder.paymentDetails.accountNumber || trackedOrder.paymentDetails.transactionId || 'Verified'}
+                      </span>
+                    </div>
+                  )}
+
+                  <div className="flex justify-between items-center text-xs text-neutral-600">
+                    <span>Bag Subtotal:</span>
+                    <span className="font-semibold text-neutral-800">{formatPrice(trackedOrder.subtotal)}</span>
+                  </div>
+
+                  <div className="flex justify-between items-center text-xs text-neutral-600">
+                    <span>Shipping Fee ({getCourierPartner(trackedOrder.shippingDetails?.country)}):</span>
+                    <span className="font-semibold text-neutral-800">
+                      {trackedOrder.shippingCost === 0 ? 'FREE' : formatPrice(trackedOrder.shippingCost)}
+                    </span>
+                  </div>
+
+                  <div className="flex justify-between items-center text-sm pt-2.5 border-t border-[#C5A059]/30 font-bold text-[#0d1a13]">
+                    <span>Total Order Amount:</span>
+                    <span className="text-lg text-[#C5A059] font-black">{formatPrice(trackedOrder.total)}</span>
+                  </div>
+                </div>
+
               </div>
-            </div>
+            </motion.div>
           ) : (
-            <div className="flex flex-col items-center justify-center text-center p-8 bg-white rounded-2xl border border-neutral-200 text-neutral-400 shadow-2xs">
-              <AlertCircle className="w-9 h-9 text-[#C5A059] mb-2 animate-bounce" />
-              <p className="font-serif font-bold text-[#003e1c] text-sm">No Active Tracking Query</p>
-              <p className="text-xs text-neutral-500 max-w-xs mx-auto mt-1">
-                Enter your tracking number above or click "Track Live Status" on any order in your order history.
+            <div className="flex flex-col items-center justify-center text-center p-10 bg-white rounded-[2.5rem] border border-neutral-200 text-neutral-400 shadow-2xs space-y-2">
+              <AlertCircle className="w-10 h-10 text-[#C5A059] animate-pulse" />
+              <p className="font-serif font-bold text-[#0d1a13] text-sm">No Active Tracking Query</p>
+              <p className="text-xs text-neutral-500 max-w-xs mx-auto">
+                Enter your <code className="text-[#C5A059] font-mono font-bold">RR-</code> tracking code above or click "Track Live Radar" on any order in your history.
               </p>
             </div>
           )}
         </div>
       )}
 
-      {/* ── TAB 3: MY PROFILE ── */}
-      {activeTab === 'profile' && (
-        <div className="space-y-4">
-          {user ? (
-            <div className="bg-white border border-[#C5A059]/25 p-5 md:p-6 rounded-2xl shadow-xs space-y-4 text-left">
-              <div className="flex items-center justify-between border-b border-neutral-100 pb-3">
-                <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 rounded-full bg-[#003e1c] text-white flex items-center justify-center font-bold text-lg shadow-xs">
-                    {user.name.charAt(0).toUpperCase()}
-                  </div>
-                  <div>
-                    <span className="text-[8.5px] uppercase tracking-widest text-[#C5A059] font-bold block">ROTBA MEMBER PROFILE</span>
-                    <h3 className="text-base font-bold text-neutral-900 font-sans">{user.name}</h3>
+
+      {/* ── 6. SLIDE-UP DETAILED ORDER REPORT FORM MODAL ── */}
+      <AnimatePresence>
+        {selectedModalOrder && (() => {
+          const formattedModalRRCode = formatTrackingNumber(selectedModalOrder.trackingNumber);
+          return (
+          <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 bg-black/70 backdrop-blur-md">
+            <motion.div
+              initial={{ opacity: 0, y: 100 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 100 }}
+              className="w-full max-w-2xl bg-white rounded-t-[2.5rem] sm:rounded-[2.5rem] max-h-[90vh] overflow-y-auto shadow-2xl border border-[#C5A059]/40 p-5 sm:p-7 space-y-6 text-left relative scrollbar-none"
+            >
+              {/* Minimal Top Close Bar */}
+              <div className="flex items-center justify-between sticky top-0 bg-white/95 backdrop-blur-md z-10 pb-2">
+                <span className="text-[10px] font-mono font-bold uppercase tracking-widest text-[#0d1a13]">
+                  {getCountryFlag(selectedModalOrder.shippingDetails?.country)} RECEIPT FORM
+                </span>
+                <button
+                  onClick={() => setSelectedModalOrder(null)}
+                  className="w-8 h-8 rounded-full bg-neutral-100 hover:bg-neutral-200 border border-neutral-300 flex items-center justify-center text-neutral-700 transition-all cursor-pointer"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              </div>
+
+              {/* 1. Courier & Tracking Bar */}
+              <div className="p-4 rounded-2xl bg-[#0d1a13] text-white border border-[#C5A059]/40 flex flex-wrap items-center justify-between gap-3 shadow-md">
+                <div>
+                  <span className="text-[8.5px] font-mono text-[#E8C888] uppercase font-bold block tracking-wider">LOGISTICS PARTNER & TRACKING CODE</span>
+                  <div className="flex items-center gap-2 mt-0.5">
+                    <span className="text-base font-mono font-black text-white">{formattedModalRRCode}</span>
+                    <span className="bg-[#C5A059] text-black px-2 py-0.5 rounded text-[9px] font-mono font-black uppercase">
+                      {getCourierPartner(selectedModalOrder.shippingDetails?.country)}
+                    </span>
                   </div>
                 </div>
                 <button
-                  onClick={logout}
-                  className="px-3.5 py-1.5 rounded-xl bg-red-50 text-red-700 hover:bg-red-100 font-mono text-[9px] uppercase font-bold tracking-wider transition-colors cursor-pointer"
+                  onClick={() => handleCopy(formattedModalRRCode)}
+                  className="px-3.5 py-1.5 rounded-xl bg-white/10 hover:bg-[#C5A059] hover:text-black text-white text-[10px] font-mono uppercase font-bold transition-all border border-white/20 flex items-center gap-1.5 cursor-pointer"
                 >
-                  Sign Out
+                  <Copy className="w-3.5 h-3.5" />
+                  <span>Copy Code</span>
                 </button>
               </div>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs font-sans">
-                <div className="p-3.5 bg-neutral-50 rounded-xl border border-neutral-150">
-                  <span className="text-neutral-400 font-mono text-[9px] block uppercase font-bold">Email Address</span>
-                  <strong className="text-neutral-800 font-medium block truncate mt-0.5">{user.email}</strong>
+
+              {/* 2. Full Consignee & Shipping Details Form */}
+              <div className="p-5 rounded-3xl bg-neutral-50 border border-neutral-200/90 space-y-4 shadow-2xs">
+                <div className="flex items-center justify-between border-b border-neutral-200/80 pb-2.5">
+                  <h4 className="font-serif text-sm font-bold text-[#0d1a13] flex items-center gap-2">
+                    <MapPin className="w-4 h-4 text-[#C5A059]" />
+                    <span>Shipping & Delivery Details</span>
+                  </h4>
+                  <span className="text-[9px] font-mono font-bold bg-[#0d1a13] text-[#E8C888] px-2.5 py-0.5 rounded-full uppercase border border-[#C5A059]/30">
+                    VERIFIED ADDRESS
+                  </span>
                 </div>
-                <div className="p-3.5 bg-neutral-50 rounded-xl border border-neutral-150">
-                  <span className="text-neutral-400 font-mono text-[9px] block uppercase font-bold">Phone Number</span>
-                  <strong className="text-neutral-800 font-medium block truncate mt-0.5">{user.phone || 'Standard contact'}</strong>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs font-sans text-neutral-800">
+                  <div className="p-3 rounded-2xl bg-white border border-neutral-200/80 flex items-start gap-2.5">
+                    <User className="w-4 h-4 text-[#C5A059] shrink-0 mt-0.5" />
+                    <div className="min-w-0">
+                      <span className="text-[9px] font-mono text-neutral-400 uppercase font-bold block">Consignee Name</span>
+                      <strong className="text-neutral-900 text-xs font-bold truncate block">{selectedModalOrder.shippingDetails?.name || 'Customer'}</strong>
+                    </div>
+                  </div>
+
+                  <div className="p-3 rounded-2xl bg-white border border-neutral-200/80 flex items-start gap-2.5">
+                    <Phone className="w-4 h-4 text-[#C5A059] shrink-0 mt-0.5" />
+                    <div className="min-w-0">
+                      <span className="text-[9px] font-mono text-neutral-400 uppercase font-bold block">Contact Number</span>
+                      <strong className="text-neutral-900 text-xs font-bold truncate block">{selectedModalOrder.shippingDetails?.phone || 'N/A'}</strong>
+                    </div>
+                  </div>
+
+                  <div className="p-3 rounded-2xl bg-white border border-neutral-200/80 flex items-start gap-2.5">
+                    <Mail className="w-4 h-4 text-[#C5A059] shrink-0 mt-0.5" />
+                    <div className="min-w-0">
+                      <span className="text-[9px] font-mono text-neutral-400 uppercase font-bold block">Email Address</span>
+                      <span className="text-neutral-900 text-xs font-bold truncate block">{selectedModalOrder.shippingDetails?.email || 'N/A'}</span>
+                    </div>
+                  </div>
+
+                  <div className="p-3 rounded-2xl bg-white border border-neutral-200/80 flex items-start gap-2.5">
+                    <Globe className="w-4 h-4 text-[#C5A059] shrink-0 mt-0.5" />
+                    <div className="min-w-0">
+                      <span className="text-[9px] font-mono text-neutral-400 uppercase font-bold block">Destination & Country</span>
+                      <strong className="text-neutral-900 text-xs font-bold truncate block">
+                        {selectedModalOrder.shippingDetails?.city} {selectedModalOrder.shippingDetails?.postalCode ? `(${selectedModalOrder.shippingDetails.postalCode})` : ''}, {selectedModalOrder.shippingDetails?.country}
+                      </strong>
+                    </div>
+                  </div>
+
+                  <div className="sm:col-span-2 p-3 rounded-2xl bg-white border border-neutral-200/80 flex items-start gap-2.5">
+                    <MapPin className="w-4 h-4 text-[#C5A059] shrink-0 mt-0.5" />
+                    <div className="min-w-0">
+                      <span className="text-[9px] font-mono text-neutral-400 uppercase font-bold block">Street Address</span>
+                      <span className="text-neutral-900 text-xs font-medium leading-relaxed block">{selectedModalOrder.shippingDetails?.address || 'N/A'}</span>
+                    </div>
+                  </div>
                 </div>
               </div>
-            </div>
-          ) : (
-            <div className="bg-white border border-[#C5A059]/25 p-6 rounded-2xl text-center space-y-3 shadow-xs">
-              <span className="text-[9px] uppercase tracking-widest text-[#C5A059] font-bold block">ROTBA CUSTOMER PORTAL</span>
-              <h2 className="font-serif text-xl font-bold text-[#003e1c]">Your Account Profile</h2>
-              <p className="text-xs text-neutral-500 font-sans max-w-sm mx-auto">
-                Sign in to manage your saved preferences and view order records.
-              </p>
-              <button
-                onClick={() => setAuthModalOpen(true)}
-                className="mt-1 py-3 px-6 rounded-xl bg-[#003e1c] text-white font-mono text-[10px] uppercase font-bold tracking-wider hover:bg-[#002b13] transition-all cursor-pointer shadow-md active:scale-98"
-              >
-                Log In / Create Account
-              </button>
-            </div>
-          )}
-        </div>
-      )}
+
+              {/* 3. Purchased Items with Full Product Features List */}
+              <div className="space-y-4">
+                <h4 className="font-serif text-sm font-bold text-[#0d1a13] flex items-center gap-2 border-b border-neutral-100 pb-2">
+                  <Package className="w-4 h-4 text-[#C5A059]" />
+                  <span>Purchased Suits & Product Features ({selectedModalOrder.items.length})</span>
+                </h4>
+
+                <div className="space-y-4">
+                  {selectedModalOrder.items.map((item: any, idx: number) => {
+                    const features = item.product?.features && item.product.features.length > 0 
+                      ? item.product.features 
+                      : item.product?.description ? [item.product.description] : [];
+
+                    return (
+                      <div key={idx} className="p-4.5 rounded-3xl bg-neutral-50 border border-neutral-200/90 space-y-3.5 shadow-2xs">
+                        {/* Top Item Summary Row */}
+                        <div className="flex items-start gap-4">
+                          {item.product?.images?.[0] && (
+                            <img 
+                              src={item.product.images[0]} 
+                              alt={item.product.name} 
+                              className="w-18 h-24 object-cover rounded-2xl border border-neutral-200 shadow-sm shrink-0" 
+                            />
+                          )}
+                          <div className="flex-1 min-w-0 space-y-1.5 text-left">
+                            <div className="flex items-start justify-between gap-2">
+                              <h5 className="font-serif font-bold text-neutral-900 text-sm leading-tight">
+                                {item.product?.name || 'Unstitched Luxury Suite'}
+                              </h5>
+                              <span className="font-mono text-xs font-black text-[#0d1a13] shrink-0">
+                                {formatPrice((item.product?.price || 0) * item.quantity)}
+                              </span>
+                            </div>
+
+                            <div className="flex flex-wrap gap-1.5">
+                              <span className="font-mono text-[9px] uppercase font-bold text-[#0d1a13] bg-[#0d1a13]/10 px-2.5 py-0.5 rounded-md border border-[#0d1a13]/15">
+                                Category: {item.selectedCategory || item.product?.category || 'Unstitched'}
+                              </span>
+                              <span className="font-mono text-[9px] uppercase font-bold text-[#C5A059] bg-[#C5A059]/10 px-2.5 py-0.5 rounded-md border border-[#C5A059]/20">
+                                Size: {item.selectedSize || item.product?.pieces || '3 Piece'}
+                              </span>
+                            </div>
+
+                            <div className="flex items-center justify-between text-xs text-neutral-500 font-sans pt-1">
+                              <span>Fabric: <strong className="text-neutral-900">{item.product?.fabric || 'Lawn'}</strong></span>
+                              <span>Qty: <strong className="text-neutral-900 font-bold">{item.quantity}</strong></span>
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* ✦ PRODUCT FEATURES SPECIFICATION LIST (FULL DETAILED FEATURES) ✦ */}
+                        <div className="p-3.5 rounded-2xl bg-white border border-[#C5A059]/30 space-y-2 text-left shadow-2xs">
+                          <span className="text-[9px] font-mono uppercase tracking-wider text-[#C5A059] font-extrabold flex items-center gap-1.5">
+                            <Sparkles className="w-3.5 h-3.5 text-[#C5A059]" />
+                            PRODUCT SPECIFICATIONS & FEATURES
+                          </span>
+                          <ul className="space-y-1 text-xs text-neutral-700 font-sans pl-1">
+                            {features.map((feat: string, fIdx: number) => (
+                              <li key={fIdx} className="flex items-start gap-2">
+                                <Check className="w-3.5 h-3.5 text-[#C5A059] shrink-0 mt-0.5" />
+                                <span className="leading-snug">{feat}</span>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+
+              {/* 4. Financial Receipt Breakdown */}
+              <div className="p-5 rounded-3xl bg-[#0d1a13] text-white space-y-3 shadow-md border border-[#C5A059]/30">
+                <div className="flex justify-between items-center text-xs text-neutral-300">
+                  <span>Bag Subtotal:</span>
+                  <span className="font-mono font-bold">{formatPrice(selectedModalOrder.subtotal)}</span>
+                </div>
+                <div className="flex justify-between items-center text-xs text-neutral-300">
+                  <span>Courier Delivery Fee ({getCourierPartner(selectedModalOrder.shippingDetails?.country)}):</span>
+                  <span className="font-mono font-bold">{selectedModalOrder.shippingCost === 0 ? 'FREE' : formatPrice(selectedModalOrder.shippingCost)}</span>
+                </div>
+                <div className="flex justify-between items-center text-sm pt-2 border-t border-white/15 font-bold text-white">
+                  <span>Total Order Amount:</span>
+                  <span className="text-lg text-[#E8C888] font-black">{formatPrice(selectedModalOrder.total)}</span>
+                </div>
+              </div>
+
+              {/* Modal Action Buttons */}
+              <div className="flex items-center gap-3 pt-2">
+                <button
+                  onClick={() => {
+                    const code = selectedModalOrder.trackingNumber;
+                    setSelectedModalOrder(null);
+                    handleTrackCode(code);
+                  }}
+                  className="flex-1 py-3.5 rounded-full bg-[#0d1a13] hover:bg-[#C5A059] text-white hover:text-black font-mono text-xs uppercase font-black tracking-widest transition-all cursor-pointer shadow-lg active:scale-95 flex items-center justify-center gap-2 border border-[#C5A059]/40"
+                >
+                  <Truck className="w-4 h-4 text-[#C5A059]" />
+                  <span>Track Live Radar</span>
+                </button>
+              </div>
+            </motion.div>
+          </div>
+          );
+        })()}
+      </AnimatePresence>
     </div>
   );
 }
@@ -669,12 +1098,11 @@ export function PoliciesPage() {
         <section className="space-y-2 bg-brand-cream-dark p-5 rounded-xl border border-brand-gold/10">
           <h2 className="font-serif text-base font-semibold text-brand-emerald">1. Shipping Timelines & Charges</h2>
           <p>
-            ROTBA offers <strong>completely free nationwide delivery</strong> across all of Pakistan. Delivery partner processing operates through premium couriers (TCS and Leopards Express).
+            ROTBA offers <strong>premium fast delivery</strong> locally and internationally via designated shipping partners.
           </p>
           <ul className="list-disc list-inside space-y-1 font-mono text-[11px] pt-1.5 pl-2">
-            <li>Major Cities (Lahore, Karachi, Islamabad, Rawalpindi): 2-3 working days.</li>
-            <li>Other Locations & Rural Areas: 3-5 working days.</li>
-            <li>International Airmail (United Kingdom, UAE, USA): AED 50 shipping rate, delivery within 5-7 working days via DHL.</li>
+            <li>Pakistan Local Delivery: TCS Express Courier (2-3 working days).</li>
+            <li>International Delivery (United States, Saudi Arabia, UAE, Australia, Singapore, HK, Malaysia, UK): NexGen Worldwide Express (4-6 working days).</li>
           </ul>
         </section>
 

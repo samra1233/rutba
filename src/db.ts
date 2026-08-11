@@ -2393,7 +2393,7 @@ class Database {
   }
 
   public createOrder(orderData: Omit<Order, 'id' | 'createdAt' | 'status' | 'trackingNumber'>): Order {
-    const trackingNumber = `ZR-${Math.floor(100000 + Math.random() * 900000)}`;
+    const trackingNumber = `RR-${Math.floor(100000 + Math.random() * 900000)}`;
     const id = `ORD-${Math.floor(100000 + Math.random() * 900000)}`;
     
     // Deduct stock for each item in the order
@@ -2421,6 +2421,11 @@ class Database {
 
   public getOrders(): Order[] {
     return this.state.orders;
+  }
+
+  public clearAllOrders() {
+    this.state.orders = [];
+    this.save();
   }
 
   public getOrder(id: string): Order | undefined {

@@ -40,6 +40,7 @@ interface AppContextType {
   updateCartQty: (productId: string, quantity: number) => Promise<void>;
   removeFromCart: (productId: string) => Promise<void>;
   placeOrder: (shippingDetails: ShippingDetails, paymentMethod: 'card' | 'jazzcash' | 'easypaisa' | 'cod', paymentDetails?: any) => Promise<Order | null>;
+  clearUserOrders: () => void;
   trackOrder: (orderId: string) => Promise<Order | null>;
   dismissAlert: (id: string) => void;
   addToast: (message: string, type?: 'info' | 'success' | 'warn') => void;
@@ -96,6 +97,7 @@ const defaultContextValue: AppContextType = {
   updateCartQty: async () => {},
   removeFromCart: async () => {},
   placeOrder: async () => null,
+  clearUserOrders: () => {},
   trackOrder: async () => null,
   dismissAlert: () => {},
   addToast: () => {},
@@ -129,8 +131,23 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   const [selectedProductId, setSelectedProductId] = useState<string | null>(null);
   const [userId, setUserId] = useState<string>('');
   const [trackedOrder, setTrackedOrder] = useState<Order | null>(null);
-  const [userOrders, setUserOrders] = useState<Order[]>([]);
-  const [user, setUser] = useState<{ name: string; email: string; phone?: string } | null>(null);
+  const [userOrders, setUserOrders] = useState<Order[]>(() => {
+    try {
+      localStorage.removeItem('rotba_user_orders');
+      const saved = localStorage.getItem('rotba_user_orders_v2');
+      return saved ? JSON.parse(saved) : [];
+    } catch (_) {
+      return [];
+    }
+  });
+  const [user, setUser] = useState<{ name: string; email: string; phone?: string } | null>(() => {
+    try {
+      const saved = localStorage.getItem('rotba_user_profile');
+      return saved ? JSON.parse(saved) : null;
+    } catch (_) {
+      return null;
+    }
+  });
   const [loading, setLoading] = useState(true);
   const [isAuthModalOpen, setAuthModalOpen] = useState<boolean>(false);
   const [wishlist, setWishlist] = useState<string[]>([]);
@@ -141,33 +158,43 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     const fetchUserOrders = async () => {
-      if (!userId && !user?.email) return;
+      let emailQuery = user?.email || '';
+      if (!emailQuery) {
+        try {
+          const savedProfile = localStorage.getItem('rotba_user_profile');
+          if (savedProfile) {
+            const parsed = JSON.parse(savedProfile);
+            emailQuery = parsed?.email || '';
+          }
+        } catch (_) {}
+      }
+
       try {
         const query = new URLSearchParams();
         if (userId) query.append('userId', userId);
-        if (user?.email) query.append('email', user.email);
+        if (emailQuery) query.append('email', emailQuery);
         
         const res = await fetch(`/api/orders?${query.toString()}`);
         if (res.ok) {
           const data: Order[] = await res.json();
           const hydratedOrders = data.map(ord => ({
             ...ord,
-            items: ord.items.map(item => ({
+            items: (ord.items || []).map(item => ({
               ...item,
               product: item.product || products.find(p => p.id === item.productId) || staticCatalog.find(p => p.id === item.productId)
             }))
           }));
-          setUserOrders(hydratedOrders as Order[]);
-          if (hydratedOrders.length > 0 && !trackedOrder) {
-            setTrackedOrder(hydratedOrders[0] as Order);
-          }
+          setUserOrders(hydratedOrders);
+          try {
+            localStorage.setItem('rotba_user_orders_v2', JSON.stringify(hydratedOrders));
+          } catch (_) {}
         }
       } catch (e) {
         console.error('Error fetching user orders:', e);
       }
     };
     fetchUserOrders();
-  }, [userId, user, trackedOrder, products]);
+  }, [userId, user?.email]);
   const [globalViewers, setGlobalViewers] = useState<number>(12);
   const [liveAlerts, setLiveAlerts] = useState<AppContextType['liveAlerts']>([]);
   const [flyingItems, setFlyingItems] = useState<AppContextType['flyingItems']>([]);
@@ -176,6 +203,10 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   const setCurrency = (cur: CurrencyCode) => {
     setCurrencyState(cur);
     localStorage.setItem('rotba_currency', cur);
+    const info = CURRENCIES[cur];
+    if (info) {
+      addToast(`✦ Region & Currency updated to ${info.country} (${info.code}) ✦`, 'success');
+    }
   };
 
   const formatPrice = (priceInPKR: number) => {
@@ -741,9 +772,26 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     if (!cart || cart.items.length === 0) return null;
 
     const subtotal = cart.items.reduce((sum, item) => sum + ((item.product?.price || 0) * item.quantity), 0);
-    const shippingCost = subtotal >= 500 ? 0 : 15;
+    
+    const cardShippingFee = typeof settings?.cardShippingFee !== 'undefined' ? Number(settings.cardShippingFee) : 15;
+    const codShippingFee = typeof settings?.codShippingFee !== 'undefined' ? Number(settings.codShippingFee) : 25;
+    const freeLimit = typeof settings?.freeShippingThreshold !== 'undefined' ? Number(settings.freeShippingThreshold) : 500;
+
+    const isLocalPakistan = shippingDetails.country && (
+      shippingDetails.country.toLowerCase() === 'pakistan' || 
+      shippingDetails.country.toLowerCase() === 'pk'
+    );
+
+    let shippingCost = !isLocalPakistan 
+      ? 100 
+      : (paymentMethod === 'card' ? cardShippingFee : codShippingFee);
+
+    if (isLocalPakistan && subtotal >= freeLimit) {
+      shippingCost = 0;
+    }
+
     const total = subtotal + shippingCost;
-    const trackingNumber = `ZR-${Math.floor(100000 + Math.random() * 900000)}`;
+    const trackingNumber = `RR-${Math.floor(100000 + Math.random() * 900000)}`;
     const id = `ORD-${Math.floor(100000 + Math.random() * 900000)}`;
 
     const verifiedItems: (CartItem & { product: Product })[] = cart.items.map(item => ({
@@ -771,12 +819,38 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
       items: verifiedItems,
       shippingDetails,
       paymentMethod,
+      paymentDetails,
       subtotal,
       shippingCost,
       total,
       status: 'Pending',
       trackingNumber,
       createdAt: new Date().toISOString()
+    };
+
+    const saveOrderLocal = (newOrder: Order) => {
+      setUserOrders(prev => {
+        const next = [newOrder, ...prev.filter(o => o.id !== newOrder.id)];
+        try {
+          localStorage.setItem('rotba_user_orders', JSON.stringify(next));
+        } catch (_) {}
+        return next;
+      });
+      if (shippingDetails.email) {
+        const profile = { 
+          name: shippingDetails.name, 
+          email: shippingDetails.email, 
+          phone: shippingDetails.phone,
+          address: shippingDetails.address,
+          city: shippingDetails.city,
+          postalCode: shippingDetails.postalCode,
+          country: shippingDetails.country 
+        };
+        setUser(profile);
+        try {
+          localStorage.setItem('rotba_user_profile', JSON.stringify(profile));
+        } catch (_) {}
+      }
     };
 
     try {
@@ -804,7 +878,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
         setCart({ userId: userId || 'guest', items: [] });
         localStorage.removeItem('rotba_guest_cart');
         setTrackedOrder(hydratedOrder);
-        setUserOrders(prev => [hydratedOrder, ...prev]);
+        saveOrderLocal(hydratedOrder);
         setActivePage('orders');
         return hydratedOrder;
       }
@@ -815,9 +889,20 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     setCart({ userId: userId || 'guest', items: [] });
     localStorage.removeItem('rotba_guest_cart');
     setTrackedOrder(fallbackOrder);
-    setUserOrders(prev => [fallbackOrder, ...prev]);
+    saveOrderLocal(fallbackOrder);
     setActivePage('orders');
     return fallbackOrder;
+  };
+
+  const clearUserOrders = async () => {
+    setUserOrders([]);
+    setTrackedOrder(null);
+    try {
+      localStorage.removeItem('rotba_user_orders');
+      localStorage.removeItem('rotba_user_orders_v2');
+      await fetch('/api/orders/clear-all', { method: 'POST' });
+    } catch (_) {}
+    addToast('Order history cleared.', 'info');
   };
 
   // 9. Order tracking
@@ -890,6 +975,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
       updateCartQty,
       removeFromCart,
       placeOrder,
+      clearUserOrders,
       trackOrder,
       dismissAlert,
       addToast,

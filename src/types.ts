@@ -1,7 +1,7 @@
 export type FabricType = 'Lawn' | 'Chiffon' | 'Silk' | 'Cotton' | 'Organza' | string;
 export type SuitType = 'Embroidered' | 'Printed' | string;
 
-export type CurrencyCode = 'PKR' | 'AED' | 'SAR' | 'AUD' | 'SGD' | 'HKD' | 'MYR' | 'GBP';
+export type CurrencyCode = 'PKR' | 'USD' | 'AED' | 'SAR' | 'AUD' | 'SGD' | 'HKD' | 'MYR' | 'GBP';
 
 export interface CurrencyInfo {
   code: CurrencyCode;
@@ -14,6 +14,7 @@ export interface CurrencyInfo {
 
 export const CURRENCIES: Record<CurrencyCode, CurrencyInfo> = {
   PKR: { code: 'PKR', country: 'Pakistan', flag: '🇵🇰', flagCode: 'pk', symbol: 'PKR', rateInPKR: 1 },
+  USD: { code: 'USD', country: 'United States', flag: '🇺🇸', flagCode: 'us', symbol: '$', rateInPKR: 278.5 },
   AED: { code: 'AED', country: 'United Arab Emirates', flag: '🇦🇪', flagCode: 'ae', symbol: 'AED', rateInPKR: 76 },
   SAR: { code: 'SAR', country: 'Saudi Arabia', flag: '🇸🇦', flagCode: 'sa', symbol: 'SAR', rateInPKR: 74.3 },
   AUD: { code: 'AUD', country: 'Australia', flag: '🇦🇺', flagCode: 'au', symbol: 'AUD', rateInPKR: 182.5 },
@@ -66,7 +67,18 @@ export interface ShippingDetails {
   phone: string;
   address: string;
   city: string;
+  postalCode?: string;
   country: string;
+}
+
+export interface UserProfile {
+  name: string;
+  email: string;
+  phone?: string;
+  address?: string;
+  city?: string;
+  postalCode?: string;
+  country?: string;
 }
 
 export interface Order {
@@ -77,6 +89,7 @@ export interface Order {
   paymentMethod: 'card' | 'jazzcash' | 'easypaisa' | 'cod';
   paymentDetails?: {
     accountNumber?: string;
+    cardHolder?: string;
     transactionId?: string;
   };
   subtotal: number;

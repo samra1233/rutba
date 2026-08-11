@@ -1,3 +1,6 @@
+import dotenv from 'dotenv';
+dotenv.config();
+
 import express from 'express';
 import http from 'http';
 import path from 'path';
@@ -6,8 +9,12 @@ import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { WebSocketServer, WebSocket } from 'ws';
 import { createServer as createViteServer } from 'vite';
+import Stripe from 'stripe';
 import { db } from './src/db';
 import { Product, CartItem, Order, ShippingDetails } from './src/types';
+
+const stripeSecretKey = process.env.STRIPE_SECRET_KEY || '';
+const stripe = stripeSecretKey ? new Stripe(stripeSecretKey) : null;
 
 const PORT = 3000;
 const app = express();
@@ -271,21 +278,22 @@ app.post('/api/orders', (req, res) => {
     });
   }
 
-  // Delivery costs: UAE/Local dynamic from DB, International AED 100
+  // Delivery costs: Pakistan Local dynamic from DB, International AED 100
   const storeSettings = db.getSettings();
   const cardShippingFee = typeof storeSettings.cardShippingFee !== 'undefined' ? Number(storeSettings.cardShippingFee) : 15;
   const codShippingFee = typeof storeSettings.codShippingFee !== 'undefined' ? Number(storeSettings.codShippingFee) : 25;
   const freeLimit = typeof storeSettings.freeShippingThreshold !== 'undefined' ? Number(storeSettings.freeShippingThreshold) : 500;
 
-  const isInternational = shippingDetails.country && 
-    shippingDetails.country.toLowerCase() !== 'united arab emirates' && 
-    shippingDetails.country.toLowerCase() !== 'uae';
+  const isLocalPakistan = shippingDetails.country && (
+    shippingDetails.country.toLowerCase() === 'pakistan' || 
+    shippingDetails.country.toLowerCase() === 'pk'
+  );
     
-  let shippingCost = isInternational 
+  let shippingCost = !isLocalPakistan 
     ? 100 
     : (paymentMethod === 'card' ? cardShippingFee : codShippingFee);
     
-  if (!isInternational && subtotal >= freeLimit) {
+  if (isLocalPakistan && subtotal >= freeLimit) {
     shippingCost = 0; // free shipping limit reached!
   }
   
@@ -326,6 +334,53 @@ app.post('/api/orders', (req, res) => {
   });
 
   res.status(201).json(order);
+});
+
+// 5.5 Stripe Real-Time Payment Intent Endpoint
+app.post('/api/create-payment-intent', async (req, res) => {
+  try {
+    const { amount, currency = 'usd', customerEmail } = req.body;
+    const amountInCents = Math.max(50, Math.round(Number(amount) * 100));
+
+    const currentKey = process.env.STRIPE_SECRET_KEY || stripeSecretKey;
+
+    if (!currentKey || currentKey.startsWith('mock_')) {
+      const mockId = `pi_demo_${Date.now()}_${Math.floor(1000 + Math.random() * 9000)}`;
+      return res.json({
+        clientSecret: `${mockId}_secret_demo`,
+        paymentIntentId: mockId,
+        isMock: true,
+        message: 'Stripe real-time intent initialized in Test/Demo Mode'
+      });
+    }
+
+    const liveStripe = new Stripe(currentKey);
+    const paymentIntent = await liveStripe.paymentIntents.create({
+      amount: amountInCents,
+      currency: currency.toLowerCase(),
+      receipt_email: customerEmail || undefined,
+      automatic_payment_methods: { enabled: true },
+    });
+
+    res.json({
+      clientSecret: paymentIntent.client_secret,
+      paymentIntentId: paymentIntent.id,
+      isMock: false
+    });
+  } catch (err: any) {
+    console.error('Stripe PaymentIntent error:', err);
+    res.status(400).json({ error: err.message || 'Payment intent creation failed' });
+  }
+});
+
+app.delete('/api/orders/clear-all', (req, res) => {
+  db.clearAllOrders();
+  res.json({ success: true, message: 'All orders cleared' });
+});
+
+app.post('/api/orders/clear-all', (req, res) => {
+  db.clearAllOrders();
+  res.json({ success: true, message: 'All orders cleared' });
 });
 
 // 6. Order Tracking & List Orders

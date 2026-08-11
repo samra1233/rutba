@@ -22,6 +22,7 @@ import Admin from './page/Admin';
 import NotFoundPage from './page/NotFoundPage';
 import SplashLoader from './components/SplashLoader';
 import AmbientPlayer from './components/AmbientPlayer';
+import WhatsAppWidget from './components/WhatsAppWidget';
 import { AboutPage, ContactPage, OrderTrackingPage, PoliciesPage } from './page/ContentPages';
 import { motion, AnimatePresence } from 'motion/react';
 import WishlistDrawer from './components/WishlistDrawer';
@@ -161,6 +162,9 @@ function MainLayout() {
 
       {/* Ambient background music player */}
       <AmbientPlayer />
+
+      {/* Floating 24/7 WhatsApp Customer Support Widget */}
+      <WhatsAppWidget />
 
       {/* 4. REAL-TIME EVENT POPUP TOASTS (existing — bottom-right) */}
       <div className="fixed bottom-20 md:bottom-6 right-4 z-50 flex flex-col gap-2.5 max-w-sm w-full pointer-events-none">

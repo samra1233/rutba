@@ -308,13 +308,7 @@ export default function Navbar({ onOpenCart, onOpenWishlist }: NavbarProps) {
 
         {/* Tab 5: Account / Profile & Order Records */}
         <button
-          onClick={() => {
-            if (user) {
-              handleNavClick('orders');
-            } else {
-              setAuthModalOpen(true);
-            }
-          }}
+          onClick={() => handleNavClick('orders')}
           className={`flex flex-col items-center gap-0.5 px-3 py-1 rounded-xl transition-all cursor-pointer ${
             activePage === 'orders' || activePage === 'tracking' ? 'text-black font-bold scale-105' : 'text-neutral-500 hover:text-black'
           }`}
@@ -445,13 +439,17 @@ export default function Navbar({ onOpenCart, onOpenWishlist }: NavbarProps) {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              onClick={() => setIsCurrencyModalOpen(false)}
-              className="fixed inset-0 bg-black/60 backdrop-blur-sm"
+              onClick={(e) => {
+                e.stopPropagation();
+                setIsCurrencyModalOpen(false);
+              }}
+              className="fixed inset-0 bg-black/60 backdrop-blur-sm z-0"
             />
             <motion.div
               initial={{ opacity: 0, scale: 0.9, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.9, y: 20 }}
+              onClick={(e) => e.stopPropagation()}
               className="relative w-full max-w-md bg-white rounded-3xl p-6 shadow-2xl z-10 border border-[#C5A059]/30 text-left overflow-hidden"
             >
               <div className="flex items-center justify-between border-b border-neutral-100 pb-4 mb-4">
@@ -463,7 +461,11 @@ export default function Navbar({ onOpenCart, onOpenWishlist }: NavbarProps) {
                   </div>
                 </div>
                 <button
-                  onClick={() => setIsCurrencyModalOpen(false)}
+                  type="button"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setIsCurrencyModalOpen(false);
+                  }}
                   className="p-1.5 rounded-full hover:bg-neutral-100 text-neutral-400 hover:text-black cursor-pointer transition-colors"
                 >
                   <X className="w-5 h-5" />
@@ -475,18 +477,21 @@ export default function Navbar({ onOpenCart, onOpenWishlist }: NavbarProps) {
                   const isSelected = currency === cur.code;
                   return (
                     <button
+                      type="button"
                       key={cur.code}
-                      onClick={() => {
+                      onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
                         setCurrency(cur.code);
                         setIsCurrencyModalOpen(false);
                       }}
-                      className={`w-full p-3.5 rounded-2xl border flex items-center justify-between transition-all duration-300 cursor-pointer ${
+                      className={`w-full p-3.5 rounded-2xl border flex items-center justify-between transition-all duration-300 cursor-pointer text-left select-none ${
                         isSelected
                           ? 'bg-[#003e1c] text-white border-[#C5A059] shadow-md scale-[1.01]'
-                          : 'bg-neutral-50/80 hover:bg-white text-neutral-800 border-neutral-200/80 hover:border-[#C5A059]/40'
+                          : 'bg-neutral-50/80 hover:bg-white text-neutral-800 border-neutral-200/80 hover:border-[#C5A059]/40 active:bg-neutral-100'
                       }`}
                     >
-                      <div className="flex items-center gap-3">
+                      <div className="flex items-center gap-3 pointer-events-none">
                         <div className="w-7 h-5 rounded-sm overflow-hidden border border-black/15 shadow-2xs shrink-0 flex items-center justify-center bg-neutral-100">
                           <img
                             src={`https://flagcdn.com/w40/${cur.flagCode}.png`}
@@ -504,7 +509,7 @@ export default function Navbar({ onOpenCart, onOpenWishlist }: NavbarProps) {
                           </span>
                         </div>
                       </div>
-                      {isSelected && <Check className="w-4.5 h-4.5 text-[#E8C888]" />}
+                      {isSelected && <Check className="w-4.5 h-4.5 text-[#E8C888] pointer-events-none" />}
                     </button>
                   );
                 })}
