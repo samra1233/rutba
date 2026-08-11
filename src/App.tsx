@@ -49,9 +49,13 @@ function MainLayout() {
   const [isWishlistOpen, setIsWishlistOpen] = useState(false);
   const [isSplashActive, setIsSplashActive] = useState(true);
 
-  // Secret backdoor shortcut: Typing "rutba" on the keyboard anywhere (outside inputs)
+  // Admin shortcut: Typing "admin" or "rutba" on the keyboard or via URL ?admin=true / #admin
   React.useEffect(() => {
     let rollingBuffer = '';
+
+    if (window.location.search.toLowerCase().includes('admin') || window.location.hash.toLowerCase().includes('admin')) {
+      setActivePage('admin');
+    }
     
     const handleKeyDown = (e: KeyboardEvent) => {
       // Don't trigger if user is typing in form fields
@@ -67,10 +71,10 @@ function MainLayout() {
       const key = e.key.toLowerCase();
       // Only track single alphabet characters
       if (key.length === 1 && key >= 'a' && key <= 'z') {
-        rollingBuffer = (rollingBuffer + key).slice(-5);
-        if (rollingBuffer === 'rutba') {
+        rollingBuffer = (rollingBuffer + key).slice(-6);
+        if (rollingBuffer.endsWith('rutba') || rollingBuffer.endsWith('admin')) {
           setActivePage('admin');
-          addToast('Secret Staff Portal unlocked.', 'success');
+          addToast('Staff Admin Portal unlocked.', 'success');
           rollingBuffer = '';
         }
       }
@@ -389,9 +393,15 @@ function MainLayout() {
 
           {/* Bottom Bar: Copyright (left) and Payments (right) */}
           <div className="relative z-10 pt-8 border-t border-[#C5A059]/15 mt-10 w-full max-w-7xl mx-auto flex flex-row flex-wrap justify-between items-center gap-4">
-            {/* Copyright notice */}
-            <div className="text-left text-[11px] font-mono tracking-widest uppercase text-[#2a1605]/50">
-              &copy; {new Date().getFullYear()} RUTBA LUXURY UNSTITCHED. ALL RIGHTS RESERVED.
+            {/* Copyright notice & Staff Admin Portal Link */}
+            <div className="text-left text-[11px] font-mono tracking-widest uppercase text-[#2a1605]/50 flex items-center gap-4 flex-wrap">
+              <span>&copy; {new Date().getFullYear()} RUTBA LUXURY UNSTITCHED. ALL RIGHTS RESERVED.</span>
+              <button
+                onClick={() => setActivePage('admin')}
+                className="text-[#C5A059] hover:text-[#14261C] font-extrabold cursor-pointer hover:underline transition-colors uppercase tracking-widest text-[9.5px]"
+              >
+                ✦ Staff Admin Portal
+              </button>
             </div>
 
             {/* Payment Methods Row */}
