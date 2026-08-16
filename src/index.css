@@ -83,7 +83,7 @@ html {
 
 body {
   font-family: var(--font-sans);
-  background-color: var(--color-brand-cream);
+  background-color: #f9f9f9;
   color: #1a1a1a;
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
@@ -139,13 +139,13 @@ h1, h2, h3, h4, h5, h6 {
    [NEW] HIGH-PERFORMANCE CUSTOM CURSOR SYSTEM
    ============================================================ */
 
-/* Hide native cursor on non-touch devices so ONLY the designed cursor is visible */
-@media (pointer: fine) {
+/* Standard default browser cursor restored */
+/* @media (pointer: fine) {
   .cursor-hide-native,
   .cursor-hide-native * {
-    cursor: none !important;
+    cursor: auto !important;
   }
-}
+} */
 
 /* 1. Precision Core Dot (Moves instantly for pixel-perfect user response) */
 /* 1. Precision Core Brand Logo Cursor (Moves instantly for pixel-perfect user response) */

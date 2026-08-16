@@ -24,6 +24,18 @@ export const CURRENCIES: Record<CurrencyCode, CurrencyInfo> = {
   GBP: { code: 'GBP', country: 'Scotland / UK', flag: '🏴󠁧󠁢󠁳󠁣󠁴󠁿', flagCode: 'gb', symbol: 'GBP', rateInPKR: 352.4 },
 };
 
+export interface CategoryDef {
+  id: string;
+  num: string;
+  label: string;
+  sublabel: string;
+  tag: string;
+  filterKey: string;
+  filterValue: string;
+  image: string;
+  isColor?: boolean;
+}
+
 export interface Product {
   id: string;
   name: string;

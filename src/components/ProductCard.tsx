@@ -62,27 +62,10 @@ export default function ProductCard({ product }: ProductCardProps) {
         damping: 24,
         opacity: { duration: 0.4 } 
       }}
-      className="product-card group flex flex-col w-full cursor-pointer transition-all duration-300 p-2 sm:p-3 rounded-xl sm:rounded-2xl bg-white"
-      style={{
-        border: '1px solid rgba(201, 164, 99, 0.16)',
-        boxShadow: '0 4px 20px -6px rgba(90, 54, 10, 0.04)',
-      }}
+      className="product-card group flex flex-col w-full cursor-pointer transition-all duration-300 p-2 sm:p-3 rounded-xl sm:rounded-2xl bg-white border border-neutral-200 shadow-sm hover:border-[#003e1c]/40 hover:shadow-md"
     >
-      {/* Image container frame (contained inside the glass card) */}
-      <div className="relative aspect-[3/4] w-full rounded-lg sm:rounded-xl overflow-hidden bg-neutral-100/50">
-        {/* Shimmer sweep effect on group hover (desktop only) */}
-        <div className="hidden md:block absolute inset-0 z-10 pointer-events-none overflow-hidden">
-          <motion.div
-            className="absolute inset-0 w-[200%] h-full bg-gradient-to-r from-transparent via-white/30 to-transparent skew-x-[-20deg]"
-            style={{ left: '-50%' }}
-            variants={{
-              hover: {
-                x: ['-100%', '100%'],
-              }
-            }}
-            transition={{ duration: 1.3, ease: [0.16, 1, 0.3, 1] }}
-          />
-        </div>
+      {/* Image container frame */}
+      <div className="relative aspect-[3/4] w-full rounded-lg sm:rounded-xl overflow-hidden bg-neutral-100">
         {/* Main image */}
         <img
           src={product.images[0]}
@@ -102,7 +85,7 @@ export default function ProductCard({ product }: ProductCardProps) {
         {/* Floating badges — top-left */}
         <div className="absolute top-3 left-3 flex flex-col gap-1 z-20">
           {product.stock === 0 && (
-            <span className="text-[8px] font-sans tracking-[0.12em] uppercase px-2.5 py-1 rounded bg-neutral-900/90 text-white font-bold border border-neutral-700/50 shadow-xs">
+            <span className="text-[8px] font-sans tracking-[0.12em] uppercase px-2.5 py-1 rounded bg-black/90 text-white font-bold border border-neutral-700/50 shadow-xs">
               OUT OF STOCK
             </span>
           )}
@@ -111,20 +94,20 @@ export default function ProductCard({ product }: ProductCardProps) {
         {/* Wishlist button */}
         <button
           onClick={handleWishlist}
-          className={`absolute top-3 right-3 z-30 w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300 cursor-pointer bg-white border border-neutral-200/80 shadow-xs ${
-            wishlisted ? 'text-rose-700 scale-100 opacity-100' : 'text-neutral-400 hover:text-rose-700 group-hover:opacity-100 group-hover:scale-100'
+          className={`absolute top-3 right-3 z-30 w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300 cursor-pointer bg-white/90 border border-neutral-200 backdrop-blur-md shadow-xs ${
+            wishlisted ? 'text-rose-500 scale-100 opacity-100' : 'text-neutral-600 hover:text-rose-500 group-hover:opacity-100 group-hover:scale-100'
           }`}
         >
-          <Heart className={`w-3.5 h-3.5 ${wishlisted ? 'fill-rose-700 text-rose-700' : ''}`} />
+          <Heart className={`w-3.5 h-3.5 ${wishlisted ? 'fill-rose-500 text-rose-500' : ''}`} />
         </button>
 
-        {/* Desktop Add to Bag - clean bottom slide-up overlay inside the image frame */}
+        {/* Desktop Add to Bag */}
         <button
           onClick={handleAddToCart}
           disabled={product.stock === 0 || adding}
-          className="hidden md:flex absolute bottom-0 left-0 right-0 py-3 bg-black hover:bg-neutral-800 text-white text-[9px] font-sans tracking-widest text-center justify-center items-center gap-1.5 translate-y-full group-hover:translate-y-0 transition-transform duration-300 cursor-pointer disabled:bg-neutral-800 disabled:cursor-not-allowed z-20 font-bold"
+          className="hidden md:flex absolute bottom-0 left-0 right-0 py-3.5 bg-[#003e1c] hover:bg-[#002f15] text-white text-[10px] font-sans tracking-widest text-center justify-center items-center gap-2 translate-y-full group-hover:translate-y-0 transition-transform duration-300 cursor-pointer disabled:bg-neutral-300 disabled:cursor-not-allowed z-20 font-bold shadow-md"
         >
-          <ShoppingBag className="w-3.5 h-3.5" />
+          <ShoppingBag className="w-3.5 h-3.5 text-white" />
           <span>{product.stock === 0 ? 'OUT OF STOCK' : adding ? 'ADDING...' : 'ADD TO BAG'}</span>
         </button>
 
@@ -132,24 +115,24 @@ export default function ProductCard({ product }: ProductCardProps) {
         <button
           onClick={handleAddToCart}
           disabled={product.stock === 0 || adding}
-          className="md:hidden absolute bottom-3 right-3 z-20 w-9 h-9 rounded-full bg-white border border-[#C5A059]/40 flex items-center justify-center text-[#C5A059] shadow-md active:scale-90 transition-transform"
+          className="md:hidden absolute bottom-3 right-3 z-20 w-9 h-9 rounded-full bg-[#003e1c] border border-neutral-200 flex items-center justify-center text-white shadow-md active:scale-90 transition-transform cursor-pointer"
         >
-          <ShoppingBag className="w-4 h-4" />
+          <ShoppingBag className="w-4 h-4 text-white" />
         </button>
       </div>
 
-      {/* ── Product Specifications Details (Below the Image Frame, inside the same glass parent) ── */}
+      {/* ── Product Specifications Details ── */}
       <div className="space-y-1.5 text-left px-1 mt-3">
         {/* Fabric and Type Tag row */}
-        <div className="flex items-center justify-between text-xs uppercase font-sans tracking-[0.14em] text-neutral-400 font-semibold">
+        <div className="flex items-center justify-between text-xs uppercase font-sans tracking-[0.14em] text-neutral-500 font-semibold">
           <span>{product.fabric} Suit • {product.type}</span>
-          <span className="text-[#C5A059] font-sans font-bold flex items-center gap-0.5 text-xs">
-            ★ <span className="text-neutral-500 font-semibold">{product.viewers > 8 ? '4.9' : '4.8'}</span>
+          <span className="text-[#003e1c] font-sans font-bold flex items-center gap-0.5 text-xs">
+            ★ <span className="text-neutral-700 font-semibold">{product.viewers > 8 ? '4.9' : '4.8'}</span>
           </span>
         </div>
 
         {/* Product Name */}
-        <h3 className="font-serif text-[#14261C] text-[16px] md:text-[18px] font-extrabold tracking-wide hover:text-[#C5A059] transition-colors line-clamp-1">
+        <h3 className="font-serif text-neutral-900 text-[16px] md:text-[18px] font-bold tracking-wide group-hover:text-[#003e1c] transition-colors line-clamp-1">
           {product.name}
         </h3>
 
@@ -171,14 +154,14 @@ export default function ProductCard({ product }: ProductCardProps) {
         <div className="flex items-baseline gap-2.5 pt-1 flex-wrap">
           {product.onSale && product.salePrice ? (
             <>
-              <span className="font-sans text-[17px] font-bold text-red-800">{formatPrice(product.salePrice)}</span>
+              <span className="font-sans text-[17px] font-bold text-rose-600">{formatPrice(product.salePrice)}</span>
               <span className="font-sans text-sm text-neutral-400 line-through">{formatPrice(product.price)}</span>
-              <span className="font-sans text-[13px] text-rose-700 font-bold tracking-wide">
+              <span className="font-sans text-[13px] text-rose-500 font-bold tracking-wide">
                 ({Math.round(((product.price - product.salePrice) / product.price) * 100)}% OFF)
               </span>
             </>
           ) : (
-            <span className="font-sans text-[17px] font-bold text-[#14261C]">{formatPrice(product.price)}</span>
+            <span className="font-sans text-[17px] font-bold text-[#003e1c]">{formatPrice(product.price)}</span>
           )}
         </div>
       </div>

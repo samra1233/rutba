@@ -112,8 +112,8 @@ function TrendingLookbookCard({ product, index, variants, onCardClick }: CardPro
         <button
           onClick={handleWishlist}
           className={`absolute top-4 right-4 z-30 w-10 h-10 rounded-full border backdrop-blur-md flex items-center justify-center transition-all duration-300 shadow-md cursor-pointer pointer-events-auto ${wishlisted
-            ? 'bg-[#C5A059] border-[#C5A059] text-white scale-110 shadow-lg'
-            : 'bg-[#FAF5F0]/85 border-[#C5A059]/30 text-neutral-800 hover:text-[#C5A059] hover:border-[#C5A059] hover:scale-105 hover:bg-[#FAF5F0]/95'
+            ? 'bg-[#003e1c] border-[#003e1c] text-white scale-110 shadow-lg'
+            : 'bg-white/90 border-neutral-200 text-neutral-700 hover:text-[#003e1c] hover:border-[#003e1c] hover:scale-105'
             }`}
           aria-label="Add to wishlist"
         >
@@ -123,23 +123,23 @@ function TrendingLookbookCard({ product, index, variants, onCardClick }: CardPro
         {/* Luxurious Floating Quick Add to Bag Glass Liquid Capsule */}
         <button
           onClick={handleAddToCart}
-          className="absolute bottom-4 left-4 right-4 z-30 py-3.5 bg-[#FAF5F0]/80 backdrop-blur-md text-[#111714] border border-[#C5A059]/45 rounded-xl flex items-center justify-center gap-2.5 font-mono text-[9px] uppercase tracking-[0.26em] font-extrabold cursor-pointer pointer-events-auto transition-all duration-300 opacity-0 translate-y-3 group-hover:opacity-100 group-hover:translate-y-0 hover:bg-[#C5A059] hover:text-black hover:border-[#C5A059] hover:shadow-[0_8px_25px_rgba(197,160,89,0.35)] active:scale-95"
+          className="absolute bottom-4 left-4 right-4 z-30 py-3.5 bg-[#003e1c] hover:bg-[#002f15] text-white border border-[#003e1c] rounded-xl flex items-center justify-center gap-2.5 font-mono text-[9px] uppercase tracking-[0.26em] font-extrabold cursor-pointer pointer-events-auto transition-all duration-300 opacity-0 translate-y-3 group-hover:opacity-100 group-hover:translate-y-0 hover:scale-102 hover:shadow-lg active:scale-95 shadow-md"
         >
-          <ShoppingBag className="w-4 h-4 shrink-0" />
-          <span>Add To Bag</span>
+          <ShoppingBag className="w-4 h-4 shrink-0 text-white" />
+          <span className="font-extrabold">Add To Bag</span>
         </button>
       </div>
 
-      {/* Details underneath the image container (clean Dawn-style on transparent background) */}
+      {/* Details underneath the image container */}
       <div className="mt-4 text-left space-y-2 px-1">
-        <h3 className="font-serif text-[#111714] text-[15px] font-medium leading-snug line-clamp-1 group-hover:text-[#C5A059] transition-colors duration-300">
+        <h3 className="font-serif text-neutral-900 text-[15px] font-medium leading-snug line-clamp-1 group-hover:text-[#003e1c] transition-colors duration-300">
           {product.name}
         </h3>
-        <div className="flex items-center justify-between pt-1 border-t border-black/5">
-          <span className="font-sans font-extrabold text-neutral-900 text-[14.5px] tracking-wide">
+        <div className="flex items-center justify-between pt-1 border-t border-neutral-200">
+          <span className="font-sans font-extrabold text-[#003e1c] text-[14.5px] tracking-wide">
             {formatPrice(product.price)}
           </span>
-          <span className="font-mono text-[8.5px] text-[#C5A059] bg-[#C5A059]/10 border border-[#C5A059]/20 font-bold px-2.5 py-0.5 rounded uppercase tracking-wider">
+          <span className="font-mono text-[8.5px] text-[#003e1c] bg-[#003e1c]/10 border border-[#003e1c]/20 font-bold px-2.5 py-0.5 rounded uppercase tracking-wider">
             {product.fabric} Suit
           </span>
         </div>
@@ -165,26 +165,22 @@ export default function TrendingSection() {
 
   return (
     <section
-      className="w-full py-24 relative overflow-hidden"
-      style={{ background: 'transparent' }}
+      className="w-full py-24 relative overflow-hidden bg-transparent"
     >
-      {/* Ambient glass light glow behind slider */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[300px] rounded-full bg-[#C5A059]/5 blur-[120px] pointer-events-none" />
-
       <div className="max-w-7xl mx-auto px-4 md:px-8 space-y-8 md:space-y-12 relative z-10">
 
         {/* ── Section Title & Navigation Row ── */}
-        <div className="flex flex-col gap-4 md:gap-6 border-b border-[#C5A059]/20 pb-4 md:pb-6 text-left">
+        <div className="flex flex-col gap-4 md:gap-6 border-b border-neutral-200 pb-4 md:pb-6 text-left">
           {/* Heading Row */}
           <div className="flex items-center justify-between gap-4 w-full">
             {/* Accent Line + Heading */}
-            <div className="flex items-center gap-3 border-l-[4px] md:border-l-[5px] border-[#143D30] pl-3 md:pl-4">
+            <div className="flex items-center gap-3 border-l-[4px] md:border-l-[5px] border-[#003e1c] pl-3 md:pl-4">
               <h2
-                className="text-xl sm:text-2xl md:text-3xl lg:text-4xl uppercase tracking-wider leading-none text-[#1A1A1A]"
+                className="text-xl sm:text-2xl md:text-3xl lg:text-4xl uppercase tracking-wider leading-none text-neutral-900"
                 style={{ fontFamily: 'var(--font-didot)', fontWeight: 400 }}
               >
-                <span className="text-[#1A1A1A]">SHOP </span>
-                <span className="text-[#143D30]">NOW</span>
+                <span className="text-neutral-900">SHOP </span>
+                <span className="text-[#003e1c]">NOW</span>
               </h2>
             </div>
 
@@ -193,40 +189,43 @@ export default function TrendingSection() {
               onClick={() => {
                 setActivePage('shop');
               }}
-              className="px-4 py-1.5 sm:px-6 sm:py-2 bg-gradient-to-b from-[#C5A059] to-[#9E7D3B] text-white/95 border border-[#8C6D2F] rounded-full text-[11px] sm:text-xs font-semibold tracking-wider hover:scale-105 active:scale-95 transition-all shadow-md cursor-pointer shrink-0"
+              className="px-4 py-2 sm:px-6 sm:py-2.5 bg-[#003e1c] hover:bg-[#002f15] text-white font-bold text-xs md:text-sm tracking-wider rounded-full shadow-md hover:scale-105 active:scale-95 transition-all duration-300 cursor-pointer shrink-0 border border-[#003e1c] text-center flex items-center justify-center"
               style={{ fontFamily: 'var(--font-avenir)' }}
             >
-              View All
+              <span className="font-bold">View All</span>
             </button>
           </div>
 
           {/* Tab Selection - Centered & Underlined */}
-          <div className="flex items-center justify-center pt-1 overflow-x-auto no-scrollbar">
-            <div className="flex gap-4 sm:gap-8 md:gap-12 whitespace-nowrap px-2">
+          <div className="flex items-center justify-center pt-2 overflow-x-auto no-scrollbar">
+            <div className="flex gap-6 sm:gap-10 md:gap-14 whitespace-nowrap px-2">
               {[
                 { id: 'ready-to-wear', label: 'Ready To Wear' },
                 { id: 'unstitched', label: 'Unstitched' },
                 { id: 'party-wear', label: 'Party Wear' }
-              ].map(tab => (
-                <button
-                  key={tab.id}
-                  onClick={() => setActiveTab(tab.id as TabType)}
-                  className="relative pb-2 font-medium text-xs sm:text-sm md:text-base tracking-wide transition-colors cursor-pointer"
-                  style={{
-                    color: activeTab === tab.id ? '#111714' : 'rgba(17, 23, 20, 0.6)',
-                    fontFamily: 'var(--font-avenir)'
-                  }}
-                >
-                  <span>{tab.label}</span>
-                  {activeTab === tab.id && (
-                    <motion.div
-                      layoutId="trendingActiveUnderline"
-                      className="absolute bottom-0 left-0 right-0 h-[2px] bg-[#111714]"
-                      transition={{ type: 'spring', stiffness: 350, damping: 25 }}
-                    />
-                  )}
-                </button>
-              ))}
+              ].map(tab => {
+                const isActive = activeTab === tab.id;
+                return (
+                  <button
+                    key={tab.id}
+                    onClick={() => setActiveTab(tab.id as TabType)}
+                    className="relative pb-2.5 font-bold text-xs sm:text-sm md:text-base tracking-widest uppercase transition-all duration-300 cursor-pointer group"
+                    style={{
+                      color: isActive ? '#003e1c' : '#737373',
+                      fontFamily: 'var(--font-avenir)'
+                    }}
+                  >
+                    <span className="transition-colors group-hover:text-black">{tab.label}</span>
+                    {isActive && (
+                      <motion.div
+                        layoutId="trendingActiveUnderline"
+                        className="absolute bottom-0 left-0 right-0 h-[2.5px] bg-[#003e1c] rounded-full"
+                        transition={{ type: 'spring', stiffness: 380, damping: 28 }}
+                      />
+                    )}
+                  </button>
+                );
+              })}
             </div>
           </div>
         </div>

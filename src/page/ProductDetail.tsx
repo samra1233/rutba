@@ -60,12 +60,9 @@ export default function ProductDetail() {
 
   return (
     <>
-    <div className="min-h-screen bg-white md:bg-[#FAF5F0] font-sans pb-24 selection:bg-neutral-200 selection:text-black relative overflow-hidden">
-      
-      {/* Background ambient luxury glows (desktop only) */}
-      <div className="hidden md:block absolute top-[10%] left-[-10%] w-[500px] h-[500px] bg-[#C5A059]/5 rounded-full blur-[140px] pointer-events-none" />
-      <div className="hidden md:block absolute bottom-[20%] right-[-10%] w-[450px] h-[450px] bg-[#143D30]/5 rounded-full blur-[120px] pointer-events-none" />
-
+    <div 
+      className="min-h-screen font-sans pb-24 bg-[#f9f9f9] text-neutral-900 relative overflow-hidden"
+    >
       {/* Space for the fixed Navbar */}
       <div className="pt-16 md:pt-28" />
 
@@ -74,7 +71,7 @@ export default function ProductDetail() {
           
           {/* LEFT: Sticky Image Gallery */}
           <div className="w-full lg:w-[45%] lg:sticky lg:top-8 space-y-4">
-             <div className="w-full bg-white/40 backdrop-blur-xs relative rounded-2xl overflow-hidden shadow-md border border-[#C5A059]/15 group/main">
+             <div className="w-full bg-white relative rounded-2xl overflow-hidden shadow-sm border border-neutral-200 group/main">
                 <AnimatePresence mode="wait">
                   <motion.img
                     key={activeImageIdx}
@@ -108,8 +105,8 @@ export default function ProductDetail() {
                       onClick={() => setActiveImageIdx(idx)}
                       className={`relative w-[70px] shrink-0 aspect-[3/4] rounded-xl overflow-hidden transition-all duration-300 ${
                         activeImageIdx === idx 
-                          ? 'ring-2 ring-[#C5A059] ring-offset-2 opacity-100 scale-102 shadow-md' 
-                          : 'opacity-50 border border-neutral-200 hover:opacity-100 shadow-xs'
+                          ? 'ring-2 ring-[#003e1c] ring-offset-2 ring-offset-white opacity-100 scale-102 shadow-md' 
+                          : 'opacity-50 border border-neutral-300 hover:opacity-100 shadow-xs'
                       }`}
                     >
                       <img src={img} className="w-full h-full object-cover" alt={`Thumbnail ${idx}`} />
@@ -121,30 +118,23 @@ export default function ProductDetail() {
 
           {/* RIGHT: Scrollable Details Column */}
           <div 
-            className="w-full lg:w-[55%] text-[#1a1a1a] p-6 md:p-8 rounded-2xl relative overflow-hidden bg-white shadow-xs"
-            style={{
-              border: '1px solid rgba(201, 164, 99, 0.18)',
-            }}
+            className="w-full lg:w-[55%] text-neutral-900 p-6 md:p-8 rounded-2xl relative overflow-hidden bg-white shadow-sm border border-neutral-200"
           >
-            {/* Liquid Glass Blobs (desktop only) */}
-            <div className="hidden md:block absolute top-[-10%] right-[-10%] w-[200px] h-[200px] bg-[#C5A059]/10 rounded-full blur-[60px] pointer-events-none" />
-            <div className="hidden md:block absolute bottom-[20%] left-[-10%] w-[180px] h-[180px] bg-[#C5A059]/5 rounded-full blur-[50px] pointer-events-none" />
-
             {/* Fabric/Type Tag Row */}
             <div className="flex items-center gap-2 mb-3 relative z-10">
-              <span className="inline-block font-sans text-[8px] uppercase tracking-widest text-[#C5A059] bg-[#C5A059]/10 px-2.5 py-1 rounded-md border border-[#C5A059]/15 font-extrabold">
+              <span className="inline-block font-sans text-[8px] uppercase tracking-widest text-[#003e1c] bg-[#003e1c]/10 px-2.5 py-1 rounded-md border border-[#003e1c]/20 font-extrabold">
                 {product.fabric} Suit
               </span>
-              <span className="inline-block font-sans text-[8px] uppercase tracking-widest text-neutral-600 bg-neutral-200/50 px-2.5 py-1 rounded-md border border-neutral-300/20 font-bold">
+              <span className="inline-block font-sans text-[8px] uppercase tracking-widest text-neutral-600 bg-neutral-100 px-2.5 py-1 rounded-md border border-neutral-200 font-bold">
                 {product.type}
               </span>
             </div>
             
             {/* Title, Wishlist Button & Price */}
-            <div className="border-b border-neutral-200/80 pb-6 mb-6 relative z-10">
+            <div className="border-b border-neutral-200 pb-6 mb-6 relative z-10">
               <div className="flex justify-between items-start gap-4 mb-3">
                 <h1 
-                  className="font-sans text-xl md:text-2xl lg:text-[28px] leading-snug text-[#14261C] font-semibold tracking-tight"
+                  className="font-serif text-xl md:text-2xl lg:text-[28px] leading-snug text-neutral-900 font-semibold tracking-wide"
                 >
                   {product.name}
                 </h1>
@@ -154,41 +144,41 @@ export default function ProductDetail() {
                   onClick={() => toggleWishlist(product.id)}
                   className={`w-9 h-9 rounded-full border flex items-center justify-center transition-all duration-300 cursor-pointer shadow-xs shrink-0 ${
                     wishlisted 
-                      ? 'bg-rose-50 border-rose-300/60 text-rose-600' 
-                      : 'bg-white/65 border-neutral-200 text-neutral-400 hover:text-rose-600 hover:border-rose-200'
+                      ? 'bg-rose-50 border-rose-300 text-rose-500' 
+                      : 'bg-neutral-100 border-neutral-200 text-neutral-500 hover:text-rose-500 hover:border-rose-400/40'
                   }`}
                   aria-label="Wishlist this item"
                 >
-                  <Heart className={`w-4 h-4 ${wishlisted ? 'fill-rose-600' : ''}`} />
+                  <Heart className={`w-4 h-4 ${wishlisted ? 'fill-rose-500' : ''}`} />
                 </motion.button>
               </div>
 
               <div className="flex items-baseline gap-2.5 flex-wrap">
                 {product.onSale && product.salePrice ? (
                   <>
-                    <span className="font-sans text-xl md:text-2xl font-bold text-red-800">
+                    <span className="font-serif text-xl md:text-2xl font-bold text-rose-600">
                       {formatPrice(product.salePrice)}
                     </span>
-                    <span className="font-sans text-sm text-neutral-400 line-through">
+                    <span className="font-serif text-sm text-neutral-400 line-through">
                       {formatPrice(product.price)}
                     </span>
-                    <span className="inline-block font-sans text-[8.5px] text-rose-700 bg-rose-50 px-2 py-0.5 rounded border border-rose-200 font-extrabold tracking-wider uppercase">
+                    <span className="inline-block font-sans text-[8.5px] text-rose-600 bg-rose-50 px-2 py-0.5 rounded border border-rose-200 font-extrabold tracking-wider uppercase">
                       {Math.round(((product.price - product.salePrice) / product.price) * 100)}% OFF
                     </span>
                   </>
                 ) : (
-                  <span className="font-sans text-xl md:text-2xl font-bold text-[#14261C]">
+                  <span className="font-serif text-2xl md:text-3xl font-bold text-[#003e1c]">
                     {formatPrice(product.price)}
                   </span>
                 )}
               </div>
-              <p className="text-[11px] text-neutral-500 mt-2 font-sans">Inclusive of all local VAT. Secured packing.</p>
+              <p className="text-[11px] text-neutral-500 mt-2 font-sans">Inclusive of all local VAT. Secured premium transit insured.</p>
             </div>
 
             {/* Color swatches */}
             {product.colors && product.colors.length > 0 && (
               <div className="mb-5 relative z-10">
-                <span className="block text-[11px] text-[#14261C] uppercase tracking-widest font-extrabold mb-2.5 font-sans">Select Color</span>
+                <span className="block text-[11px] text-neutral-700 uppercase tracking-widest font-extrabold mb-2.5 font-sans">Select Color</span>
                 <div className="flex flex-wrap gap-2">
                   {product.colors.map((color, idx) => {
                     const isSelected = selectedColor === color;
@@ -200,17 +190,17 @@ export default function ProductDetail() {
                         onClick={() => setSelectedColor(color)}
                         className={`flex items-center gap-1.5 rounded-lg px-3 py-2 cursor-pointer transition-all duration-300 border ${
                           isSelected
-                            ? 'bg-[#070B09] text-white border-[#C5A059]/50 shadow-sm'
-                            : 'bg-white/40 text-neutral-700 border border-neutral-300/30 hover:border-black/30 hover:bg-white/80 shadow-2xs'
+                            ? 'bg-[#003e1c] text-white border-[#003e1c] shadow-sm'
+                            : 'bg-neutral-50 text-neutral-800 border-neutral-200 hover:border-[#003e1c]/40 hover:bg-neutral-100'
                         }`}
                       >
                         <span
                           className={`w-3 h-3 rounded-full border transition-transform duration-300 ${
-                            isSelected ? 'border-white scale-110 shadow-sm' : 'border-neutral-300/60'
+                            isSelected ? 'border-white scale-110 shadow-sm' : 'border-neutral-300'
                           }`}
                           style={{ backgroundColor: getColorCode(color) }}
                         />
-                        <span className={`text-[9.5px] uppercase tracking-wider font-extrabold font-sans ${isSelected ? 'text-[#E8C888]' : 'text-neutral-700'}`}>
+                        <span className={`text-[9.5px] uppercase tracking-wider font-extrabold font-sans ${isSelected ? 'text-white' : 'text-neutral-700'}`}>
                           {color}
                         </span>
                       </motion.button>
@@ -223,12 +213,12 @@ export default function ProductDetail() {
             {/* Size Selector */}
             <div className="mb-5 relative z-10">
               <div className="flex justify-between items-end mb-2.5">
-                <span className="text-[11px] text-neutral-800 uppercase tracking-widest font-extrabold font-sans">Select Size</span>
+                <span className="text-[11px] text-neutral-700 uppercase tracking-widest font-extrabold font-sans">Select Size</span>
                 <button
                   onClick={() => setShowSizeChart(true)}
-                  className="flex items-center gap-1.5 text-xs text-neutral-500 hover:text-black transition-colors underline decoration-neutral-300 underline-offset-4 hover:decoration-black font-semibold cursor-pointer"
+                  className="flex items-center gap-1.5 text-xs text-neutral-500 hover:text-[#003e1c] transition-colors underline decoration-neutral-400 underline-offset-4 font-semibold cursor-pointer"
                 >
-                  <Ruler className="w-3.5 h-3.5 text-[#C5A059]" /> Size Chart
+                  <Ruler className="w-3.5 h-3.5 text-[#003e1c]" /> Size Chart
                 </button>
               </div>
               <div className="flex flex-wrap gap-2">
@@ -240,8 +230,8 @@ export default function ProductDetail() {
                     onClick={() => setSelectedSize(s)}
                     className={`w-10 h-10 rounded-lg flex items-center justify-center text-xs font-sans font-black transition-all duration-300 cursor-pointer ${
                       selectedSize === s 
-                        ? 'bg-[#070B09] text-white border border-[#C5A059]/40 shadow-md' 
-                        : 'bg-white/40 text-neutral-700 border border-neutral-300/40 backdrop-blur-sm hover:border-black hover:bg-white/80 shadow-2xs'
+                        ? 'bg-[#003e1c] text-white border border-[#003e1c] shadow-md' 
+                        : 'bg-neutral-50 text-neutral-800 border border-neutral-200 hover:border-[#003e1c]/40 hover:bg-neutral-100'
                     }`}
                   >
                     {s}
@@ -252,25 +242,25 @@ export default function ProductDetail() {
 
             {/* Quantity */}
             <div className="mb-5 relative z-10">
-              <span className="block text-[11px] text-neutral-800 uppercase tracking-widest font-extrabold font-sans mb-2.5">Quantity</span>
-              <div className="flex items-center bg-white/60 border border-[#C5A059]/25 rounded-full p-0.5 shadow-inner w-[120px] justify-between">
+              <span className="block text-[11px] text-neutral-700 uppercase tracking-widest font-extrabold font-sans mb-2.5">Quantity</span>
+              <div className="flex items-center bg-neutral-100 border border-neutral-200 rounded-full p-0.5 shadow-inner w-[120px] justify-between">
                 <motion.button 
-                  whileHover={{ scale: 1.1, backgroundColor: 'rgba(0,0,0,0.03)' }}
+                  whileHover={{ scale: 1.1, backgroundColor: 'rgba(0,0,0,0.05)' }}
                   whileTap={{ scale: 0.9 }}
                   onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                  className="w-8 h-8 rounded-full flex items-center justify-center text-neutral-600 hover:text-black transition-colors cursor-pointer"
+                  className="w-8 h-8 rounded-full flex items-center justify-center text-neutral-700 hover:text-black transition-colors cursor-pointer"
                   disabled={quantity <= 1}
                 >
-                  <Minus className="w-3 h-3" />
+                  <Minus className="w-3.5 h-3.5" />
                 </motion.button>
-                <span className="text-center font-sans font-black text-xs text-black inline-block min-w-4">{quantity}</span>
+                <span className="text-center font-sans font-black text-xs text-[#003e1c] inline-block min-w-4">{quantity}</span>
                 <motion.button 
-                  whileHover={{ scale: 1.1, backgroundColor: 'rgba(0,0,0,0.03)' }}
+                  whileHover={{ scale: 1.1, backgroundColor: 'rgba(0,0,0,0.05)' }}
                   whileTap={{ scale: 0.9 }}
                   onClick={() => setQuantity(quantity + 1)}
-                  className="w-8 h-8 rounded-full flex items-center justify-center text-neutral-600 hover:text-black transition-colors cursor-pointer"
+                  className="w-8 h-8 rounded-full flex items-center justify-center text-neutral-700 hover:text-black transition-colors cursor-pointer"
                 >
-                  <Plus className="w-3 h-3" />
+                  <Plus className="w-3.5 h-3.5" />
                 </motion.button>
               </div>
             </div>
@@ -282,80 +272,73 @@ export default function ProductDetail() {
                 whileTap={{ scale: 0.98 }}
                 onClick={handleAddToCart}
                 disabled={adding || product.stock === 0}
-                className="w-full group relative overflow-hidden py-4 px-6 rounded-xl bg-[#070B09] text-white font-sans text-xs uppercase tracking-[0.25em] font-black transition-all duration-300 cursor-pointer shadow-md disabled:opacity-50 disabled:cursor-not-allowed border border-[#C5A059]/20 flex items-center justify-center gap-2.5"
+                className="w-full group relative overflow-hidden py-4 px-6 rounded-xl bg-[#003e1c] hover:bg-[#002f15] text-white font-sans text-xs uppercase tracking-[0.25em] font-black transition-all duration-300 cursor-pointer shadow-md disabled:opacity-50 disabled:cursor-not-allowed border border-[#003e1c] flex items-center justify-center gap-2.5"
               >
-                <div className="absolute inset-0 bg-[#C5A059] translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-out z-0" />
-                <span className="relative z-10 flex items-center justify-center gap-2.5 group-hover:text-black">
+                <span className="relative z-10 flex items-center justify-center gap-2.5">
                   <ShoppingBag className="w-4 h-4 shrink-0 transition-transform duration-300 group-hover:scale-110" />
                   {product.stock === 0 ? 'Out of Stock' : adding ? 'Adding to your bag...' : 'Add to luxury bag'}
                 </span>
-                
-                {!adding && product.stock > 0 && (
-                  <span className="relative z-10 hidden sm:inline-block text-[8.5px] font-sans tracking-[0.15em] bg-[#C5A059]/25 text-[#E8C888] px-2 py-0.5 rounded-md border border-[#C5A059]/30 font-bold group-hover:bg-black/10 group-hover:text-black transition-colors duration-300">
-                    SECURE
-                  </span>
-                )}
               </motion.button>
 
               {/* Luxury Trust Indicators */}
-              <div className="grid grid-cols-3 gap-2 pt-3 border-t border-[#C5A059]/15">
-                <div className="flex flex-col items-center text-center p-1.5 rounded-lg bg-white/25 border border-[#C5A059]/10 backdrop-blur-xs">
-                  <ShieldCheck className="w-4 h-4 text-[#C5A059] mb-1" />
-                  <span className="text-[8px] font-extrabold font-sans uppercase tracking-wider text-neutral-800">Secured Checkout</span>
+              <div className="grid grid-cols-3 gap-2 pt-3 border-t border-neutral-200">
+                <div className="flex flex-col items-center text-center p-2 rounded-lg bg-neutral-50 border border-neutral-200">
+                  <ShieldCheck className="w-4 h-4 text-[#003e1c] mb-1" />
+                  <span className="text-[8px] font-extrabold font-sans uppercase tracking-wider text-neutral-700">Secured Checkout</span>
                 </div>
-                <div className="flex flex-col items-center text-center p-1.5 rounded-lg bg-white/25 border border-[#C5A059]/10 backdrop-blur-xs">
-                  <Truck className="w-4 h-4 text-[#C5A059] mb-1" />
-                  <span className="text-[8px] font-extrabold font-sans uppercase tracking-wider text-neutral-800">Free Delivery</span>
+                <div className="flex flex-col items-center text-center p-2 rounded-lg bg-neutral-50 border border-neutral-200">
+                  <Truck className="w-4 h-4 text-[#003e1c] mb-1" />
+                  <span className="text-[8px] font-extrabold font-sans uppercase tracking-wider text-neutral-700">Free Delivery</span>
                 </div>
-                <div className="flex flex-col items-center text-center p-1.5 rounded-lg bg-white/25 border border-[#C5A059]/10 backdrop-blur-xs">
-                  <RotateCcw className="w-4 h-4 text-[#C5A059] mb-1" />
-                  <span className="text-[8px] font-extrabold font-sans uppercase tracking-wider text-neutral-800">Easy Returns</span>
+                <div className="flex flex-col items-center text-center p-2 rounded-lg bg-neutral-50 border border-neutral-200">
+                  <RotateCcw className="w-4 h-4 text-[#003e1c] mb-1" />
+                  <span className="text-[8px] font-extrabold font-sans uppercase tracking-wider text-neutral-700">Easy Returns</span>
                 </div>
               </div>
             </div>
 
             {/* Description Details Card */}
-            <div className="mb-6 bg-white/50 backdrop-blur-md border border-[#C5A059]/15 rounded-xl p-5 shadow-xs relative z-10 font-sans text-xs md:text-[13px] text-neutral-700">
-              <div className="flex items-center justify-between pb-3 border-b border-[#C5A059]/10">
-                <span className="text-[#14261C] font-semibold tracking-wider text-[11px] uppercase">Specifications / Details</span>
-                <span className="text-[10px] text-neutral-400 uppercase font-sans font-extrabold tracking-wider">{product.type}</span>
+            <div className="mb-6 bg-neutral-50 border border-neutral-200 rounded-xl p-5 shadow-xs relative z-10 font-sans text-xs md:text-[13px] text-neutral-700">
+              <div className="flex items-center justify-between pb-3 border-b border-neutral-200">
+                <span className="text-neutral-900 font-semibold tracking-wider text-[11px] uppercase">Specifications / Details</span>
+                <span className="text-[10px] text-[#003e1c] uppercase font-sans font-extrabold tracking-wider">{product.type}</span>
               </div>
               
               <div className="space-y-3.5 pt-3.5">
-                <div className="flex items-start justify-between gap-4 text-xs font-medium text-[#14261C]">
-                  <span className="shrink-0">Shirt</span>
+                <div className="flex items-start justify-between gap-4 text-xs font-medium text-neutral-800">
+                  <span className="shrink-0 text-neutral-500">Shirt</span>
                   <span className="text-right">Complete Front Embroidered • Premium {product.fabric || 'Summer Cotton'}</span>
                 </div>
                 
-                <div className="h-px bg-[#C5A059]/5" />
+                <div className="h-px bg-neutral-200" />
                 
-                <div className="flex items-start justify-between gap-4 text-xs font-medium text-[#14261C]">
-                  <span className="shrink-0">Dupatta</span>
+                <div className="flex items-start justify-between gap-4 text-xs font-medium text-neutral-800">
+                  <span className="shrink-0 text-neutral-500">Dupatta</span>
                   <span className="text-right">Premium Flowy Chiffon Dupatta</span>
                 </div>
                 
-                <div className="h-px bg-[#C5A059]/5" />
+                <div className="h-px bg-neutral-200" />
                 
-                <div className="flex items-start justify-between gap-4 text-xs font-medium text-[#14261C]">
-                  <span className="shrink-0">Trouser</span>
+                <div className="flex items-start justify-between gap-4 text-xs font-medium text-neutral-800">
+                  <span className="shrink-0 text-neutral-500">Trouser</span>
                   <span className="text-right">Premium Cotton Lawn Trouser</span>
                 </div>
               </div>
 
-              <div className="pt-3.5 mt-3.5 border-t border-[#C5A059]/10 flex justify-between items-center text-[9.5px] text-neutral-500 font-sans uppercase tracking-wider font-extrabold">
+              <div className="pt-3.5 mt-3.5 border-t border-neutral-200 flex justify-between items-center text-[9.5px] text-neutral-500 font-sans uppercase tracking-wider font-extrabold">
                 <span>✨ Fit Info</span>
-                <span className="font-bold text-[#C5A059]">Model is wearing Small size</span>
+                <span className="font-bold text-[#003e1c]">Model is wearing Small size</span>
               </div>
             </div>
 
             {/* Accordions */}
-            <div className="border-t border-[#C5A059]/20 relative z-10">
+            <div className="border-t border-neutral-200 relative z-10">
               <button 
                 onClick={() => setOpenCare(!openCare)}
-                className="w-full py-3 flex justify-between items-center text-[11px] uppercase tracking-widest text-[#14261C] font-bold hover:text-[#C5A059] transition-colors"
+                className="w-full py-3 flex justify-between items-center text-[11px] uppercase tracking-widest text-neutral-800 font-bold hover:text-[#003e1c] transition-colors"
               >
                 <span>Care Instructions</span>
-                <ChevronDown className={`w-3.5 h-3.5 text-[#C5A059] transition-transform duration-300 ${openCare ? 'rotate-180' : ''}`} />
+                <ChevronDown className={`w-3.5 h-3.5 text-[#003e1c] transition-transform duration-300 ${openCare ? 'rotate-180' : ''}`} />
               </button>
               <AnimatePresence>
                 {openCare && (
@@ -373,13 +356,13 @@ export default function ProductDetail() {
               </AnimatePresence>
             </div>
 
-            <div className="border-t border-b border-[#C5A059]/20 mb-6 relative z-10">
+            <div className="border-t border-b border-neutral-200 mb-6 relative z-10">
               <button 
                 onClick={() => setOpenDisclaimer(!openDisclaimer)}
-                className="w-full py-3 flex justify-between items-center text-[11px] uppercase tracking-widest text-[#14261C] font-bold hover:text-[#C5A059] transition-colors"
+                className="w-full py-3 flex justify-between items-center text-[11px] uppercase tracking-widest text-neutral-800 font-bold hover:text-[#003e1c] transition-colors"
               >
                 <span>Disclaimer</span>
-                <ChevronDown className={`w-3.5 h-3.5 text-[#C5A059] transition-transform duration-300 ${openDisclaimer ? 'rotate-180' : ''}`} />
+                <ChevronDown className={`w-3.5 h-3.5 text-[#003e1c] transition-transform duration-300 ${openDisclaimer ? 'rotate-180' : ''}`} />
               </button>
               <AnimatePresence>
                 {openDisclaimer && (
@@ -398,8 +381,8 @@ export default function ProductDetail() {
             </div>
 
             {/* Share */}
-            <button className="inline-flex items-center gap-1.5 text-[10px] uppercase tracking-widest text-neutral-500 hover:text-black transition-colors font-black font-sans relative z-10 cursor-pointer group">
-              <Share className="w-3.5 h-3.5 text-[#C5A059] group-hover:scale-110 transition-transform" strokeWidth={2} />
+            <button className="inline-flex items-center gap-1.5 text-[10px] uppercase tracking-widest text-neutral-500 hover:text-[#003e1c] transition-colors font-black font-sans relative z-10 cursor-pointer group">
+              <Share className="w-3.5 h-3.5 text-[#003e1c] group-hover:scale-110 transition-transform" strokeWidth={2} />
               <span>Share this luxury piece</span>
             </button>
 
@@ -408,8 +391,8 @@ export default function ProductDetail() {
 
         {/* You May Also Like Section */}
         {relatedProducts.length > 0 && (
-          <div className="mt-16 md:mt-20 border-t border-[#C5A059]/20 pt-10 md:pt-12 pb-8">
-            <h2 className="text-xl md:text-2xl text-[#14261C] font-sans font-bold mb-6 tracking-tight">You May Also Like</h2>
+          <div className="mt-16 md:mt-20 border-t border-neutral-200 pt-10 md:pt-12 pb-8">
+            <h2 className="text-xl md:text-2xl text-neutral-900 font-serif font-bold mb-6 tracking-wide">You May Also Like</h2>
             <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-8 lg:gap-10">
               {relatedProducts.map(p => (
                 <ProductCard key={p.id} product={p} />
@@ -419,19 +402,19 @@ export default function ProductDetail() {
         )}
       </div>
 
-      {/* MOBILE STICKY BOTTOM BUY BAR — 1-Tap Mobile Shopping */}
-      <div className="lg:hidden fixed bottom-0 left-0 right-0 z-50 bg-[#0a1910]/95 backdrop-blur-xl border-t border-[#C5A059]/30 px-4 py-3 shadow-[0_-10px_30px_rgba(0,0,0,0.3)] flex items-center justify-between gap-4">
+      {/* MOBILE STICKY BOTTOM BUY BAR */}
+      <div className="lg:hidden fixed bottom-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-xl border-t border-neutral-200 px-4 py-3 shadow-lg flex items-center justify-between gap-4">
         <div className="flex flex-col">
-          <span className="text-[9px] font-mono uppercase tracking-widest text-[#E6C687]">TOTAL PRICE</span>
-          <span className="text-base font-mono font-bold text-white">{formatPrice(product.price)}</span>
+          <span className="text-[9px] font-mono uppercase tracking-widest text-[#003e1c]">TOTAL PRICE</span>
+          <span className="text-base font-mono font-bold text-neutral-900">{formatPrice(product.price)}</span>
         </div>
 
         <button
           onClick={handleAddToCart}
           disabled={product.stock === 0 || adding}
-          className="flex-1 max-w-[220px] py-3 px-5 bg-[linear-gradient(110deg,#D4AF37_0%,#C5A059_100%)] text-[#1A1A1A] font-bold text-xs uppercase tracking-wider rounded-xl shadow-lg active:scale-95 transition-all flex items-center justify-center gap-2 cursor-pointer disabled:bg-neutral-700"
+          className="flex-1 max-w-[220px] py-3 px-5 bg-[#003e1c] hover:bg-[#002f15] text-white font-bold text-xs uppercase tracking-wider rounded-xl shadow-md active:scale-95 transition-all flex items-center justify-center gap-2 cursor-pointer disabled:bg-neutral-400"
         >
-          <ShoppingBag className="w-4 h-4" />
+          <ShoppingBag className="w-4 h-4 text-white" />
           <span>{product.stock === 0 ? 'OUT OF STOCK' : adding ? 'ADDING...' : 'ADD TO BAG'}</span>
         </button>
       </div>
@@ -446,7 +429,7 @@ export default function ProductDetail() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={() => setShowSizeChart(false)}
-            className="fixed inset-0 z-[200] bg-black/70 backdrop-blur-sm cursor-pointer"
+            className="fixed inset-0 z-[200] bg-black/60 backdrop-blur-xs cursor-pointer"
           />
           <motion.div
             initial={{ opacity: 0, scale: 0.92, y: 30 }}
@@ -455,36 +438,36 @@ export default function ProductDetail() {
             transition={{ type: 'spring', stiffness: 280, damping: 26 }}
             className="fixed inset-0 z-[201] flex items-center justify-center p-4 pointer-events-none"
           >
-            <div className="relative bg-[#0a0a0a] rounded-3xl overflow-hidden shadow-2xl border border-[#C5A059]/30 pointer-events-auto w-full max-w-lg max-h-[90vh] flex flex-col">
+            <div className="relative bg-white rounded-3xl overflow-hidden shadow-2xl border border-neutral-200 pointer-events-auto w-full max-w-lg max-h-[90vh] flex flex-col text-neutral-900">
               {/* Header */}
-              <div className="flex items-center justify-between px-5 py-4 border-b border-[#C5A059]/20 shrink-0">
+              <div className="flex items-center justify-between px-5 py-4 border-b border-neutral-200 shrink-0">
                 <div className="flex items-center gap-2.5">
-                  <Ruler className="w-4 h-4 text-[#C5A059]" />
+                  <Ruler className="w-4 h-4 text-[#003e1c]" />
                   <div>
-                    <h3 className="font-serif text-base font-bold text-white tracking-wide">Size Chart</h3>
-                    <p className="text-[10px] font-mono text-[#C5A059] uppercase tracking-widest">All measurements in Inches</p>
+                    <h3 className="font-serif text-base font-bold text-neutral-900 tracking-wide">Size Chart</h3>
+                    <p className="text-[10px] font-mono text-[#003e1c] uppercase tracking-widest">All measurements in Inches</p>
                   </div>
                 </div>
                 <button
                   onClick={() => setShowSizeChart(false)}
-                  className="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-white transition-colors cursor-pointer"
+                  className="w-8 h-8 rounded-full bg-neutral-100 hover:bg-neutral-200 flex items-center justify-center text-neutral-700 transition-colors cursor-pointer"
                 >
                   <span className="text-lg leading-none">&times;</span>
                 </button>
               </div>
 
               {/* Size Chart Image */}
-              <div className="overflow-y-auto flex-1">
+              <div className="overflow-y-auto flex-1 p-2 bg-neutral-50">
                 <img
                   src="/size_chart.png"
                   alt="ROTBA Size Chart"
-                  className="w-full object-contain"
+                  className="w-full object-contain rounded-xl"
                 />
               </div>
 
               {/* Footer Note */}
-              <div className="px-5 py-3 border-t border-[#C5A059]/15 shrink-0 bg-[#111]">
-                <p className="text-[10px] text-neutral-400 font-sans text-center leading-relaxed">
+              <div className="px-5 py-3 border-t border-neutral-200 shrink-0 bg-neutral-50">
+                <p className="text-[10px] text-neutral-500 font-sans text-center leading-relaxed">
                   Measurements are approximate. For custom stitching queries contact us on WhatsApp.
                 </p>
               </div>

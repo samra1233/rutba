@@ -12,20 +12,15 @@ import { motion, useScroll, useTransform, AnimatePresence } from 'motion/react';
 
 /* ── Clean Editorial tokens ────────────────────────────────────────── */
 const GLASS_LIGHT = {
-  background: 'rgba(255, 255, 255, 0.85)',
-  backdropFilter: 'blur(20px)',
-  WebkitBackdropFilter: 'blur(20px)',
-  border: '1px solid rgba(201, 164, 99, 0.16)',
-  boxShadow: '0 4px 20px -4px rgba(90, 54, 10, 0.05)',
+  background: '#ffffff',
+  border: '1px solid rgba(0, 0, 0, 0.08)',
+  boxShadow: '0 4px 20px rgba(0, 0, 0, 0.05)',
 };
 
 const GLASS_DARK = {
-  background: 'rgba(14,25,19,0.62)',
-  backdropFilter: 'blur(26px) saturate(150%)',
-  WebkitBackdropFilter: 'blur(26px) saturate(150%)',
-  border: '1px solid rgba(201,164,99,0.18)',
-  boxShadow:
-    'inset 0 1px 0 rgba(255,225,170,0.12), 0 30px 70px -25px rgba(0,0,0,0.55)',
+  background: '#ffffff',
+  border: '1px solid rgba(0, 0, 0, 0.08)',
+  boxShadow: '0 4px 20px rgba(0, 0, 0, 0.05)',
 };
 
 interface LiquidBlobProps {
@@ -37,9 +32,9 @@ interface LiquidBlobProps {
 
 function LiquidBlob({ hue, size, className = '', style }: LiquidBlobProps) {
   const colors = {
-    gold: 'radial-gradient(circle, rgba(212,175,55,0.18) 0%, rgba(201,164,99,0.04) 70%, transparent 100%)',
-    wine: 'radial-gradient(circle, rgba(139,46,53,0.15) 0%, rgba(90,20,25,0.02) 75%, transparent 100%)',
-    emerald: 'radial-gradient(circle, rgba(20,38,28,0.16) 0%, rgba(10,25,18,0.02) 70%, transparent 100%)'
+    gold: 'radial-gradient(circle, rgba(212,175,55,0.08) 0%, rgba(201,164,99,0.01) 70%, transparent 100%)',
+    wine: 'radial-gradient(circle, rgba(139,46,53,0.06) 0%, rgba(90,20,25,0.01) 75%, transparent 100%)',
+    emerald: 'radial-gradient(circle, rgba(20,61,48,0.08) 0%, rgba(10,25,18,0.01) 70%, transparent 100%)'
   };
 
   const background = colors[hue] || colors.gold;
@@ -75,6 +70,25 @@ function LiquidBlob({ hue, size, className = '', style }: LiquidBlobProps) {
 
 const PRODUCTS_PER_PAGE = 30;
 
+const staggerContainer = {
+  hidden: { opacity: 0 },
+  show: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.05,
+    },
+  },
+};
+
+const fadeInUp = {
+  hidden: { opacity: 0, y: 15 },
+  show: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.35, ease: 'easeOut' },
+  },
+};
+
 export default function Shop() {
   const { products, activeFilters, updateFilters, loading, settings } = useApp();
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
@@ -98,115 +112,118 @@ export default function Shop() {
   const goToPage = (page: number) => {
     setCurrentPage(page);
     // Smooth scroll to grid top
-    setTimeout(() => {
-      gridRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }, 50);
+    if (gridRef.current) {
+      gridRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
   };
 
-  const clearAllFilters = () =>
-    updateFilters({
-      fabric: '', type: '', collection: '', sort: '', search: '', color: '',
-      sizes: '', season: '', sale: '', bestSeller: '', newArrival: '', category: '', pieces: ''
-    });
+  const handleColorFilter = (colorName: string) => {
+    updateFilters({ color: activeFilters.color === colorName ? '' : colorName });
+  };
 
-  const selectTopCategory = (key: 'bestSeller' | 'season' | 'newArrival', value: string) => {
+  const handleSizeFilter = (size: string) => {
+    updateFilters({ sizes: activeFilters.sizes === size ? '' : size });
+  };
+
+  const handlePriceFilter = (min: number | undefined, max: number | undefined) => {
+    updateFilters({ minPrice: min, maxPrice: max });
+  };
+
+  const handleSaleFilter = () => {
+    updateFilters({ sale: activeFilters.sale === 'true' ? '' : 'true' });
+  };
+
+  const clearAllFilters = () => {
     updateFilters({
-      bestSeller: key === 'bestSeller' ? value : '',
-      season: key === 'season' ? value : '',
-      newArrival: key === 'newArrival' ? value : '',
-      category: '', pieces: '', type: '', fabric: '', collection: ''
+      fabric: '',
+      type: '',
+      color: '',
+      sizes: '',
+      pieces: '',
+      season: '',
+      bestSeller: '',
+      newArrival: '',
+      category: '',
+      sale: '',
+      minPrice: undefined,
+      maxPrice: undefined,
+      search: '',
     });
   };
 
-  const selectCategoryOnly = (category: string) => {
-    updateFilters({
-      category,
-      bestSeller: '', newArrival: '', season: '', fabric: '', collection: '', pieces: '', type: ''
-    });
+  const selectTopCategory = (key: string, val: string) => {
+    if ((activeFilters as any)[key] === val && !activeFilters.category) {
+      updateFilters({ [key]: '', category: '', pieces: '', type: '' });
+    } else {
+      updateFilters({
+        fabric: '', type: '', color: '', sizes: '', pieces: '', season: '',
+        bestSeller: '', newArrival: '', category: '', sale: '',
+        [key]: val,
+      });
+    }
   };
 
-  const selectSubCategory = (category: 'Ready to Wear' | 'Unstitched', pieces: '2 Piece' | '3 Piece', type: 'Embroidered' | 'Printed') => {
-    updateFilters({
-      category, pieces, type,
-      bestSeller: '', newArrival: '', season: '', fabric: '', collection: ''
-    });
+  const selectSubCategory = (cat: string, pieces?: '2 Piece' | '3 Piece', type?: 'Printed' | 'Embroidered') => {
+    const isSame = activeFilters.category === cat && activeFilters.pieces === pieces && activeFilters.type === type;
+    if (isSame) {
+      updateFilters({ category: '', pieces: '', type: '' });
+    } else {
+      updateFilters({
+        fabric: '', color: '', sizes: '', season: '', bestSeller: '',
+        newArrival: '', sale: '',
+        category: cat,
+        pieces: pieces || '',
+        type: type || '',
+      });
+    }
   };
 
-  const handleColorFilter = (color: string) => updateFilters({ color: activeFilters.color === color ? '' : color });
-  const handleSizeFilter = (size: string) => updateFilters({ sizes: activeFilters.sizes === size ? '' : size });
-  const handleSeasonFilter = (season: string) => updateFilters({ season: activeFilters.season === season ? '' : season });
-  const toggleSaleFilter = () => updateFilters({ sale: activeFilters.sale === 'true' ? '' : 'true' });
-  const toggleBestSellerFilter = () => updateFilters({ bestSeller: activeFilters.bestSeller === 'true' ? '' : 'true' });
-
-  const hasActiveFilters = !!(
-    activeFilters.fabric || activeFilters.type || activeFilters.collection || activeFilters.search ||
-    activeFilters.color || activeFilters.sizes || activeFilters.season || activeFilters.sale ||
-    activeFilters.bestSeller || activeFilters.newArrival || activeFilters.category || activeFilters.pieces
+  const hasActiveFilters = Boolean(
+    activeFilters.fabric || activeFilters.type || activeFilters.color ||
+    activeFilters.sizes || activeFilters.pieces || activeFilters.season ||
+    activeFilters.bestSeller || activeFilters.newArrival || activeFilters.category ||
+    activeFilters.sale || activeFilters.minPrice !== undefined || activeFilters.maxPrice !== undefined
   );
 
-  const staggerContainer = {
-    hidden: { opacity: 0 },
-    show: { opacity: 1, transition: { staggerChildren: 0.05, delayChildren: 0.05 } }
-  };
-  const fadeInUp = {
-    hidden: { opacity: 0, y: 24 },
-    show: { opacity: 1, y: 0, transition: { type: 'spring' as const, stiffness: 85, damping: 14 } }
-  };
-
   const colorOptions = [
-    { name: 'Red', hex: '#7C1F1F' },
     { name: 'Gold', hex: '#C5A059' },
-    { name: 'Green', hex: '#8C9985' },
-    { name: 'Ivory', hex: '#FDFBF7', border: true },
-    { name: 'Peach', hex: '#F5C6A5' },
-    { name: 'Rose', hex: '#D39EAF' },
-    { name: 'Terracotta', hex: '#A85A3B' },
-    { name: 'Black', hex: '#1A1A1A' },
-    { name: 'Blue', hex: '#0C2340' },
+    { name: 'Emerald', hex: '#143D30' },
+    { name: 'Crimson', hex: '#7C1F1F' },
+    { name: 'Wine', hex: '#3D1220' },
+    { name: 'Ivory', hex: '#F9F6F0', border: true },
+    { name: 'Charcoal', hex: '#1A1A1A' },
   ];
 
-  const sizeOptions = ['Unstitched', 'S', 'M', 'L', 'XL'];
-  const seasonOptions = ['Summer', 'Festive'];
-  const marqueeText = settings?.homeMarqueeText || '✦ ROTBA Couture ✦ Unstitched Luxury ✦ Handloom Heritage ✦ Festive Archive ✦ Premium Lawn ✦ Chiffon Couture ✦ ';
+  const sizeOptions = ['XS', 'S', 'M', 'L', 'XL'];
+  const priceRanges = [
+    { label: 'Under 10k', min: 0, max: 10000 },
+    { label: '10k – 20k', min: 10000, max: 20000 },
+    { label: '20k – 30k', min: 20000, max: 30000 },
+    { label: '30k+', min: 30000, max: undefined },
+  ];
 
   /* Reusable glass pill button for the sidebar's top-level category rows */
   const CategoryRow = ({ active, onClick, children }: { active: boolean; onClick: () => void; children: React.ReactNode }) => (
     <motion.button
-      onClick={onClick}
       whileHover={{ x: 4 }}
       whileTap={{ scale: 0.98 }}
-      className={`w-full text-left font-sans text-xs tracking-[0.12em] uppercase py-3 px-4 rounded-xl transition-all duration-300 cursor-pointer flex items-center justify-between relative overflow-hidden ${active ? 'text-[#14261C] font-bold' : 'text-neutral-500 hover:text-[#14261C] hover:bg-white/40'
+      onClick={onClick}
+      className={`w-full flex items-center justify-between text-left font-serif text-sm py-2.5 px-3.5 rounded-xl transition-all cursor-pointer relative overflow-hidden ${active
+        ? 'text-[#003e1c] font-bold bg-[#003e1c]/10'
+        : 'text-neutral-700 hover:text-neutral-950 hover:bg-neutral-100'
         }`}
-      style={{ border: '1px solid transparent' }}
     >
-      {active && (
-        <motion.div
-          layoutId="activeCategoryBg"
-          className="absolute inset-0 z-0 rounded-xl"
-          style={{
-            background: 'linear-gradient(135deg, rgba(201,164,99,0.15), rgba(255,255,255,0.85))',
-            boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.6), 0 4px 12px -6px rgba(201,164,99,0.25)',
-            border: '1px solid rgba(201,164,99,0.25)',
-          }}
-          transition={{ type: "spring", stiffness: 300, damping: 26 }}
-        />
-      )}
       <span className="relative z-10">{children}</span>
       {active && (
-        <motion.span
-          layoutId="activeCategoryDot"
-          className="w-1.5 h-1.5 rounded-full relative z-10"
-          style={{ background: 'linear-gradient(135deg,#E8C888,#C5A059)' }}
-          transition={{ type: "spring", stiffness: 350, damping: 25 }}
-        />
+        <span className="w-1.5 h-1.5 rounded-full relative z-10 bg-[#003e1c]" />
       )}
     </motion.button>
   );
 
   const renderSidebarContent = () => (
-    <div className="space-y-7 text-left relative">
+    <div className="space-y-7 text-left relative text-neutral-900">
       <div className="space-y-4">
-        <h4 className="font-serif text-sm font-bold tracking-[0.2em] text-[#2a1605] uppercase border-b border-[#C9A463]/20 pb-2">
+        <h4 className="font-serif text-sm font-bold tracking-[0.2em] text-neutral-900 uppercase border-b border-neutral-200 pb-2">
           Category
         </h4>
         <div className="space-y-1.5">
@@ -220,15 +237,15 @@ export default function Shop() {
             New Arrival
           </CategoryRow>
 
-          <div className="h-px my-3" style={{ background: 'linear-gradient(90deg, transparent, rgba(201,164,99,0.25), transparent)' }} />
+          <div className="h-px my-3 bg-neutral-200" />
 
           <div className="space-y-1">
             <button
               onClick={() => setReadyToWearExpanded(!readyToWearExpanded)}
-              className="w-full flex items-center justify-between font-serif text-sm font-semibold tracking-wide py-2 px-1 text-[#14261C] cursor-pointer hover:text-[#C5A059] transition-colors"
+              className="w-full flex items-center justify-between font-serif text-sm font-semibold tracking-wide py-2 px-1 text-neutral-800 cursor-pointer hover:text-[#003e1c] transition-colors"
             >
               <span className="uppercase text-xs tracking-wider">Ready To Wear</span>
-              {readyToWearExpanded ? <ChevronUp className="w-4 h-4 text-[#C5A059]" /> : <ChevronDown className="w-4 h-4 text-[#C5A059]" />}
+              {readyToWearExpanded ? <ChevronUp className="w-4 h-4 text-[#003e1c]" /> : <ChevronDown className="w-4 h-4 text-[#003e1c]" />}
             </button>
             <AnimatePresence>
               {readyToWearExpanded && (
@@ -237,7 +254,7 @@ export default function Shop() {
                   animate={{ opacity: 1, height: 'auto' }}
                   exit={{ opacity: 0, height: 0 }}
                   transition={{ duration: 0.25 }}
-                  className="pl-3 border-l border-[#C9A463]/20 space-y-1 mt-1 overflow-hidden"
+                  className="pl-3 border-l border-neutral-200 space-y-1 mt-1 overflow-hidden"
                 >
                   {[
                     { pieces: '3 Piece', type: 'Embroidered', label: '3 pc Embroidered' },
@@ -250,7 +267,7 @@ export default function Shop() {
                       <button
                         key={sub.label}
                         onClick={() => selectSubCategory('Ready to Wear', sub.pieces as any, sub.type as any)}
-                        className={`w-full text-left font-sans text-xs py-2 px-2.5 rounded-lg transition-colors cursor-pointer block ${isActive ? 'text-[#C5A059] bg-[#C5A059]/5 font-bold' : 'text-neutral-500 hover:text-[#14261C] hover:bg-neutral-100/30'
+                        className={`w-full text-left font-sans text-xs py-2 px-2.5 rounded-lg transition-colors cursor-pointer block ${isActive ? 'text-[#003e1c] bg-[#003e1c]/10 font-bold' : 'text-neutral-600 hover:text-neutral-900 hover:bg-neutral-100'
                           }`}
                       >
                         {sub.label}
@@ -262,24 +279,24 @@ export default function Shop() {
             </AnimatePresence>
           </div>
 
-          <div className="h-px my-3" style={{ background: 'linear-gradient(90deg, transparent, rgba(201,164,99,0.25), transparent)' }} />
+          <div className="h-px my-3 bg-neutral-200" />
 
           <div className="space-y-1">
             <button
               onClick={() => setUnstitchedExpanded(!unstitchedExpanded)}
-              className="w-full flex items-center justify-between font-serif text-sm font-semibold tracking-wide py-2 px-1 text-[#14261C] cursor-pointer hover:text-[#C5A059] transition-colors"
+              className="w-full flex items-center justify-between font-serif text-sm font-semibold tracking-wide py-2 px-1 text-neutral-800 cursor-pointer hover:text-[#003e1c] transition-colors"
             >
               <span className="uppercase text-xs tracking-wider">Unstitched</span>
-              {unstitchedExpanded ? <ChevronUp className="w-4 h-4 text-[#C5A059]" /> : <ChevronDown className="w-4 h-4 text-[#C5A059]" />}
+              {unstitchedExpanded ? <ChevronUp className="w-4 h-4 text-[#003e1c]" /> : <ChevronDown className="w-4 h-4 text-[#003e1c]" />}
             </button>
             <AnimatePresence>
               {unstitchedExpanded && (
                 <motion.div
-                  initial={{ opacity: 0, height: 0 }}
-                  animate={{ opacity: 1, height: 'auto' }}
-                  exit={{ opacity: 0, height: 0 }}
+                  initial={{ height: 0, opacity: 0 }}
+                  animate={{ height: 'auto', opacity: 1 }}
+                  exit={{ height: 0, opacity: 0 }}
                   transition={{ duration: 0.25 }}
-                  className="pl-3 border-l border-[#C9A463]/20 space-y-1 mt-1 overflow-hidden"
+                  className="pl-3 border-l border-neutral-200 space-y-1 mt-1 overflow-hidden"
                 >
                   {[
                     { pieces: '3 Piece', type: 'Embroidered', label: '3 pc Embroidered' },
@@ -292,7 +309,7 @@ export default function Shop() {
                       <button
                         key={sub.label}
                         onClick={() => selectSubCategory('Unstitched', sub.pieces as any, sub.type as any)}
-                        className={`w-full text-left font-sans text-xs py-2 px-2.5 rounded-lg transition-colors cursor-pointer block ${isActive ? 'text-[#C5A059] bg-[#C5A059]/5 font-bold' : 'text-neutral-500 hover:text-[#14261C] hover:bg-neutral-100/30'
+                        className={`w-full text-left font-sans text-xs py-2 px-2.5 rounded-lg transition-colors cursor-pointer block ${isActive ? 'text-[#003e1c] bg-[#003e1c]/10 font-bold' : 'text-neutral-600 hover:text-neutral-900 hover:bg-neutral-100'
                           }`}
                       >
                         {sub.label}
@@ -303,18 +320,16 @@ export default function Shop() {
               )}
             </AnimatePresence>
           </div>
-
- 
         </div>
       </div>
 
       <div className="space-y-6">
-        <h4 className="font-serif text-sm font-bold tracking-[0.2em] text-[#2a1605] uppercase border-b border-[#C9A463]/20 pb-2">
+        <h4 className="font-serif text-sm font-bold tracking-[0.2em] text-neutral-900 uppercase border-b border-neutral-200 pb-2">
           Filters
         </h4>
 
         <div className="space-y-2.5">
-          <span className="text-xs uppercase font-mono tracking-widest text-neutral-400 block">Color</span>
+          <span className="text-xs uppercase font-mono tracking-widest text-neutral-500 block">Color</span>
           <div className="flex flex-wrap gap-2">
             {colorOptions.map(c => {
               const active = activeFilters.color === c.name;
@@ -328,7 +343,7 @@ export default function Shop() {
                   className={`w-7 h-7 rounded-full transition-all duration-300 relative cursor-pointer ${c.border ? 'border border-neutral-300' : ''}`}
                   style={{
                     backgroundColor: c.hex,
-                    boxShadow: active ? '0 0 0 3px rgba(255,255,255,0.9), 0 0 0 4.5px rgba(201,164,99,0.6), 0 6px 16px -4px rgba(201,164,99,0.5)' : 'none',
+                    boxShadow: active ? '0 0 0 3px #ffffff, 0 0 0 4.5px #003e1c, 0 4px 10px rgba(0,62,28,0.25)' : 'none',
                   }}
                 >
                   {active && (
@@ -343,24 +358,20 @@ export default function Shop() {
         </div>
 
         <div className="space-y-2.5">
-          <span className="text-xs uppercase font-mono tracking-widest text-neutral-400 block">Sizes</span>
+          <span className="text-xs uppercase font-mono tracking-widest text-neutral-500 block">Sizes</span>
           <div className="flex flex-wrap gap-1.5">
             {sizeOptions.map(sz => {
               const active = activeFilters.sizes === sz;
               return (
                 <motion.button
                   key={sz}
-                  whileHover={{ scale: 1.06, backgroundColor: active ? '' : 'rgba(255,255,255,0.85)' }}
+                  whileHover={{ scale: 1.06 }}
                   whileTap={{ scale: 0.96 }}
                   onClick={() => handleSizeFilter(sz)}
-                  className="px-4 py-2 text-xs font-semibold tracking-wider rounded-full cursor-pointer transition-all duration-300"
-                  style={active ? {
-                    background: 'linear-gradient(135deg,#14261C,#0b1510)', color: '#EAD9A0',
-                    border: '1px solid rgba(201,164,99,0.45)', boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.08)'
-                  } : {
-                    background: 'rgba(255,255,255,0.6)', color: '#57534e',
-                    border: '1px solid rgba(0,0,0,0.06)'
-                  }}
+                  className={`px-4 py-2 text-xs font-semibold tracking-wider rounded-full cursor-pointer transition-all duration-300 border ${active
+                    ? 'bg-[#003e1c] text-white border-[#003e1c] shadow-xs font-bold'
+                    : 'bg-neutral-50 text-neutral-700 border-neutral-200 hover:bg-neutral-100 hover:text-black'
+                    }`}
                 >
                   {sz}
                 </motion.button>
@@ -369,82 +380,33 @@ export default function Shop() {
           </div>
         </div>
 
-        <div className="space-y-2.5">
-          <span className="text-xs uppercase font-mono tracking-widest text-neutral-400 block">Season</span>
-          <div className="flex flex-wrap gap-1.5">
-            {seasonOptions.map(s => {
-              const active = activeFilters.season === s;
-              return (
-                <motion.button
-                  key={s}
-                  whileHover={{ scale: 1.06, backgroundColor: active ? '' : 'rgba(255,255,255,0.85)' }}
-                  whileTap={{ scale: 0.96 }}
-                  onClick={() => handleSeasonFilter(s)}
-                  className="px-4.5 py-2 text-xs font-semibold tracking-wider rounded-full cursor-pointer transition-all duration-300"
-                  style={active ? {
-                    background: 'linear-gradient(135deg,#14261C,#0b1510)', color: '#EAD9A0',
-                    border: '1px solid rgba(201,164,99,0.45)', boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.08)'
-                  } : {
-                    background: 'rgba(255,255,255,0.6)', color: '#57534e',
-                    border: '1px solid rgba(0,0,0,0.06)'
-                  }}
-                >
-                  {s}
-                </motion.button>
-              );
-            })}
-          </div>
-        </div>
-
-        <div className="space-y-3 pt-2">
-          <label className="flex items-center justify-between cursor-pointer group">
-            <span className="text-sm font-sans text-neutral-600 group-hover:text-[#14261C] transition-colors">On Sale Only</span>
-            <div className="relative">
-              <input type="checkbox" checked={activeFilters.sale === 'true'} onChange={toggleSaleFilter} className="sr-only" />
-              <div className="w-9 h-5 rounded-full transition-colors duration-300" style={{ background: activeFilters.sale === 'true' ? 'linear-gradient(135deg,#C5A059,#E8C888)' : 'rgba(0,0,0,0.1)' }} />
-              <div className={`absolute top-0.5 left-0.5 w-4 h-4 rounded-full bg-white shadow-md transition-transform duration-300 ${activeFilters.sale === 'true' ? 'translate-x-4' : 'translate-x-0'}`} />
-            </div>
-          </label>
-          <label className="flex items-center justify-between cursor-pointer group">
-            <span className="text-sm font-sans text-neutral-600 group-hover:text-[#14261C] transition-colors">Best Seller Only</span>
-            <div className="relative">
-              <input type="checkbox" checked={activeFilters.bestSeller === 'true'} onChange={toggleBestSellerFilter} className="sr-only" />
-              <div className="w-9 h-5 rounded-full transition-colors duration-300" style={{ background: activeFilters.bestSeller === 'true' ? 'linear-gradient(135deg,#C5A059,#E8C888)' : 'rgba(0,0,0,0.1)' }} />
-              <div className={`absolute top-0.5 left-0.5 w-4 h-4 rounded-full bg-white shadow-md transition-transform duration-300 ${activeFilters.bestSeller === 'true' ? 'translate-x-4' : 'translate-x-0'}`} />
-            </div>
-          </label>
-        </div>
-
+        {/* Reset button inside sidebar */}
         {hasActiveFilters && (
-          <button
+          <motion.button
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
             onClick={clearAllFilters}
-            className="w-full flex items-center justify-center gap-2 py-3 rounded-xl font-mono text-xs uppercase tracking-widest cursor-pointer transition-all duration-300 text-rose-800 hover:text-white hover:bg-rose-800"
-            style={{ background: 'rgba(225,29,72,0.05)', border: '1px solid rgba(225,29,72,0.15)' }}
+            className="w-full py-3 rounded-xl border border-rose-200 bg-rose-50 text-rose-700 hover:bg-rose-100 text-xs uppercase font-mono tracking-widest transition-all cursor-pointer flex items-center justify-center gap-2"
           >
             <RotateCcw className="w-3.5 h-3.5" />
             <span>Reset Filters</span>
-          </button>
+          </motion.button>
         )}
       </div>
     </div>
   );
 
   return (
-    <div className="min-h-screen relative bg-white pt-20 lg:pt-28 pb-20">
-      {/* Ambient liquid field (desktop only) */}
-      <div className="hidden md:block fixed inset-0 pointer-events-none overflow-hidden z-0">
-        <LiquidBlob hue="gold" size={620} className="-top-32 -left-32" />
-        <LiquidBlob hue="wine" size={520} className="top-1/2 -right-40" style={{ animationDelay: '4s' }} />
-        <LiquidBlob hue="emerald" size={460} className="bottom-0 left-1/3" style={{ animationDelay: '8s' }} />
-      </div>
-
+    <div 
+      className="min-h-screen relative pt-20 lg:pt-28 pb-20 bg-[#f9f9f9] text-neutral-900"
+    >
       {/* Centered Editorial Header */}
       <div className="relative z-10 max-w-7xl mx-auto px-6 md:px-8 pt-12 pb-6 text-center overflow-hidden">
         <motion.span
           initial={{ opacity: 0, letterSpacing: '0.15em', y: -12 }}
           animate={{ opacity: 1, letterSpacing: '0.35em', y: 0 }}
           transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
-          className="font-mono text-[10px] tracking-[0.35em] text-[#C5A059] uppercase block mb-2"
+          className="font-mono text-[10px] tracking-[0.35em] text-[#003e1c] uppercase block mb-2 font-bold"
         >
           Shop Luxury Archive
         </motion.span>
@@ -452,15 +414,15 @@ export default function Shop() {
           initial={{ opacity: 0, y: 22 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.9, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
-          className="font-serif text-4xl md:text-5xl font-light text-neutral-800 tracking-wide uppercase"
+          className="font-serif text-4xl md:text-5xl font-light text-neutral-900 tracking-wide uppercase"
         >
-          Shop All <span className="font-serif italic font-normal text-[#C5A059]">Luxury</span>
+          Shop All <span className="font-serif italic font-normal text-[#003e1c]">Luxury</span>
         </motion.h1>
         <motion.div
           initial={{ scaleX: 0 }}
           animate={{ scaleX: 1 }}
           transition={{ duration: 0.8, delay: 0.45, ease: 'easeOut' }}
-          className="w-12 h-[1px] bg-[#C5A059]/40 mx-auto mt-4 origin-center"
+          className="w-12 h-[1px] bg-[#003e1c]/40 mx-auto mt-4 origin-center"
         />
       </div>
 
@@ -469,10 +431,10 @@ export default function Shop() {
 
         <div className="flex flex-col gap-4 mb-8 lg:hidden">
           <div className="flex items-center justify-between">
-            <span className="font-mono text-[10px] text-neutral-400 uppercase tracking-widest">{products.length} articles found</span>
+            <span className="font-mono text-[10px] text-neutral-500 uppercase tracking-widest">{products.length} articles found</span>
             <div className="flex items-center gap-1.5">
-              <ArrowUpDown className="w-3.5 h-3.5 text-[#C5A059]" />
-              <select value={activeFilters.sort} onChange={handleSortChange} className="text-xs font-semibold text-neutral-700 rounded-full py-1.5 px-3 focus:outline-none" style={{ background: 'rgba(255,255,255,0.65)', backdropFilter: 'blur(12px)', border: '1px solid rgba(201,163,84,0.25)' }}>
+              <ArrowUpDown className="w-3.5 h-3.5 text-[#003e1c]" />
+              <select value={activeFilters.sort} onChange={handleSortChange} className="text-xs font-semibold text-neutral-800 rounded-full py-1.5 px-3 focus:outline-none bg-white border border-neutral-200 shadow-2xs">
                 <option value="">Recommended</option>
                 <option value="price-asc">Price: Low to High</option>
                 <option value="price-desc">Price: High to Low</option>
@@ -483,22 +445,21 @@ export default function Shop() {
 
           <button
             onClick={() => setMobileFiltersOpen(true)}
-            className="flex items-center justify-center gap-2 py-3.5 text-white rounded-full font-mono text-[10px] tracking-widest uppercase transition-all active:scale-95 cursor-pointer font-bold"
-            style={{ background: 'linear-gradient(135deg,#14261C,#0b1510)', border: '1px solid rgba(201,164,99,0.35)', boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.12), 0 12px 28px -12px rgba(0,0,0,0.4)' }}
+            className="flex items-center justify-center gap-2 py-3.5 text-white rounded-full font-mono text-[10px] tracking-widest uppercase transition-all active:scale-95 cursor-pointer font-bold bg-[#003e1c] border border-[#003e1c] shadow-md"
           >
-            <SlidersHorizontal className="w-4 h-4 text-[#E8C888]" />
+            <SlidersHorizontal className="w-4 h-4 text-white" />
             <span>Filter Categories</span>
           </button>
         </div>
 
-        <div className="hidden lg:flex items-center justify-between border-b border-[#C9A463]/15 pb-4 mb-8">
-          <div className="flex items-center gap-1.5 font-mono text-[10px] text-neutral-500 uppercase tracking-widest">
-            <ChevronRight className="w-3.5 h-3.5 text-[#C5A059]" />
+        <div className="hidden lg:flex items-center justify-between border-b border-neutral-200 pb-4 mb-8">
+          <div className="flex items-center gap-1.5 font-mono text-[10px] text-neutral-600 uppercase tracking-widest">
+            <ChevronRight className="w-3.5 h-3.5 text-[#003e1c]" />
             {products.length} boutique articles in archive
           </div>
           <div className="flex items-center gap-2 shrink-0">
-            <span className="font-mono text-[9px] uppercase tracking-widest text-neutral-400">Sort By:</span>
-            <select value={activeFilters.sort} onChange={handleSortChange} className="text-xs font-semibold text-neutral-700 rounded-full py-1.5 px-4 focus:outline-none cursor-pointer" style={{ background: 'rgba(255,255,255,0.65)', backdropFilter: 'blur(10px)', border: '1px solid rgba(201,163,84,0.35)' }}>
+            <span className="font-mono text-[9px] uppercase tracking-widest text-neutral-500">Sort By:</span>
+            <select value={activeFilters.sort} onChange={handleSortChange} className="text-xs font-semibold text-neutral-800 rounded-full py-1.5 px-4 focus:outline-none cursor-pointer bg-white border border-neutral-200 shadow-xs">
               <option value="">Recommended</option>
               <option value="price-asc">Price: Low to High</option>
               <option value="price-desc">Price: High to Low</option>
@@ -509,11 +470,7 @@ export default function Shop() {
 
         <div className="flex flex-col lg:flex-row gap-10">
           <aside className="hidden lg:block w-[380px] shrink-0 self-start sticky top-24 max-h-[calc(100vh-120px)] overflow-y-auto scrollbar-none pr-2">
-            <div className="p-8 rounded-3xl relative overflow-hidden" style={GLASS_LIGHT}>
-              <div className="absolute top-0 left-0 right-0 h-px z-10" style={{ background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.9), transparent)' }} />
-              <div className="absolute -top-16 -right-16 pointer-events-none overflow-hidden">
-                <LiquidBlob hue="gold" size={220} className="" />
-              </div>
+            <div className="p-8 rounded-3xl relative overflow-hidden bg-white border border-neutral-200 shadow-sm">
               <div className="relative z-10">{renderSidebarContent()}</div>
             </div>
           </aside>
@@ -522,7 +479,7 @@ export default function Shop() {
 
             {hasActiveFilters && (
               <div className="flex flex-wrap gap-2 items-center text-left">
-                <span className="font-mono text-[8px] tracking-widest uppercase text-neutral-400 mr-1.5">Active Filters:</span>
+                <span className="font-mono text-[8px] tracking-widest uppercase text-neutral-500 mr-1.5">Active Filters:</span>
                 {[
                   activeFilters.bestSeller === 'true' && { label: '★ Best Seller', onClear: () => updateFilters({ bestSeller: '' }) },
                   activeFilters.season && { label: `☀ ${activeFilters.season}`, onClear: () => updateFilters({ season: '' }) },
@@ -534,14 +491,9 @@ export default function Shop() {
                   activeFilters.sizes && { label: `📏 Size: ${activeFilters.sizes}`, onClear: () => updateFilters({ sizes: '' }) },
                   activeFilters.sale === 'true' && { label: '🏷 Sale', onClear: () => updateFilters({ sale: '' }), sale: true },
                 ].filter(Boolean).map((chip: any, i) => (
-                  <span key={i} className="px-3 py-1 rounded-full text-[10px] font-semibold flex items-center gap-1" style={{
-                    background: chip.sale ? 'rgba(139,46,53,0.08)' : 'rgba(255,255,255,0.55)',
-                    backdropFilter: 'blur(10px)',
-                    color: chip.sale ? '#8B2E35' : '#3a3a3a',
-                    border: chip.sale ? '1px solid rgba(139,46,53,0.2)' : '1px solid rgba(201,163,84,0.22)',
-                  }}>
+                  <span key={i} className="px-3 py-1 rounded-full text-[10px] font-semibold flex items-center gap-1 bg-white border border-neutral-200 text-neutral-800 shadow-2xs">
                     {chip.label}
-                    <X className="w-3 h-3 cursor-pointer hover:text-[#8B2E35] ml-1" onClick={chip.onClear} />
+                    <X className="w-3 h-3 cursor-pointer hover:text-rose-500 ml-1" onClick={chip.onClear} />
                   </span>
                 ))}
               </div>
@@ -553,21 +505,20 @@ export default function Shop() {
               <motion.div
                 initial={{ opacity: 0, scale: 0.97 }}
                 animate={{ opacity: 1, scale: 1 }}
-                className="flex flex-col items-center justify-center text-center py-28 rounded-3xl relative overflow-hidden"
-                style={GLASS_LIGHT}
+                className="flex flex-col items-center justify-center text-center py-28 rounded-3xl relative overflow-hidden bg-white md:bg-transparent border border-neutral-200 md:border-transparent"
+                style={typeof window !== 'undefined' && window.innerWidth >= 768 ? GLASS_LIGHT : {}}
               >
-                <div className="absolute top-0 left-0 right-0 h-px" style={{ background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.9), transparent)' }} />
-                <div className="w-14 h-14 rounded-2xl flex items-center justify-center mb-4" style={{ background: 'rgba(201,163,84,0.12)', border: '1px solid rgba(201,163,84,0.2)' }}>
+                <div className="hidden md:block absolute top-0 left-0 right-0 h-px" style={{ background: 'linear-gradient(90deg, transparent, rgba(197,160,89,0.5), transparent)' }} />
+                <div className="w-14 h-14 rounded-2xl flex items-center justify-center mb-4 bg-[#C5A059]/15 border border-[#C5A059]/30">
                   <Gem className="w-6 h-6 text-[#C5A059]" />
                 </div>
-                <p className="font-serif text-xl text-[#2a1605] font-semibold">No luxury suits found</p>
-                <p className="font-sans text-xs text-neutral-400 mt-1.5 max-w-xs leading-relaxed">
+                <p className="font-serif text-xl text-neutral-900 md:text-white font-semibold">No luxury suits found</p>
+                <p className="font-sans text-xs text-neutral-500 md:text-stone-400 mt-1.5 max-w-xs leading-relaxed">
                   No articles matched your filters. Try resetting the sidebar categories to view all.
                 </p>
                 <button
                   onClick={clearAllFilters}
-                  className="mt-6 text-xs uppercase tracking-widest font-bold px-7 py-3.5 rounded-full transition-all cursor-pointer text-white"
-                  style={{ background: 'linear-gradient(135deg,#1c2921,#0e1913)', boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.08), 0 16px 32px -16px rgba(0,0,0,0.5)' }}
+                  className="mt-6 text-xs uppercase tracking-widest font-bold px-7 py-3.5 rounded-full transition-all cursor-pointer bg-[#003e1c] md:bg-[linear-gradient(110deg,#D4AF37_0%,#FFF3A8_25%,#C5A059_50%,#FFEC99_75%,#A07C28_100%)] text-white md:text-black border border-[#003e1c] md:border-[#FFF0A6]/70 shadow-lg"
                 >
                   Reset All Filters
                 </button>
@@ -603,13 +554,7 @@ export default function Shop() {
                     <button
                       onClick={() => goToPage(currentPage - 1)}
                       disabled={currentPage === 1}
-                      className="w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300 disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer hover:scale-105 active:scale-95"
-                      style={{
-                        background: currentPage === 1 ? 'rgba(255,255,255,0.4)' : 'linear-gradient(135deg,#14261C,#0b1510)',
-                        border: '1px solid rgba(201,164,99,0.3)',
-                        boxShadow: currentPage === 1 ? 'none' : '0 8px 20px -8px rgba(0,0,0,0.4)',
-                        color: currentPage === 1 ? '#999' : '#E8C888',
-                      }}
+                      className="w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300 disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer hover:scale-105 active:scale-95 bg-white border border-neutral-200 text-neutral-800 shadow-2xs"
                       aria-label="Previous page"
                     >
                       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><polyline points="15 18 9 12 15 6"/></svg>
@@ -630,30 +575,11 @@ export default function Shop() {
                           <button
                             key={page}
                             onClick={() => goToPage(page)}
-                            className="transition-all duration-300 cursor-pointer font-mono text-xs font-bold"
-                            style={isActive ? {
-                              width: '36px',
-                              height: '36px',
-                              borderRadius: '50%',
-                              background: 'linear-gradient(135deg,#C5A059,#E8C888)',
-                              color: '#1a0e00',
-                              boxShadow: '0 6px 16px -6px rgba(197,160,89,0.6)',
-                              border: '1px solid rgba(255,220,140,0.4)',
-                              display: 'flex',
-                              alignItems: 'center',
-                              justifyContent: 'center',
-                            } : {
-                              width: '32px',
-                              height: '32px',
-                              borderRadius: '50%',
-                              background: 'rgba(255,255,255,0.5)',
-                              backdropFilter: 'blur(10px)',
-                              color: '#6b6b6b',
-                              border: '1px solid rgba(201,164,99,0.2)',
-                              display: 'flex',
-                              alignItems: 'center',
-                              justifyContent: 'center',
-                            }}
+                            className={`transition-all duration-300 cursor-pointer font-mono text-xs font-bold w-8 h-8 rounded-full flex items-center justify-center ${
+                              isActive
+                                ? 'bg-[#003e1c] text-white border border-[#003e1c] shadow-md scale-105'
+                                : 'bg-white text-neutral-700 border border-neutral-200 hover:border-[#003e1c]/40 shadow-2xs'
+                            }`}
                           >
                             {page}
                           </button>
@@ -665,13 +591,7 @@ export default function Shop() {
                     <button
                       onClick={() => goToPage(currentPage + 1)}
                       disabled={currentPage === totalPages}
-                      className="w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300 disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer hover:scale-105 active:scale-95"
-                      style={{
-                        background: currentPage === totalPages ? 'rgba(255,255,255,0.4)' : 'linear-gradient(135deg,#14261C,#0b1510)',
-                        border: '1px solid rgba(201,164,99,0.3)',
-                        boxShadow: currentPage === totalPages ? 'none' : '0 8px 20px -8px rgba(0,0,0,0.4)',
-                        color: currentPage === totalPages ? '#999' : '#E8C888',
-                      }}
+                      className="w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300 disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer hover:scale-105 active:scale-95 bg-white border border-neutral-200 text-neutral-800 shadow-2xs"
                       aria-label="Next page"
                     >
                       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><polyline points="9 18 15 12 9 6"/></svg>
@@ -679,7 +599,7 @@ export default function Shop() {
 
                     {/* Page Info */}
                     <span
-                      className="font-mono text-[9px] uppercase tracking-widest text-neutral-400 ml-2"
+                      className="font-mono text-[9px] uppercase tracking-widest text-neutral-500 ml-2"
                     >
                       {(currentPage - 1) * PRODUCTS_PER_PAGE + 1}–{Math.min(currentPage * PRODUCTS_PER_PAGE, products.length)} of {products.length}
                     </span>
@@ -691,28 +611,25 @@ export default function Shop() {
         </div>
       </div>
 
-      {/* ── Mobile Sidebar Drawer — liquid glass ── */}
+      {/* ── Mobile Sidebar Drawer ── */}
       <AnimatePresence>
         {mobileFiltersOpen && (
           <>
             <motion.div
               initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
               onClick={() => setMobileFiltersOpen(false)}
-              className="fixed inset-0 z-50 cursor-pointer"
-              style={{ background: 'rgba(10,16,12,0.55)', backdropFilter: 'blur(4px)' }}
+              className="fixed inset-0 z-50 cursor-pointer bg-black/40 backdrop-blur-xs"
             />
             <motion.div
               initial={{ x: '-100%' }} animate={{ x: 0 }} exit={{ x: '-100%' }}
               transition={{ type: 'spring', damping: 25, stiffness: 220 }}
-              className="fixed top-0 bottom-0 left-0 z-55 w-full max-w-xs p-6 overflow-y-auto"
-              style={{ background: 'rgba(253,245,235,0.85)', backdropFilter: 'blur(30px) saturate(160%)', boxShadow: '0 0 60px rgba(0,0,0,0.3)' }}
+              className="fixed top-0 bottom-0 left-0 z-55 w-full max-w-xs p-6 overflow-y-auto bg-white border-r border-neutral-200 shadow-2xl text-neutral-900"
             >
-              <div className="flex items-center justify-between border-b border-[#C9A463]/15 pb-4 mb-6">
-                <span className="font-serif text-sm font-semibold tracking-wider text-neutral-800">Shop Categories</span>
+              <div className="flex items-center justify-between border-b border-neutral-200 pb-4 mb-6">
+                <span className="font-serif text-sm font-semibold tracking-wider text-neutral-900">Shop Categories</span>
                 <button
                   onClick={() => setMobileFiltersOpen(false)}
-                  className="w-8 h-8 rounded-full flex items-center justify-center text-neutral-500 hover:text-black cursor-pointer"
-                  style={{ background: 'rgba(255,255,255,0.6)', border: '1px solid rgba(0,0,0,0.08)' }}
+                  className="w-8 h-8 rounded-full flex items-center justify-center text-neutral-500 hover:text-black cursor-pointer bg-neutral-100 border border-neutral-200"
                 >
                   <X className="w-4 h-4" />
                 </button>

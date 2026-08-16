@@ -1,6 +1,39 @@
 import React, { createContext, useContext, useState, useEffect, useRef } from 'react';
-import { Product, Cart, CartItem, Order, ShippingDetails, RealTimeUpdateEvent, CurrencyCode, CURRENCIES } from './types';
+import { Product, Cart, CartItem, Order, ShippingDetails, RealTimeUpdateEvent, CurrencyCode, CURRENCIES, CategoryDef } from './types';
 import initialDb from '../zariha_db.json';
+
+export const DEFAULT_CATEGORIES: CategoryDef[] = [
+  {
+    id: 'unstitched',
+    num: '01',
+    label: 'Unstitched',
+    sublabel: 'Premium textiles to shape your silhouette',
+    tag: 'Artisan Yardage',
+    filterKey: 'category',
+    filterValue: 'Unstitched',
+    image: '/cat_unstitched_new.jpg',
+  },
+  {
+    id: 'stitched',
+    num: '02',
+    label: 'Stitched',
+    sublabel: 'Styled & tailored ready off the rack',
+    tag: 'Pret-A-Porter',
+    filterKey: 'category',
+    filterValue: 'Stitches',
+    image: '/cat_readytowear_new.png',
+  },
+  {
+    id: 'party-wear',
+    num: '03',
+    label: 'Party wear',
+    sublabel: 'Heavy formal embellishments & festive drops',
+    tag: 'Festive Glam',
+    filterKey: 'category',
+    filterValue: 'Party Wear',
+    image: '/cat_bestseller_new.png',
+  },
+];
 
 interface AppContextType {
   products: Product[];
@@ -55,6 +88,10 @@ interface AppContextType {
   formatPrice: (priceInPKR: number) => string;
   settings: { announcementText: string; homeMarqueeText: string; shippingFee?: number; cardShippingFee?: number; codShippingFee?: number; freeShippingThreshold?: number };
   updateSettings: (updated: Partial<{ announcementText: string; homeMarqueeText: string; shippingFee?: number; cardShippingFee?: number; codShippingFee?: number; freeShippingThreshold?: number }>) => Promise<void>;
+  categories: CategoryDef[];
+  addCategory: (cat: Omit<CategoryDef, 'id' | 'num'>) => void;
+  updateCategory: (id: string, updated: Partial<CategoryDef>) => void;
+  deleteCategory: (id: string) => void;
 }
 
 const staticCatalog: Product[] = (initialDb && initialDb.products) ? (initialDb.products as Product[]) : [];
@@ -950,6 +987,50 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
+  const [categories, setCategories] = useState<CategoryDef[]>(() => {
+    try {
+      const saved = localStorage.getItem('rotba_categories_v2');
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+      }
+    } catch (_) {}
+    return DEFAULT_CATEGORIES;
+  });
+
+  const saveCategories = (updated: CategoryDef[]) => {
+    setCategories(updated);
+    try {
+      localStorage.setItem('rotba_categories_v2', JSON.stringify(updated));
+    } catch (_) {}
+  };
+
+  const addCategory = (catData: Omit<CategoryDef, 'id' | 'num'>) => {
+    const newId = `cat-${Date.now()}`;
+    const nextNum = (categories.length + 1).toString().padStart(2, '0');
+    const newCat: CategoryDef = {
+      ...catData,
+      id: newId,
+      num: nextNum,
+    };
+    const updated = [...categories, newCat];
+    saveCategories(updated);
+    addToast(`Category "${catData.label}" added successfully!`, 'success');
+  };
+
+  const updateCategory = (id: string, updatedData: Partial<CategoryDef>) => {
+    const updated = categories.map(cat => cat.id === id ? { ...cat, ...updatedData } : cat);
+    saveCategories(updated);
+    addToast(`Category updated successfully!`, 'success');
+  };
+
+  const deleteCategory = (id: string) => {
+    const updated = categories.filter(cat => cat.id !== id);
+    const renumbered = updated.map((c, i) => ({ ...c, num: (i + 1).toString().padStart(2, '0') }));
+    saveCategories(renumbered);
+    addToast(`Category removed!`, 'info');
+  };
+
   return (
     <AppContext.Provider value={{
       products,
@@ -989,7 +1070,11 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
       setCurrency,
       formatPrice,
       settings,
-      updateSettings
+      updateSettings,
+      categories,
+      addCategory,
+      updateCategory,
+      deleteCategory
     }}>
       {children}
     </AppContext.Provider>

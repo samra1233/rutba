@@ -36,10 +36,10 @@ interface Customer {
   }[];
 }
 
-type ActiveTabType = 'dashboard' | 'products' | 'orders' | 'customers' | 'settings';
+type ActiveTabType = 'dashboard' | 'products' | 'categories' | 'orders' | 'customers' | 'settings';
 
 export default function Admin() {
-  const { addToast, products, setProducts, settings, updateSettings } = useApp();
+  const { addToast, products, setProducts, settings, updateSettings, categories, addCategory, updateCategory, deleteCategory } = useApp();
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
   const [adminUser, setAdminUser] = useState<{ id: string; email: string } | null>(null);
   const [email, setEmail] = useState('');
@@ -538,6 +538,73 @@ export default function Admin() {
     );
   }
 
+  // Category management modal states
+  const [isCatFormOpen, setIsCatFormOpen] = useState(false);
+  const [editingCat, setEditingCat] = useState<any>(null);
+  const [catFormLabel, setCatFormLabel] = useState('');
+  const [catFormTag, setCatFormTag] = useState('');
+  const [catFormSublabel, setCatFormSublabel] = useState('');
+  const [catFormImage, setCatFormImage] = useState('/cat_unstitched_new.jpg');
+  const [catFormFilterKey, setCatFormFilterKey] = useState('category');
+  const [catFormFilterValue, setCatFormFilterValue] = useState('');
+
+  const handleOpenNewCat = () => {
+    setEditingCat(null);
+    setCatFormLabel('');
+    setCatFormTag('Artisan Yardage');
+    setCatFormSublabel('Premium tailored collection');
+    setCatFormImage('/cat_unstitched_new.jpg');
+    setCatFormFilterKey('category');
+    setCatFormFilterValue('');
+    setIsCatFormOpen(true);
+  };
+
+  const handleEditCat = (cat: any) => {
+    setEditingCat(cat);
+    setCatFormLabel(cat.label || '');
+    setCatFormTag(cat.tag || '');
+    setCatFormSublabel(cat.sublabel || '');
+    setCatFormImage(cat.image || '/cat_unstitched_new.jpg');
+    setCatFormFilterKey(cat.filterKey || 'category');
+    setCatFormFilterValue(cat.filterValue || '');
+    setIsCatFormOpen(true);
+  };
+
+  const handleCatSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!catFormLabel.trim()) {
+      addToast('Please enter a Category Name', 'warn');
+      return;
+    }
+    const val = catFormFilterValue.trim() || catFormLabel.trim();
+    const payload = {
+      label: catFormLabel.trim(),
+      tag: catFormTag.trim() || 'Curated Edit',
+      sublabel: catFormSublabel.trim() || 'Premium collection',
+      image: catFormImage.trim() || '/cat_unstitched_new.jpg',
+      filterKey: catFormFilterKey,
+      filterValue: val,
+    };
+
+    if (editingCat) {
+      updateCategory(editingCat.id, payload);
+    } else {
+      addCategory(payload);
+    }
+    setIsCatFormOpen(false);
+  };
+
+  // Check session
+  useEffect(() => {
+    checkSession();
+  }, []);
+
+  useEffect(() => {
+    if (isLoggedIn) {
+      fetchDashboardData();
+    }
+  }, [isLoggedIn, activeTab]);
+
   // Active header titles
   const getTabHeader = () => {
     switch (activeTab) {
@@ -545,6 +612,8 @@ export default function Admin() {
         return 'Dashboard Overview';
       case 'products':
         return 'Product Catalog';
+      case 'categories':
+        return 'Category Management';
       case 'orders':
         return 'Live Orders Overview';
       case 'customers':
@@ -595,6 +664,7 @@ export default function Admin() {
             {[
               { id: 'dashboard', label: 'Overview', icon: LayoutDashboard },
               { id: 'products', label: 'Products', icon: Package },
+              { id: 'categories', label: 'Categories', icon: Layers },
               { id: 'settings', label: 'Customizer', icon: Sliders },
               { id: 'orders', label: 'Orders', icon: ShoppingBag },
               { id: 'customers', label: 'Ledger', icon: Users },
@@ -1282,9 +1352,251 @@ export default function Admin() {
                 </div>
               </motion.div>
             )}
+
+            {/* Category Management Tab */}
+            {activeTab === 'categories' && (
+              <motion.div
+                key="categories"
+                initial={{ opacity: 0, y: 15 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -15 }}
+                className="space-y-6"
+              >
+                {/* Header & Add Button */}
+                <div className="flex items-center justify-between bg-white border border-neutral-100 p-6 rounded-3xl shadow-2xs">
+                  <div>
+                    <h2 className="text-xl font-sans font-black text-neutral-900">Manage Shop Categories</h2>
+                    <p className="text-xs text-neutral-500 font-sans mt-1">
+                      Add, edit, or remove categories displayed on the Homepage "Shop By Category" section.
+                    </p>
+                  </div>
+                  <button
+                    onClick={handleOpenNewCat}
+                    className="px-5 py-3 bg-[#14261C] hover:bg-[#C5A059] text-white hover:text-black font-sans font-bold text-xs rounded-2xl transition-all cursor-pointer shadow-md flex items-center gap-2 uppercase tracking-wider"
+                  >
+                    <Plus className="w-4 h-4" />
+                    <span>Add New Category</span>
+                  </button>
+                </div>
+
+                {/* Categories Grid */}
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {categories.map((cat, idx) => (
+                    <div
+                      key={cat.id}
+                      className="bg-white border border-neutral-200/80 rounded-3xl overflow-hidden shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between"
+                    >
+                      {/* Category Image Header */}
+                      <div className="relative h-48 w-full bg-stone-100 overflow-hidden">
+                        <img
+                          src={cat.image}
+                          alt={cat.label}
+                          className="w-full h-full object-cover"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/20" />
+                        
+                        {/* Top Badges */}
+                        <div className="absolute top-3 left-3 right-3 flex items-center justify-between">
+                          <span className="text-[10px] font-mono font-bold uppercase tracking-wider px-2.5 py-1 rounded-md bg-[#C5A059] text-black shadow">
+                            {cat.num}
+                          </span>
+                          <span className="text-[10px] font-sans font-bold uppercase tracking-wider px-2.5 py-1 rounded-md bg-black/60 text-white backdrop-blur-md border border-white/20">
+                            {cat.tag}
+                          </span>
+                        </div>
+
+                        {/* Bottom Label on Image */}
+                        <div className="absolute bottom-3 left-4 right-4 text-white">
+                          <h3 className="text-xl font-serif font-bold drop-shadow">
+                            {cat.label}
+                          </h3>
+                          <p className="text-xs font-sans text-stone-200 line-clamp-1 font-light">
+                            {cat.sublabel}
+                          </p>
+                        </div>
+                      </div>
+
+                      {/* Card Details & Actions */}
+                      <div className="p-4 bg-stone-50/50 border-t border-neutral-100 flex items-center justify-between">
+                        <div className="text-[11px] font-mono text-neutral-500">
+                          <span>Filter: </span>
+                          <span className="font-bold text-neutral-800">{cat.filterKey}={cat.filterValue}</span>
+                        </div>
+
+                        <div className="flex items-center gap-2">
+                          <button
+                            onClick={() => handleEditCat(cat)}
+                            className="p-2 rounded-xl bg-white border border-neutral-200 text-neutral-700 hover:text-black hover:border-black transition-all cursor-pointer shadow-2xs"
+                            title="Edit Category"
+                          >
+                            <Edit className="w-4 h-4" />
+                          </button>
+                          <button
+                            onClick={() => {
+                              if (confirm(`Are you sure you want to delete category "${cat.label}"?`)) {
+                                deleteCategory(cat.id);
+                              }
+                            }}
+                            className="p-2 rounded-xl bg-rose-50 border border-rose-200 text-rose-600 hover:bg-rose-600 hover:text-white transition-all cursor-pointer shadow-2xs"
+                            title="Delete Category"
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </motion.div>
+            )}
           </AnimatePresence>
         </div>
       </main>
+
+      {/* ── CREATE / EDIT CATEGORY MODAL ── */}
+      <AnimatePresence>
+        {isCatFormOpen && (
+          <div className="fixed inset-0 bg-black/50 backdrop-blur-md z-50 flex items-center justify-center p-4">
+            <div className="absolute inset-0 cursor-pointer" onClick={() => setIsCatFormOpen(false)} />
+            
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.95 }}
+              transition={{ type: 'spring', damping: 25, stiffness: 260 }}
+              className="relative z-10 w-full max-w-xl bg-white border border-neutral-200 rounded-3xl shadow-2xl p-6 md:p-8 space-y-6 overflow-hidden text-left"
+            >
+              <div className="flex items-center justify-between border-b border-neutral-100 pb-4">
+                <h3 className="text-xl font-serif font-extrabold text-neutral-900">
+                  {editingCat ? 'Edit Category' : 'Add New Category'}
+                </h3>
+                <button
+                  onClick={() => setIsCatFormOpen(false)}
+                  className="p-2 rounded-full bg-neutral-100 text-neutral-500 hover:bg-neutral-200 hover:text-black transition-all"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+
+              <form onSubmit={handleCatSubmit} className="space-y-4 font-sans text-xs">
+                {/* Category Label */}
+                <div className="space-y-1.5">
+                  <label className="block text-[11px] font-bold text-neutral-700 uppercase tracking-wider">
+                    Category Name / Label (e.g. Unstitched, Stitched, Party wear)
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    value={catFormLabel}
+                    onChange={(e) => setCatFormLabel(e.target.value)}
+                    placeholder="e.g. Party wear"
+                    className="w-full bg-stone-50 border border-neutral-200 rounded-xl p-3.5 focus:outline-hidden focus:border-[#C5A059] text-sm font-semibold"
+                  />
+                </div>
+
+                {/* Tag / Badge & Sublabel */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="space-y-1.5">
+                    <label className="block text-[11px] font-bold text-neutral-700 uppercase tracking-wider">
+                      Badge Tag (e.g. Festive Glam)
+                    </label>
+                    <input
+                      type="text"
+                      value={catFormTag}
+                      onChange={(e) => setCatFormTag(e.target.value)}
+                      placeholder="e.g. Festive Glam"
+                      className="w-full bg-stone-50 border border-neutral-200 rounded-xl p-3.5 focus:outline-hidden focus:border-[#C5A059] text-sm font-semibold"
+                    />
+                  </div>
+
+                  <div className="space-y-1.5">
+                    <label className="block text-[11px] font-bold text-neutral-700 uppercase tracking-wider">
+                      Filter Value
+                    </label>
+                    <input
+                      type="text"
+                      value={catFormFilterValue}
+                      onChange={(e) => setCatFormFilterValue(e.target.value)}
+                      placeholder="e.g. Party Wear"
+                      className="w-full bg-stone-50 border border-neutral-200 rounded-xl p-3.5 focus:outline-hidden focus:border-[#C5A059] text-sm font-semibold"
+                    />
+                  </div>
+                </div>
+
+                {/* Subtitle / Sublabel */}
+                <div className="space-y-1.5">
+                  <label className="block text-[11px] font-bold text-neutral-700 uppercase tracking-wider">
+                    Subtitle Description
+                  </label>
+                  <input
+                    type="text"
+                    value={catFormSublabel}
+                    onChange={(e) => setCatFormSublabel(e.target.value)}
+                    placeholder="e.g. Heavy formal embellishments & festive drops"
+                    className="w-full bg-stone-50 border border-neutral-200 rounded-xl p-3.5 focus:outline-hidden focus:border-[#C5A059] text-sm font-semibold"
+                  />
+                </div>
+
+                {/* Image URL / Presets */}
+                <div className="space-y-1.5">
+                  <label className="block text-[11px] font-bold text-neutral-700 uppercase tracking-wider">
+                    Category Image (Select Preset or Paste Custom URL)
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    value={catFormImage}
+                    onChange={(e) => setCatFormImage(e.target.value)}
+                    placeholder="e.g. /cat_bestseller_new.png"
+                    className="w-full bg-stone-50 border border-neutral-200 rounded-xl p-3.5 focus:outline-hidden focus:border-[#C5A059] text-xs font-mono"
+                  />
+
+                  {/* Preset Image Options */}
+                  <div className="flex gap-2 pt-2">
+                    {[
+                      { name: 'Unstitched', url: '/cat_unstitched_new.jpg' },
+                      { name: 'Stitches', url: '/cat_readytowear_new.png' },
+                      { name: 'Party/Bestseller', url: '/cat_bestseller_new.png' },
+                      { name: 'Summer', url: '/cat_summer_new.png' },
+                      { name: 'New Arrivals', url: '/cat_newarrivals_new.png' },
+                    ].map((preset) => (
+                      <button
+                        key={preset.url}
+                        type="button"
+                        onClick={() => setCatFormImage(preset.url)}
+                        className={`text-[10px] font-mono px-2.5 py-1 rounded-lg border transition-all cursor-pointer ${
+                          catFormImage === preset.url
+                            ? 'bg-[#14261C] text-white border-[#14261C] font-bold'
+                            : 'bg-stone-100 text-stone-600 border-stone-200 hover:bg-stone-200'
+                        }`}
+                      >
+                        {preset.name}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Submit Buttons */}
+                <div className="pt-4 flex items-center justify-end gap-3">
+                  <button
+                    type="button"
+                    onClick={() => setIsCatFormOpen(false)}
+                    className="px-5 py-3 rounded-xl border border-neutral-200 text-neutral-600 font-sans font-bold hover:bg-neutral-100 transition-all cursor-pointer uppercase tracking-wider text-xs"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    className="px-6 py-3 rounded-xl bg-[#14261C] hover:bg-[#C5A059] text-white hover:text-black font-sans font-bold transition-all cursor-pointer uppercase tracking-wider text-xs shadow-md"
+                  >
+                    {editingCat ? 'Save Changes' : 'Create Category'}
+                  </button>
+                </div>
+              </form>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
 
       {/* Centered Standalone modal box product form popup — Redesigned exact to Reference Image 2 */}
       <AnimatePresence>

@@ -76,46 +76,34 @@ export default function WishlistDrawer({ isOpen, onClose }: WishlistDrawerProps)
             className="fixed inset-0 z-50 bg-[#020504]/40 backdrop-blur-[2px] cursor-pointer"
           />
  
-          {/* Drawer Body — Luxurious Frosted Light Glass */}
+          {/* Drawer Body — Luxurious Clean Light Glass */}
           <motion.div
             initial={{ x: '100%' }}
             animate={{ x: 0 }}
             exit={{ x: '100%' }}
             transition={{ type: 'spring', damping: 28, stiffness: 220 }}
-            className="fixed top-0 right-0 bottom-0 z-55 w-full max-w-md shadow-2xl flex flex-col h-full border-l border-[#C5A059]/20"
-            style={{
-              background: 'rgba(250, 245, 240, 0.85)',
-              backdropFilter: 'blur(35px)',
-            }}
+            className="fixed top-0 right-0 bottom-0 z-55 w-full max-w-md shadow-2xl flex flex-col h-full border-l border-neutral-200 text-neutral-900 bg-white"
           >
-            {/* Liquid Glass Background Blobs */}
-            <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
-              <div className="absolute top-[-20%] left-[-20%] w-[320px] h-[320px] bg-[#C5A059]/15 rounded-full blur-[90px] animate-liquid-blob-1" />
-              <div className="absolute bottom-[-10%] right-[-10%] w-[280px] h-[280px] bg-[#C5A059]/10 rounded-full blur-[90px] animate-liquid-blob-2" />
-              <div className="absolute top-[40%] left-[20%] w-[200px] h-[200px] bg-[#C5A059]/5 rounded-full blur-[100px] animate-liquid-blob-1" />
-            </div>
- 
             {/* Header Area */}
-            <div className="p-6 border-b border-black/5 flex items-center justify-between relative z-10">
+            <div className="p-6 border-b border-neutral-200 flex items-center justify-between relative z-10 bg-neutral-50/90 backdrop-blur-md">
               <div className="flex items-center gap-3.5">
-                <div className="w-10 h-10 rounded-full bg-rose-50/80 border border-rose-500/15 shadow-sm flex items-center justify-center">
+                <div className="w-10 h-10 rounded-full bg-rose-50 border border-rose-200 shadow-xs flex items-center justify-center">
                   <Heart className="w-5 h-5 text-rose-500 fill-rose-500" />
                 </div>
                 <div>
                   <h2 
-                    className="font-serif text-[#111714] tracking-widest uppercase text-sm font-semibold"
-                    style={{ fontFamily: 'var(--font-display)' }}
+                    className="font-serif text-neutral-900 tracking-widest uppercase text-sm font-bold"
                   >
                     Your Wishlist
                   </h2>
-                  <span className="text-[9px] font-mono text-[#C5A059] uppercase tracking-widest font-semibold block mt-0.5">
+                  <span className="text-[9px] font-mono text-[#003e1c] uppercase tracking-widest font-semibold block mt-0.5">
                     {resolvedItems.length} {resolvedItems.length === 1 ? 'item' : 'items'} saved
                   </span>
                 </div>
               </div>
               <button
                 onClick={onClose}
-                className="w-8 h-8 rounded-full border border-black/5 flex items-center justify-center hover:bg-black/5 text-neutral-600 hover:text-black transition-all cursor-pointer"
+                className="w-8 h-8 rounded-full border border-neutral-300 flex items-center justify-center hover:bg-neutral-100 text-neutral-500 hover:text-neutral-900 transition-all cursor-pointer"
                 aria-label="Close Wishlist"
               >
                 <X className="w-4 h-4" />
@@ -123,16 +111,15 @@ export default function WishlistDrawer({ isOpen, onClose }: WishlistDrawerProps)
             </div>
 
             {/* Items scroll section */}
-            <div className="flex-1 overflow-y-auto p-6 space-y-6 scrollbar-none relative z-10">
+            <div className="flex-1 overflow-y-auto p-6 space-y-6 scrollbar-none relative z-10 bg-[#fafafa]">
               {resolvedItems.length === 0 ? (
                 /* Premium Empty State */
                 <div className="flex flex-col items-center justify-center h-full text-center py-12 px-6">
-                  <div className="w-20 h-20 rounded-full border border-dashed border-[#C5A059]/40 flex items-center justify-center text-[#C5A059]/60 mb-6 animate-pulse">
+                  <div className="w-20 h-20 rounded-full border border-dashed border-rose-300 flex items-center justify-center text-rose-400 mb-6 animate-pulse bg-rose-50">
                     <Heart className="w-9 h-9" />
                   </div>
                   <h3 
-                    className="font-display text-neutral-800 text-base tracking-widest uppercase font-medium"
-                    style={{ fontFamily: 'var(--font-display)' }}
+                    className="font-serif text-neutral-900 text-base tracking-widest uppercase font-bold"
                   >
                     Wishlist is Empty
                   </h3>
@@ -144,12 +131,11 @@ export default function WishlistDrawer({ isOpen, onClose }: WishlistDrawerProps)
                       onClose();
                       setActivePage('shop');
                     }}
-                    className="mt-8 group relative overflow-hidden px-8 py-3.5 rounded-full font-mono text-[9px] uppercase tracking-[0.25em] border border-[#C5A059]/30 text-[#C5A059] transition-all duration-300 cursor-pointer"
+                    className="mt-8 px-8 py-3.5 rounded-full font-mono text-[9px] uppercase tracking-[0.25em] bg-[#003e1c] hover:bg-[#002f15] text-white font-black border border-[#003e1c] transition-all duration-300 cursor-pointer shadow-md active:scale-95"
                   >
-                    <div className="absolute inset-0 bg-[#C5A059] translate-y-full group-hover:translate-y-0 transition-transform duration-500 z-0" />
-                    <span className="relative z-10 group-hover:text-black font-bold flex items-center gap-2">
+                    <span className="flex items-center gap-2">
                       Browse Outfits
-                      <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
+                      <ArrowRight className="w-3.5 h-3.5" />
                     </span>
                   </button>
                 </div>
@@ -167,11 +153,11 @@ export default function WishlistDrawer({ isOpen, onClose }: WishlistDrawerProps)
                         key={product.id}
                         variants={itemVariants}
                         layout
-                        className="wishlist-item flex gap-4 p-4 rounded-xl border border-[#C5A059]/15 bg-white/45 backdrop-blur-sm relative group cursor-pointer shadow-sm hover:shadow-md transition-all duration-300"
+                        className="wishlist-item flex gap-4 p-4 rounded-2xl border border-neutral-200 bg-white relative group cursor-pointer shadow-sm hover:border-[#003e1c] transition-all duration-300"
                         onClick={() => handleItemClick(product.id)}
                       >
                         {/* Image compartment */}
-                        <div className="w-20 aspect-[3/4] rounded-lg overflow-hidden bg-black/5 shrink-0 border border-[#C5A059]/20 transition-all duration-300 group-hover:border-[#C5A059] group-hover:scale-[1.04] relative">
+                        <div className="w-20 aspect-[3/4] rounded-xl overflow-hidden bg-neutral-100 shrink-0 border border-neutral-200 transition-all duration-300 group-hover:border-[#003e1c] group-hover:scale-[1.03] relative">
                           <img
                             src={product.images[0]}
                             alt={product.name}
@@ -185,8 +171,7 @@ export default function WishlistDrawer({ isOpen, onClose }: WishlistDrawerProps)
                           <div className="space-y-1.5">
                             <div className="flex items-start justify-between gap-2">
                               <h4 
-                                className="font-serif text-sm font-medium text-neutral-800 tracking-wide line-clamp-1 pr-2 transition-colors duration-300 group-hover:text-[#C5A059]"
-                                style={{ fontFamily: 'var(--font-serif)' }}
+                                className="font-serif text-sm font-bold text-neutral-900 tracking-wide line-clamp-1 pr-2 transition-colors duration-300 group-hover:text-[#003e1c]"
                               >
                                 {product.name}
                               </h4>
@@ -195,7 +180,7 @@ export default function WishlistDrawer({ isOpen, onClose }: WishlistDrawerProps)
                                   e.stopPropagation();
                                   toggleWishlist(product.id);
                                 }}
-                                className="text-neutral-400 hover:text-red-600 transition-all p-1.5 rounded-lg hover:bg-red-500/10 cursor-pointer"
+                                className="text-neutral-400 hover:text-red-500 transition-all p-1.5 rounded-lg hover:bg-red-50 cursor-pointer"
                                 aria-label="Remove item"
                               >
                                 <Trash2 className="w-3.5 h-3.5" />
@@ -203,50 +188,48 @@ export default function WishlistDrawer({ isOpen, onClose }: WishlistDrawerProps)
                             </div>
                             
                             <div className="flex justify-between items-center gap-1.5">
-                              <span className="inline-block font-mono text-[8px] uppercase tracking-wider text-[#C5A059] bg-[#C5A059]/10 px-2 py-0.5 rounded border border-[#C5A059]/20 font-bold">
+                              <span className="inline-block font-mono text-[8px] uppercase tracking-wider text-[#003e1c] bg-[#003e1c]/10 px-2 py-0.5 rounded border border-[#003e1c]/20 font-bold">
                                 {product.fabric}
                               </span>
-                              <span className="font-serif text-xs font-semibold text-neutral-800">
+                              <span className="font-mono text-xs font-bold text-[#003e1c]">
                                 {formatPrice(product.price)}
                               </span>
                             </div>
                           </div>
- 
                           {/* View Outfit Details CTA */}
                           <div className="mt-3.5">
                             <button
                               onClick={(e) => handleViewDetails(product.id, e)}
-                              className="w-full group/btn relative overflow-hidden py-2 px-4 rounded-full bg-[#070B09] border border-black/5 hover:bg-[#C5A059] text-white hover:text-black font-mono text-[9px] uppercase tracking-[0.2em] font-bold transition-all duration-300 cursor-pointer flex items-center justify-center gap-2 shadow-sm"
+                              className="w-full group/btn relative overflow-hidden py-2 px-4 rounded-full bg-[#003e1c] hover:bg-[#002f15] text-white font-mono text-[9px] uppercase tracking-[0.2em] font-extrabold transition-all duration-300 cursor-pointer flex items-center justify-center gap-2 shadow-xs border border-[#003e1c]"
                             >
-                              <ArrowRight className="w-3.5 h-3.5 group-hover/btn:translate-x-0.5 transition-transform" />
+                              <ArrowRight className="w-3.5 h-3.5 group-hover/btn:translate-x-0.5 transition-transform text-white" />
                               <span>View Outfit Details</span>
                             </button>
                           </div>
                         </div>
- 
+
                       </motion.div>
                     ))}
                   </AnimatePresence>
                 </motion.div>
               )}
             </div>
- 
+
             {/* Footer summary block */}
             {resolvedItems.length > 0 && (
               <div 
-                className="p-6 border-t border-[#C5A059]/25 relative z-10 space-y-4 shadow-[0_-12px_40px_rgba(197,160,89,0.06)] bg-[#FAF5F0]/60 backdrop-blur-md"
+                className="p-6 border-t border-neutral-200 relative z-10 space-y-4 shadow-lg bg-white"
               >
                 <button
                   onClick={() => {
                     onClose();
                     setActivePage('shop');
                   }}
-                  className="w-full group relative overflow-hidden py-4.5 px-6 rounded-xl bg-[#070B09] text-white font-mono text-[10px] uppercase tracking-[0.3em] font-bold transition-all duration-300 cursor-pointer shadow-lg shadow-black/10"
+                  className="w-full group relative overflow-hidden py-4 px-6 rounded-full bg-[#003e1c] hover:bg-[#002f15] text-white font-mono text-[11px] uppercase tracking-[0.3em] font-black transition-all duration-300 cursor-pointer shadow-md border border-[#003e1c] active:scale-95"
                 >
-                  <div className="absolute inset-0 bg-[#C5A059] translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-out z-0" />
-                  <span className="relative z-10 flex items-center justify-center gap-3 group-hover:text-black">
+                  <span className="relative z-10 flex items-center justify-center gap-3">
                     Continue Shopping
-                    <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                    <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform text-white" />
                   </span>
                 </button>
               </div>

@@ -99,7 +99,8 @@ const CATEGORIES: CategoryDef[] = [
 ];
 
 export default function ShopByCategory() {
-  const { setActivePage, updateFilters } = useApp();
+  const { setActivePage, updateFilters, categories } = useApp();
+  const displayCategories = (categories && categories.length > 0) ? categories : [];
   const reduceMotion = !!useReducedMotion();
   const sectionRef = useRef<HTMLDivElement>(null);
 
@@ -115,7 +116,7 @@ export default function ShopByCategory() {
   const sectionScale = useTransform(scrollYProgress, [0, 0.3], [0.97, 1]);
   const sectionOpacity = useTransform(scrollYProgress, [0, 0.25], [0.6, 1]);
 
-  const handleSelect = useCallback((cat: CategoryDef, colorValue?: string) => {
+  const handleSelect = useCallback((cat: any, colorValue?: string) => {
     // Reset all filters first to prevent sticky parameters
     updateFilters({
       fabric: '',
@@ -175,10 +176,10 @@ export default function ShopByCategory() {
               <div className="w-[5px] sm:w-[7px] h-7 sm:h-9 md:h-11 lg:h-12 bg-[#003e1c] rounded-full shrink-0 ml-1 sm:ml-4" />
               <h2
                 id="shop-by-category-heading"
-                className="text-2xl sm:text-4xl lg:text-6xl uppercase tracking-normal leading-none"
+                className="text-2xl sm:text-4xl lg:text-6xl uppercase tracking-normal leading-none text-neutral-900"
                 style={{ fontFamily: 'var(--font-didot)', fontWeight: 400, letterSpacing: '0.00em' }}
               >
-                <span className="text-[#000000]">SHOP BY </span>
+                <span className="text-neutral-900">SHOP BY </span>
                 <span className="text-[#003e1c]">CATEGORY</span>
               </h2>
             </div>
@@ -188,29 +189,28 @@ export default function ShopByCategory() {
               onClick={() => {
                 setActivePage('shop');
               }}
-              className="px-4 py-2 sm:px-6 sm:py-2.5 bg-[linear-gradient(110deg,#D4AF37_0%,#FFF3A8_25%,#C5A059_50%,#FFEC99_75%,#A07C28_100%)] text-[#1A1A1A] font-bold text-xs md:text-sm tracking-wider rounded-full shadow-[0_4px_18px_rgba(197,160,89,0.4),inset_0_1px_2px_rgba(255,255,255,0.85)] hover:shadow-[0_6px_25px_rgba(197,160,89,0.65),inset_0_1px_2px_rgba(255,255,255,1)] hover:scale-105 active:scale-95 transition-all duration-300 cursor-pointer shrink-0 border border-[#FFF0A6]/70 text-center flex items-center justify-center relative overflow-hidden group"
+              className="px-4 py-2 sm:px-6 sm:py-2.5 bg-[#003e1c] hover:bg-[#002f15] text-white font-bold text-xs md:text-sm tracking-wider rounded-full shadow-md hover:scale-105 active:scale-95 transition-all duration-300 cursor-pointer shrink-0 border border-[#003e1c] text-center flex items-center justify-center relative overflow-hidden group"
               style={{ fontFamily: 'var(--font-avenir)' }}
             >
-              <span className="relative z-10 font-bold drop-shadow-[0_1px_0px_rgba(255,255,255,0.6)]">View All</span>
-              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/50 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700 ease-in-out pointer-events-none" />
+              <span className="relative z-10 font-bold">View All</span>
             </button>
           </div>
 
           {/* Paragraph */}
           <p
-            className="text-xs sm:text-sm md:text-base font-sans tracking-wide text-neutral-1500 max-w-5xl leading-relaxed pl-2 sm:pl-[20px]"
-            style={{ fontFamily: 'var(--font-body)', fontSize: '20px' }}
+            className="text-xs sm:text-sm md:text-base font-sans tracking-wide text-neutral-600 max-w-5xl leading-relaxed pl-2 sm:pl-[20px]"
+            style={{ fontFamily: 'var(--font-body)' }}
           >
             Explore our curated selection of premium fabrics, artisan collections, and everyday essentials designed with heritage weaving techniques and modern aesthetic sophistication.
           </p>
         </div>
 
-        {/* ── Premium Category Grid (LAAM / SHEIN 2-column mobile, flex accordion desktop) ── */}
+        {/* ── Premium Category Grid ── */}
         <div className="grid grid-cols-2 lg:flex lg:flex-row w-full gap-3 md:gap-4 lg:h-[75vh]">
-          {CATEGORIES.map((cat, index) => {
+          {displayCategories.map((cat: any, index: number) => {
             const isHovered = hoveredIdx === index;
             const isAnyHovered = hoveredIdx !== null;
-            const isLastOnMobile = index === CATEGORIES.length - 1;
+            const isLastOnMobile = index === displayCategories.length - 1;
 
             return (
               <motion.div

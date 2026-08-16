@@ -40,12 +40,10 @@ export default function MobileHomeView() {
 
   // Story Rings Data (Native App Stories)
   const stories = [
-    { id: 1, title: 'Unstitched', img: '/cat_unstitched_new.jpg', isNew: true, category: 'category', val: 'Unstitched' },
-    { id: 2, title: 'Stitches', img: '/cat_readytowear_new.png', isNew: false, category: 'category', val: 'Stitches' },
-    { id: 3, title: 'Farshi Shalwar', img: '/cat_bestseller_new.png', isNew: true, category: 'type', val: 'Farshi' },
-    { id: 4, title: 'Chiffon Dupatta', img: '/cat_summer_new.png', isNew: false, category: 'type', val: 'Chiffon' },
-    { id: 5, title: 'Embroidered', img: '/cat_unstitched_new.jpg', isNew: true, category: 'type', val: 'Embroidered' },
-    { id: 6, title: 'New Arrivals', img: '/cat_bestseller_new.png', isNew: true, category: 'collection', val: 'New Arrivals 26' },
+    { id: 1, title: 'Offers', img: '/cat_bestseller_new.png', isNew: true, category: 'sale', val: 'true' },
+    { id: 2, title: 'New Arrivals', img: '/cat_newarrivals_new.png', isNew: true, category: 'newArrival', val: 'true' },
+    { id: 3, title: 'Happy Clients', img: '/cat_summer_new.png', isNew: false, category: 'collection', val: 'Happy Clients' },
+    { id: 4, title: 'Sale', img: '/cat_unstitched_new.jpg', isNew: true, category: 'sale', val: 'true' },
   ];
 
   // App Hero Banners
@@ -79,11 +77,8 @@ export default function MobileHomeView() {
   // Circular Category Avatars
   const circularCategories = [
     { id: 'unstitched', label: 'Unstitched', img: '/cat_unstitched_new.jpg', key: 'category', val: 'Unstitched' },
-    { id: 'stitches', label: 'Stitches', img: '/cat_readytowear_new.png', key: 'category', val: 'Stitches' },
-    { id: 'farshi', label: 'Farshi Shalwar', img: '/cat_bestseller_new.png', key: 'type', val: 'Farshi' },
-    { id: 'chiffon', label: 'Chiffon Dupatta', img: '/cat_summer_new.png', key: 'type', val: 'Chiffon' },
-    { id: 'embroidered', label: 'Embroidered', img: '/cat_unstitched_new.jpg', key: 'type', val: 'Embroidered' },
-    { id: 'new-arrivals', label: 'New Arrivals', img: '/cat_bestseller_new.png', key: 'collection', val: 'New Arrivals 26' }
+    { id: 'stitches', label: 'Stitched', img: '/cat_readytowear_new.png', key: 'category', val: 'Stitches' },
+    { id: 'party-wear', label: 'Party Wear', img: '/cat_bestseller_new.png', key: 'category', val: 'Party Wear' },
   ];
 
   const handleSearchSubmit = (e: React.FormEvent) => {
@@ -153,8 +148,16 @@ export default function MobileHomeView() {
       </div>
 
       {/* ── 2. INSTAGRAM / TIKTOK STYLE LUXURY STORY RINGS ── */}
-      <div className="py-3 px-4 bg-white border-b border-neutral-100 overflow-x-auto no-scrollbar">
-        <div className="flex items-center gap-4">
+      <div className="pt-3 pb-3 px-4 bg-white border-b border-neutral-100">
+        <div className="flex items-center justify-between mb-2.5">
+          <div className="flex items-center gap-1.5">
+            <span className="w-1.5 h-1.5 rounded-full bg-[#C5A059] animate-pulse" />
+            <h3 className="text-xs font-mono uppercase font-extrabold tracking-[0.18em] text-neutral-900">
+              Highlighted Updates
+            </h3>
+          </div>
+        </div>
+        <div className="flex items-center gap-4 overflow-x-auto no-scrollbar pt-0.5">
           {stories.map((st, idx) => (
             <div
               key={st.id}
@@ -239,7 +242,7 @@ export default function MobileHomeView() {
           </button>
         </div>
 
-        <div className="grid grid-cols-3 sm:grid-cols-4 gap-4 gap-y-5">
+        <div className="grid grid-cols-3 gap-3.5">
           {circularCategories.map(cat => (
             <div
               key={cat.id}

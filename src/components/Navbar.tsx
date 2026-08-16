@@ -3,6 +3,7 @@ import { useApp } from '../AppContext';
 import { ShoppingBag, Search, Compass, Info, Sparkles, Menu, X, ArrowRight, ArrowLeft, User, Heart, Globe, Check, ChevronDown, Coins, Headphones, Package, RotateCcw, ShieldCheck, RefreshCw, FileText, Truck } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { CURRENCIES, CurrencyCode } from '../types';
+import brandLogoGold from '../assets_logo.png';
 
 interface NavbarProps {
   onOpenCart: () => void;
@@ -96,7 +97,7 @@ export default function Navbar({ onOpenCart, onOpenWishlist }: NavbarProps) {
         className={`hidden lg:flex fixed top-4 left-1/2 -translate-x-1/2 z-40 w-[90%] max-w-6xl transition-all duration-300 ease-out ${headerVisible ? 'translate-y-0 opacity-100' : '-translate-y-28 opacity-0'
           }`}
       >
-        <div className="w-full bg-white/10 backdrop-blur-xl border border-white/20 rounded-full px-6 py-3 flex items-center justify-between gap-4 shadow-[0_12px_40px_-6px_rgba(0,0,0,0.15)]">
+        <div className="w-full bg-transparent px-6 py-3 flex items-center justify-between gap-4">
           {/* Brand Logo */}
           <button
             onClick={() => handleNavClick('home')}
@@ -104,10 +105,10 @@ export default function Navbar({ onOpenCart, onOpenWishlist }: NavbarProps) {
             aria-label="ROTBA Home"
           >
             <img
-              src="/logo_rotba.png"
-              alt="ROTBA Logo"
-              style={{ height: '120px' }}
-              className="object-contain max-w-none mix-blend-multiply transition-transform group-hover:scale-105"
+              src={brandLogoGold}
+              alt="ROTBA Luxury Gold Logo"
+              style={{ height: '150px' }}
+              className="object-contain max-w-none translate-y-1.5 transition-transform duration-300 group-hover:scale-105"
             />
           </button>
 
@@ -121,8 +122,8 @@ export default function Navbar({ onOpenCart, onOpenWishlist }: NavbarProps) {
                     key={link.id}
                     onClick={() => handleNavClick(link.id)}
                     className={`text-[14px] font-bold uppercase tracking-[0.15em] px-4 py-2 rounded-full transition-all duration-300 cursor-pointer ${isActive
-                      ? 'bg-brand-emerald text-brand-cream shadow-[0_2px_10px_rgba(11,36,27,0.2)]'
-                      : 'text-neutral-700 hover:text-brand-emerald hover:bg-brand-emerald/5'
+                      ? 'bg-[#003e1c] text-white font-black shadow-sm'
+                      : 'text-neutral-800 hover:text-[#003e1c] hover:bg-neutral-100'
                       }`}
                   >
                     {link.label}
@@ -134,23 +135,38 @@ export default function Navbar({ onOpenCart, onOpenWishlist }: NavbarProps) {
             {/* Premium Luxury Currency Selector Trigger */}
             <button
               onClick={() => setIsCurrencyModalOpen(true)}
-              className="group flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-[#C5A059]/40 bg-white/90 hover:bg-[#003e1c] hover:border-[#C5A059] text-neutral-900 hover:text-white transition-all duration-300 cursor-pointer shadow-2xs active:scale-95 relative overflow-hidden"
+              className="group flex items-center gap-1.5 px-3.5 py-1.5 rounded-full border border-neutral-300 bg-white hover:bg-neutral-100 text-neutral-800 hover:text-black transition-all duration-300 cursor-pointer shadow-xs active:scale-95 relative overflow-hidden"
               title="Change Currency & Region"
             >
-              <Globe className="w-4 h-4 text-[#C5A059] group-hover:rotate-12 transition-transform duration-300" />
+              <Globe className="w-4 h-4 text-[#003e1c] group-hover:text-black group-hover:rotate-12 transition-transform duration-300" />
               <span className="font-mono text-xs font-bold tracking-wider">{currentCurrencyInfo.code}</span>
-              <ChevronDown className="w-3.5 h-3.5 text-[#C5A059] group-hover:translate-y-0.5 transition-transform" />
+              <ChevronDown className="w-3.5 h-3.5 text-neutral-600 group-hover:text-black group-hover:translate-y-0.5 transition-transform" />
+            </button>
+
+            {/* Wishlist Button */}
+            <button
+              onClick={onOpenWishlist}
+              className="relative p-2.5 text-neutral-800 hover:text-[#003e1c] transition-all cursor-pointer group"
+              aria-label="Wishlist"
+              title="Saved Outfits"
+            >
+              <Heart className={`w-5.5 h-5.5 transition-transform duration-300 group-hover:scale-110 ${wishlist && wishlist.length > 0 ? 'text-rose-500 fill-rose-500/20' : ''}`} />
+              {wishlist && wishlist.length > 0 && (
+                <span className="absolute -top-1 -right-1 bg-rose-600 text-white text-[10px] font-black w-5 h-5 rounded-full flex items-center justify-center shadow-xs">
+                  {wishlist.length}
+                </span>
+              )}
             </button>
 
             {/* Cart Button */}
             <button
               onClick={onOpenCart}
-              className="relative p-2.5 text-brand-emerald hover:text-brand-gold transition-all cursor-pointer"
+              className="relative p-2.5 text-neutral-800 hover:text-[#003e1c] transition-all cursor-pointer"
               aria-label="Shopping Bag"
             >
               <ShoppingBag className="w-5.5 h-5.5" />
               {cartItemsCount > 0 && (
-                <span className="absolute -top-1 -right-1 bg-brand-crimson text-white text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center shadow-md">
+                <span className="absolute -top-1 -right-1 bg-[#003e1c] text-white text-[10px] font-black w-5 h-5 rounded-full flex items-center justify-center shadow-xs">
                   {cartItemsCount}
                 </span>
               )}
@@ -160,7 +176,7 @@ export default function Navbar({ onOpenCart, onOpenWishlist }: NavbarProps) {
             <div className="relative">
               <button
                 onClick={() => (user ? setIsProfileOpen(!isProfileOpen) : setAuthModalOpen(true))}
-                className={`p-2.5 transition-all cursor-pointer ${user ? 'text-[#C5A059]' : 'text-brand-emerald hover:text-brand-gold'}`}
+                className={`p-2.5 transition-all cursor-pointer ${user ? 'text-[#003e1c]' : 'text-neutral-800 hover:text-[#003e1c]'}`}
                 aria-label="Account Profile"
               >
                 <User className="w-6 h-6" />
@@ -174,16 +190,16 @@ export default function Navbar({ onOpenCart, onOpenWishlist }: NavbarProps) {
                       initial={{ opacity: 0, y: 15 }}
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, y: 15 }}
-                      className="absolute right-0 mt-2.5 w-64 rounded-2xl border p-5 z-20 bg-white/95 backdrop-blur-xl border-[#C5A059]/25 shadow-xl text-left"
+                      className="absolute right-0 mt-2.5 w-64 rounded-2xl border p-5 z-20 bg-white border-neutral-200 shadow-xl text-left text-neutral-900"
                     >
                       <div className="space-y-1 mb-3">
-                        <span className="text-[8px] uppercase tracking-widest text-[#C5A059] font-bold">Active Profile</span>
-                        <h4 className="font-serif text-base text-brand-emerald font-medium">{user.name}</h4>
+                        <span className="text-[8px] uppercase tracking-widest text-[#003e1c] font-bold">Active Profile</span>
+                        <h4 className="font-serif text-base text-neutral-900 font-medium">{user.name}</h4>
                         <span className="text-[9px] text-neutral-500">{user.email}</span>
                       </div>
                       <button
                         onClick={() => { logout(); setIsProfileOpen(false); }}
-                        className="w-full py-2 rounded-xl bg-red-800 text-white text-[9px] uppercase font-bold tracking-widest hover:bg-red-900 transition-all"
+                        className="w-full py-2 rounded-xl bg-rose-600 hover:bg-rose-700 text-white text-[9px] uppercase font-bold tracking-widest transition-all cursor-pointer"
                       >
                         Sign Out
                       </button>
@@ -197,25 +213,25 @@ export default function Navbar({ onOpenCart, onOpenWishlist }: NavbarProps) {
       </header>
 
       {/* ── 2. SINGLE CLEAN MOBILE TOP HEADER (MOBILE ONLY: lg:hidden) ── */}
-      <div className="lg:hidden fixed top-0 left-0 right-0 z-40 bg-white text-neutral-900 shadow-xs border-b border-neutral-200">
-        {/* White Header Row */}
+      <div className="lg:hidden fixed top-0 left-0 right-0 z-40 bg-[#080D0A]/95 text-white shadow-lg border-b border-[#C5A059]/30 backdrop-blur-xl">
+        {/* Black Header Row */}
         <div className="px-4 py-2.5 flex items-center justify-between relative min-h-[54px]">
           <div className="flex items-center gap-3 z-10">
             {activePage === 'home' ? (
               <button
                 onClick={() => setIsMenuOpen(true)}
-                className="p-1 text-neutral-900 hover:text-black cursor-pointer"
+                className="p-1 text-[#C5A059] hover:text-[#E8C888] active:scale-95 transition-all cursor-pointer"
                 aria-label="Open menu"
               >
-                <Menu className="w-7 h-7" />
+                <Menu className="w-7 h-7 text-[#C5A059] stroke-[2.2]" />
               </button>
             ) : (
               <button
                 onClick={() => handleNavClick('home')}
-                className="p-1 text-neutral-900 hover:text-black cursor-pointer flex items-center gap-1.5"
+                className="p-1 text-[#C5A059] hover:text-[#E8C888] active:scale-95 transition-all cursor-pointer flex items-center gap-1.5"
                 aria-label="Back to Home"
               >
-                <ArrowLeft className="w-6 h-6" />
+                <ArrowLeft className="w-6 h-6 text-[#C5A059]" />
               </button>
             )}
           </div>
@@ -225,14 +241,14 @@ export default function Navbar({ onOpenCart, onOpenWishlist }: NavbarProps) {
             onClick={() => handleNavClick('home')}
             className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 h-12 flex items-center justify-center cursor-pointer z-10"
           >
-            <img src="/logo_rotba.png" alt="ROTBA Logo" className="h-18 object-contain mix-blend-multiply" />
+            <img src="/logo_rotba.png" alt="ROTBA Logo" className="h-16 object-contain" />
           </button>
 
           <div className="flex items-center gap-2.5 z-10">
             {/* Premium Luxury Currency Selector Trigger (Mobile) */}
             <button
               onClick={() => setIsCurrencyModalOpen(true)}
-              className="flex items-center gap-1 px-2.5 py-1 rounded-full border border-[#C5A059]/40 bg-white/90 active:bg-[#003e1c] text-neutral-900 active:text-white transition-all cursor-pointer text-[11px] font-mono font-bold shadow-2xs active:scale-95"
+              className="flex items-center gap-1 px-2.5 py-1 rounded-full border border-[#C5A059]/40 bg-[#121A15] active:bg-[#C5A059] text-stone-200 active:text-black transition-all cursor-pointer text-[11px] font-mono font-bold shadow-2xs active:scale-95"
               title="Change Currency & Region"
             >
               <Globe className="w-3.5 h-3.5 text-[#C5A059]" />
@@ -241,10 +257,10 @@ export default function Navbar({ onOpenCart, onOpenWishlist }: NavbarProps) {
             </button>
 
             {/* Cart Shopping Bag */}
-            <button onClick={onOpenCart} className="relative p-1 text-neutral-900 hover:text-black cursor-pointer">
+            <button onClick={onOpenCart} className="relative p-1 text-[#C5A059] hover:text-[#E8C888] cursor-pointer">
               <ShoppingBag className="w-6 h-6" />
               {cartItemsCount > 0 && (
-                <span className="absolute -top-1 -right-1 bg-[#7C1F1F] text-white text-[8px] font-bold w-4 h-4 rounded-full flex items-center justify-center">
+                <span className="absolute -top-1 -right-1 bg-[#C5A059] text-black font-black text-[8px] w-4 h-4 rounded-full flex items-center justify-center shadow-xs">
                   {cartItemsCount}
                 </span>
               )}
@@ -254,25 +270,23 @@ export default function Navbar({ onOpenCart, onOpenWishlist }: NavbarProps) {
       </div>
 
       {/* ── 3. NATIVE LUXURY MOBILE BOTTOM APP DOCK BAR (MOBILE ONLY: lg:hidden) ── */}
-      <div className="lg:hidden fixed bottom-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-xl border-t border-neutral-200/90 px-3 py-1.5 flex items-center justify-around shadow-[0_-8px_30px_rgba(0,0,0,0.08)] text-neutral-600">
-        
+      <div className="lg:hidden fixed bottom-0 left-0 right-0 z-50 bg-[#080D0A]/95 backdrop-blur-xl border-t border-[#C5A059]/30 px-3 py-1.5 flex items-center justify-around shadow-[0_-8px_30px_rgba(0,0,0,0.5)] text-stone-400">
+
         {/* Tab 1: Home */}
         <button
           onClick={() => handleNavClick('home')}
-          className={`flex flex-col items-center gap-0.5 px-3 py-1 rounded-xl transition-all cursor-pointer ${
-            activePage === 'home' ? 'text-black font-bold scale-105' : 'text-neutral-500 hover:text-black'
-          }`}
+          className={`flex flex-col items-center gap-0.5 px-3 py-1 rounded-xl transition-all cursor-pointer ${activePage === 'home' ? 'text-white font-bold scale-105' : 'text-stone-400 hover:text-white'
+            }`}
         >
-          <Compass className={`w-5 h-5 ${activePage === 'home' ? 'text-[#003e1c]' : ''}`} />
+          <Compass className={`w-5 h-5 ${activePage === 'home' ? 'text-[#C5A059]' : ''}`} />
           <span className="text-[10px] font-sans font-semibold tracking-tight">Home</span>
         </button>
 
         {/* Tab 2: Categories */}
         <button
           onClick={() => handleNavClick('shop')}
-          className={`flex flex-col items-center gap-0.5 px-3 py-1 rounded-xl transition-all cursor-pointer ${
-            activePage === 'shop' ? 'text-black font-bold scale-105' : 'text-neutral-500 hover:text-black'
-          }`}
+          className={`flex flex-col items-center gap-0.5 px-3 py-1 rounded-xl transition-all cursor-pointer ${activePage === 'shop' ? 'text-white font-bold scale-105' : 'text-stone-400 hover:text-white'
+            }`}
         >
           <Sparkles className={`w-5 h-5 ${activePage === 'shop' ? 'text-[#C5A059]' : ''}`} />
           <span className="text-[10px] font-sans font-semibold tracking-tight">Categories</span>
@@ -281,12 +295,12 @@ export default function Navbar({ onOpenCart, onOpenWishlist }: NavbarProps) {
         {/* Tab 3: Wishlist */}
         <button
           onClick={onOpenWishlist}
-          className="flex flex-col items-center gap-0.5 px-3 py-1 rounded-xl text-neutral-500 hover:text-black transition-all cursor-pointer relative"
+          className="flex flex-col items-center gap-0.5 px-3 py-1 rounded-xl text-stone-400 hover:text-white transition-all cursor-pointer relative"
         >
-          <Heart className="w-5 h-5 text-neutral-600" />
+          <Heart className="w-5 h-5 text-stone-300" />
           <span className="text-[10px] font-sans font-semibold tracking-tight">Wishlist</span>
           {wishlist && wishlist.length > 0 && (
-            <span className="absolute top-0.5 right-2 bg-[#C5A059] text-white text-[8px] font-mono font-bold w-3.5 h-3.5 rounded-full flex items-center justify-center shadow-xs">
+            <span className="absolute top-0.5 right-2 bg-[#C5A059] text-black text-[8px] font-mono font-bold w-3.5 h-3.5 rounded-full flex items-center justify-center shadow-xs">
               {wishlist.length}
             </span>
           )}
@@ -295,12 +309,12 @@ export default function Navbar({ onOpenCart, onOpenWishlist }: NavbarProps) {
         {/* Tab 4: Cart */}
         <button
           onClick={onOpenCart}
-          className="flex flex-col items-center gap-0.5 px-3 py-1 rounded-xl text-neutral-500 hover:text-black transition-all cursor-pointer relative"
+          className="flex flex-col items-center gap-0.5 px-3 py-1 rounded-xl text-stone-400 hover:text-white transition-all cursor-pointer relative"
         >
-          <ShoppingBag className="w-5 h-5 text-neutral-600" />
+          <ShoppingBag className="w-5 h-5 text-stone-300" />
           <span className="text-[10px] font-sans font-semibold tracking-tight">Bag</span>
           {cartItemsCount > 0 && (
-            <span className="absolute top-0.5 right-2 bg-[#7C1F1F] text-white text-[8px] font-mono font-bold w-4 h-4 rounded-full flex items-center justify-center shadow-xs">
+            <span className="absolute top-0.5 right-2 bg-[#C5A059] text-black text-[8px] font-mono font-bold w-4 h-4 rounded-full flex items-center justify-center shadow-xs">
               {cartItemsCount}
             </span>
           )}
@@ -309,11 +323,10 @@ export default function Navbar({ onOpenCart, onOpenWishlist }: NavbarProps) {
         {/* Tab 5: Account / Profile & Order Records */}
         <button
           onClick={() => handleNavClick('orders')}
-          className={`flex flex-col items-center gap-0.5 px-3 py-1 rounded-xl transition-all cursor-pointer ${
-            activePage === 'orders' || activePage === 'tracking' ? 'text-black font-bold scale-105' : 'text-neutral-500 hover:text-black'
-          }`}
+          className={`flex flex-col items-center gap-0.5 px-3 py-1 rounded-xl transition-all cursor-pointer ${activePage === 'orders' || activePage === 'tracking' ? 'text-white font-bold scale-105' : 'text-stone-400 hover:text-white'
+            }`}
         >
-          <User className={`w-5 h-5 ${activePage === 'orders' || activePage === 'tracking' ? 'text-[#003e1c]' : 'text-neutral-600'}`} />
+          <User className={`w-5 h-5 ${activePage === 'orders' || activePage === 'tracking' ? 'text-[#C5A059]' : 'text-stone-300'}`} />
           <span className="text-[10px] font-sans font-semibold tracking-tight">Account</span>
         </button>
       </div>
@@ -329,8 +342,8 @@ export default function Navbar({ onOpenCart, onOpenWishlist }: NavbarProps) {
           >
             <div className="flex items-center justify-between border-b border-white/15 pb-4">
               <img src="/logo_rotba.png" alt="ROTBA" className="h-10 object-contain brightness-200" />
-              <button onClick={() => setIsMenuOpen(false)} className="p-2 text-white/80 hover:text-white">
-                <X className="w-6 h-6" />
+              <button onClick={() => setIsMenuOpen(false)} className="p-2 text-[#C5A059] hover:text-[#E8C888] transition-colors cursor-pointer">
+                <X className="w-6 h-6 text-[#C5A059]" />
               </button>
             </div>
 
@@ -349,7 +362,7 @@ export default function Navbar({ onOpenCart, onOpenWishlist }: NavbarProps) {
               {/* Navigation Links & Customer Care Accordion */}
               <div className="space-y-1">
                 <span className="text-[10px] font-mono uppercase font-bold tracking-widest text-[#C5A059] block mb-2">Navigation Menu</span>
-                
+
                 {['home', 'shop', 'about'].map((id) => (
                   <button
                     key={id}
@@ -450,14 +463,14 @@ export default function Navbar({ onOpenCart, onOpenWishlist }: NavbarProps) {
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.9, y: 20 }}
               onClick={(e) => e.stopPropagation()}
-              className="relative w-full max-w-md bg-white rounded-3xl p-6 shadow-2xl z-10 border border-[#C5A059]/30 text-left overflow-hidden"
+              className="relative w-full max-w-md bg-[#0D1410] text-white rounded-3xl p-6 shadow-2xl z-10 border border-[#C5A059]/35 text-left overflow-hidden"
             >
-              <div className="flex items-center justify-between border-b border-neutral-100 pb-4 mb-4">
+              <div className="flex items-center justify-between border-b border-white/10 pb-4 mb-4">
                 <div className="flex items-center gap-2.5">
-                  <Globe className="w-5.5 h-5.5 text-[#003e1c]" />
+                  <Globe className="w-5.5 h-5.5 text-[#C5A059]" />
                   <div>
-                    <h3 className="font-serif text-lg font-bold text-[#003e1c]">Select Country & Currency</h3>
-                    <p className="text-[10px] font-sans text-neutral-500">Live prices auto-convert to your chosen region</p>
+                    <h3 className="font-serif text-lg font-bold text-white">Select Country & Currency</h3>
+                    <p className="text-[10px] font-sans text-stone-400">Live prices auto-convert to your chosen region</p>
                   </div>
                 </div>
                 <button
@@ -466,7 +479,7 @@ export default function Navbar({ onOpenCart, onOpenWishlist }: NavbarProps) {
                     e.stopPropagation();
                     setIsCurrencyModalOpen(false);
                   }}
-                  className="p-1.5 rounded-full hover:bg-neutral-100 text-neutral-400 hover:text-black cursor-pointer transition-colors"
+                  className="p-1.5 rounded-full hover:bg-white/10 text-stone-400 hover:text-white cursor-pointer transition-colors"
                 >
                   <X className="w-5 h-5" />
                 </button>
@@ -485,14 +498,13 @@ export default function Navbar({ onOpenCart, onOpenWishlist }: NavbarProps) {
                         setCurrency(cur.code);
                         setIsCurrencyModalOpen(false);
                       }}
-                      className={`w-full p-3.5 rounded-2xl border flex items-center justify-between transition-all duration-300 cursor-pointer text-left select-none ${
-                        isSelected
-                          ? 'bg-[#003e1c] text-white border-[#C5A059] shadow-md scale-[1.01]'
-                          : 'bg-neutral-50/80 hover:bg-white text-neutral-800 border-neutral-200/80 hover:border-[#C5A059]/40 active:bg-neutral-100'
-                      }`}
+                      className={`w-full p-3.5 rounded-2xl border flex items-center justify-between transition-all duration-300 cursor-pointer text-left select-none ${isSelected
+                        ? 'bg-[#C5A059] text-black border-[#C5A059] shadow-md scale-[1.01] font-bold'
+                        : 'bg-[#121A15] hover:bg-[#18221C] text-stone-200 border-white/10 hover:border-[#C5A059]/40 active:bg-black/50'
+                        }`}
                     >
                       <div className="flex items-center gap-3 pointer-events-none">
-                        <div className="w-7 h-5 rounded-sm overflow-hidden border border-black/15 shadow-2xs shrink-0 flex items-center justify-center bg-neutral-100">
+                        <div className="w-7 h-5 rounded-sm overflow-hidden border border-black/15 shadow-2xs shrink-0 flex items-center justify-center bg-neutral-900">
                           <img
                             src={`https://flagcdn.com/w40/${cur.flagCode}.png`}
                             alt={`${cur.country} flag`}
