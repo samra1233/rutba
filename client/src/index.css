@@ -1,0 +1,542 @@
+/* ============================================================
+   ZARIHA LUXURY — GLOBAL STYLESHEET
+   10K Website Upgrade: Fluid Typography, Custom Cursor,
+   Premium Animations, Skeleton Loaders, Toast System
+   ============================================================ */
+
+/* === FONT IMPORTS === */
+/* Original fonts */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap');
+/* [NEW] Marcellus + Manrope for premium headings & alternate body */
+@import url('https://fonts.googleapis.com/css2?family=Marcellus&family=Manrope:wght@300;400;500;600;700;800&display=swap');
+/* [NEW] GFS Didot font for luxury heading style */
+@import url('https://fonts.googleapis.com/css2?family=GFS+Didot&display=swap');
+
+@import "tailwindcss";
+
+/* === TAILWIND v4 THEME TOKENS === */
+@theme {
+  --font-serif: "GFS Didot", Georgia, serif;
+  --font-sans: "Avenir Next", Avenir, ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "Avenir Next", Avenir, ui-monospace, SFMono-Regular, monospace;
+  /* Premium alternate font families */
+  --font-display: "GFS Didot", serif;
+  --font-didot: "GFS Didot", serif;
+  --font-avenir: "Avenir Next", Avenir, ui-sans-serif, system-ui, sans-serif;
+  --font-body: "Avenir Next", Avenir, ui-sans-serif, system-ui, sans-serif;
+  --font-georgia: "Georgia", Georgia, serif;
+
+  /* Custom luxury colors representing high-end South Asian fabrics and dyes */
+  --color-brand-emerald: #143D30;
+  --color-brand-plum: #421223;
+  --color-brand-crimson: #7C1F1F;
+  --color-brand-gold: #C5A059;
+  --color-brand-cream: #FFFFFF;
+  --color-brand-cream-dark: #FAFAFA;
+  --color-brand-sage: #8C9985;
+  /* Additional brand tokens from brief */
+  --color-brand-wine: #3D1220;
+  --color-brand-ivory: #F5F5F5;
+  --color-brand-charcoal: #1A1A1A;
+
+  /* Marquee animation */
+  --animate-marquee: marquee 30s linear infinite;
+  --animate-marquee-reverse: marquee-reverse 35s linear infinite;
+  --animate-shimmer: shimmer 1.8s ease-in-out infinite;
+  --animate-swing: swing 1s ease-in-out infinite;
+
+  @keyframes marquee {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+  @keyframes marquee-reverse {
+    0% { transform: translateX(-50%); }
+    100% { transform: translateX(0); }
+  }
+  @keyframes shimmer {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+  }
+  @keyframes swing {
+    0%, 100% { transform: rotate(0deg); }
+    25% { transform: rotate(8deg); }
+    75% { transform: rotate(-8deg); }
+  }
+}
+
+/* === FLUID TYPOGRAPHY SCALE (clamp-based, no breakpoints needed) === */
+:root {
+  --text-xs: clamp(0.625rem, 0.6rem + 0.15vw, 0.75rem);
+  --text-sm: clamp(0.75rem, 0.7rem + 0.25vw, 0.875rem);
+  --text-base: clamp(0.875rem, 0.8rem + 0.375vw, 1rem);
+  --text-lg: clamp(1rem, 0.9rem + 0.5vw, 1.25rem);
+  --text-xl: clamp(1.25rem, 1rem + 1.25vw, 1.75rem);
+  --text-2xl: clamp(1.5rem, 1.2rem + 1.5vw, 2.25rem);
+  --text-3xl: clamp(2rem, 1.5rem + 2.5vw, 3.5rem);
+}
+
+/* === BASE RESETS & DEFAULTS === */
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  font-family: 'Avenir Next', Avenir, 'Manrope', 'Inter', ui-sans-serif, system-ui, sans-serif;
+  background-color: #f9f9f9;
+  color: #1a1a1a;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+/* GPU Hardware Acceleration & Fast Rendering */
+img {
+  content-visibility: auto;
+  decoding: async;
+}
+
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* === GLOBAL TYPOGRAPHY ENFORCEMENT ACROSS ALL PAGES === */
+/* All Headings across the web app use GFS Didot */
+h1, h2, h3, h4, h5, h6,
+.font-serif,
+.font-didot,
+.font-heading {
+  font-family: 'GFS Didot', serif !important;
+}
+
+/* All Body, Paragraphs, Price text, and UI controls use Avenir */
+body, p, span, div, a, button, input, label, select, textarea,
+.font-sans,
+.font-mono,
+.font-avenir,
+.price-text {
+  font-family: 'Avenir Next', Avenir, 'Manrope', 'Inter', ui-sans-serif, system-ui, sans-serif;
+}
+
+/* === CUSTOM SCROLLBAR === */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-brand-cream);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-brand-emerald);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-brand-gold);
+}
+
+/* === WEAVE PATTERN BACKGROUND === */
+.weave-pattern {
+  background-color: var(--color-brand-cream);
+  background-image: radial-gradient(var(--color-brand-cream-dark) 1px, transparent 1px),
+                    radial-gradient(var(--color-brand-cream-dark) 1px, transparent 1px);
+  background-size: 16px 16px;
+  background-position: 0 0, 8px 8px;
+}
+
+/* === BRAND LOGO SHADER FILTERS === */
+.filter-gold-invert {
+  /* Inverts white background to black and black logo to white, then applies sepia, saturation, brightness, and contrast adjustments to color it metallic gold */
+  filter: invert(1) sepia(1) saturate(5) hue-rotate(5deg) brightness(0.9) contrast(1.1);
+}
+
+/* ============================================================
+   [NEW] HIGH-PERFORMANCE CUSTOM CURSOR SYSTEM
+   ============================================================ */
+
+/* Standard default browser cursor restored */
+/* @media (pointer: fine) {
+  .cursor-hide-native,
+  .cursor-hide-native * {
+    cursor: auto !important;
+  }
+} */
+
+/* 1. Precision Core Dot (Moves instantly for pixel-perfect user response) */
+/* 1. Precision Core Brand Logo Cursor (Moves instantly for pixel-perfect user response) */
+.custom-cursor-logo-wrapper {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 44px;
+  height: 44px;
+  pointer-events: none;
+  z-index: 99999;
+  opacity: 0.95;
+  transform: translate3d(var(--cursor-x, -100px), var(--cursor-y, -100px), 0) translate(-50%, -50%);
+  transition: transform 0.25s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.custom-cursor-logo-wrapper img {
+  animation: logo-sway 6s ease-in-out infinite alternate;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+@keyframes logo-sway {
+  0% { transform: scale(1) rotate(-8deg); }
+  100% { transform: scale(1) rotate(8deg); }
+}
+
+.custom-cursor-logo-wrapper.is-hovering {
+  transform: translate3d(var(--cursor-x, -100px), var(--cursor-y, -100px), 0) translate(-50%, -50%) scale(1.4) rotate(12deg);
+  opacity: 1;
+}
+
+/* 2. Premium Outer Ring (Smooth trailing lag/glide behind the core dot) */
+.custom-cursor-ring {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 22px;
+  height: 22px;
+  border: 1px solid var(--color-brand-gold);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 99998;
+  opacity: 0.75;
+  mix-blend-mode: difference; /* Blends dynamically over light/dark layouts */
+  transform: translate3d(var(--cursor-x, -100px), var(--cursor-y, -100px), 0) translate(-50%, -50%);
+  /* transform has 0.08s delay to create the premium gliding follower trail */
+  transition: transform 0.08s cubic-bezier(0.25, 1, 0.5, 1),
+              width 0.25s cubic-bezier(0.25, 1, 0.5, 1),
+              height 0.25s cubic-bezier(0.25, 1, 0.5, 1),
+              border-color 0.25s ease,
+              background-color 0.25s ease,
+              opacity 0.25s ease;
+}
+
+/* Hover state: ring expands and fills with a gold tint */
+.custom-cursor-ring.is-hovering {
+  width: 38px;
+  height: 38px;
+  border-color: var(--color-brand-gold);
+  background-color: rgba(197, 160, 89, 0.15);
+  opacity: 1;
+}
+
+/* Slow-pulse Ambient Background Glow (Replaces high-overhead mouse follow blob) */
+.cursor-blob {
+  position: fixed;
+  top: -10%;
+  left: 30%;
+  width: 450px;
+  height: 450px;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 1;
+  background: radial-gradient(circle,
+    rgba(197, 160, 89, 0.12) 0%,
+    rgba(61, 18, 32, 0.06) 50%,
+    transparent 80%
+  );
+  filter: blur(80px);
+  animation: floatGlow 15s ease-in-out infinite alternate;
+}
+
+@keyframes floatGlow {
+  0% {
+    transform: translate(0, 0) scale(1);
+    opacity: 0.6;
+  }
+  50% {
+    transform: translate(5%, 10%) scale(1.1);
+    opacity: 0.8;
+  }
+  100% {
+    transform: translate(-5%, 5%) scale(0.95);
+    opacity: 0.5;
+  }
+}
+
+/* Static ambient glow fallback */
+.cursor-blob-static {
+  position: fixed;
+  top: 10%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 350px;
+  height: 350px;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 1;
+  background: radial-gradient(circle,
+    rgba(197, 160, 89, 0.1) 0%,
+    rgba(61, 18, 32, 0.05) 50%,
+    transparent 80%
+  );
+  filter: blur(80px);
+  opacity: 0.6;
+}
+
+/* ============================================================
+   [NEW] CTA BUTTON PREMIUM HOVER STATES
+   ============================================================ */
+.cta-btn {
+  position: relative;
+  transition: transform 0.2s cubic-bezier(0.25, 1, 0.5, 1),
+              box-shadow 0.25s ease,
+              border-color 0.25s ease;
+}
+
+.cta-btn:hover {
+  transform: scale(1.03);
+  box-shadow:
+    0 8px 25px -5px rgba(197, 160, 89, 0.3),
+    0 0 0 1px rgba(197, 160, 89, 0.25),
+    0 0 15px rgba(197, 160, 89, 0.15);
+}
+
+.cta-btn:active {
+  transform: scale(0.98);
+}
+
+/* ============================================================
+   [NEW] LOADING SKELETON SHIMMER
+   ============================================================ */
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    var(--color-brand-cream-dark) 0%,
+    var(--color-brand-ivory) 30%,
+    rgba(197, 160, 89, 0.08) 50%,
+    var(--color-brand-ivory) 70%,
+    var(--color-brand-cream-dark) 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.8s ease-in-out infinite;
+  border-radius: 8px;
+}
+
+.skeleton-text {
+  height: 12px;
+  margin-bottom: 8px;
+  border-radius: 4px;
+}
+
+.skeleton-text-sm {
+  height: 8px;
+  margin-bottom: 6px;
+  border-radius: 3px;
+}
+
+/* ============================================================
+   [NEW] TOAST NOTIFICATION SYSTEM
+   ============================================================ */
+@keyframes toast-slide-in {
+  0% {
+    transform: translateX(120%);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes toast-slide-out {
+  0% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(120%);
+    opacity: 0;
+  }
+}
+
+@keyframes toast-progress {
+  0% { width: 100%; }
+  100% { width: 0%; }
+}
+
+.toast-enter {
+  animation: toast-slide-in 0.4s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+}
+
+.toast-exit {
+  animation: toast-slide-out 0.3s cubic-bezier(0.55, 0, 1, 0.45) forwards;
+}
+
+.toast-progress-bar {
+  animation: toast-progress 4s linear forwards;
+}
+
+/* ============================================================
+   [NEW] MARQUEE / INFINITE CAROUSEL
+   ============================================================ */
+.marquee-track {
+  display: flex;
+  width: max-content;
+}
+
+.marquee-track:hover {
+  animation-play-state: paused !important;
+}
+
+/* ============================================================
+   [NEW] FULLSCREEN OVERLAY MENU
+   ============================================================ */
+.overlay-menu-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: linear-gradient(135deg,
+    var(--color-brand-wine) 0%,
+    var(--color-brand-charcoal) 60%,
+    var(--color-brand-emerald) 100%
+  );
+}
+
+/* ============================================================
+   [NEW] HIDE-ON-SCROLL HEADER
+   ============================================================ */
+.header-hide {
+  transform: translateY(-100%);
+  transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.header-show {
+  transform: translateY(0);
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ============================================================
+   [NEW] PREFERS-REDUCED-MOTION — GLOBAL FALLBACKS
+   ============================================================ */
+@media (prefers-reduced-motion: reduce) {
+  /* Disable shape blur blob follow */
+  .cursor-blob {
+    display: none !important;
+  }
+
+  /* Disable custom cursor animations */
+  .custom-cursor-logo-wrapper,
+  .custom-cursor-ring {
+    transition: none !important;
+  }
+
+  /* Disable marquee motion */
+  .marquee-track {
+    animation: none !important;
+  }
+
+  /* Disable CTA hover transform */
+  .cta-btn:hover {
+    transform: none;
+  }
+
+  /* Disable skeleton shimmer */
+  .skeleton {
+    animation: none !important;
+    background: var(--color-brand-cream-dark);
+  }
+
+  /* Disable toast animations */
+  .toast-enter,
+  .toast-exit {
+    animation: none !important;
+  }
+
+  /* Disable overlay menu stagger — instant display */
+  .overlay-menu-backdrop * {
+    animation: none !important;
+    transition: none !important;
+  }
+
+  /* General motion reduction */
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ============================================================
+   [NEW] HERO SHOWCASE KEN BURNS ANIMATION
+   ============================================================ */
+.animate-ken-burns {
+  animation: kenBurnsAnimation 24s ease-in-out infinite alternate;
+}
+
+@keyframes kenBurnsAnimation {
+  0% {
+    transform: scale(1.0);
+  }
+  100% {
+    transform: scale(1.08);
+  }
+}
+
+/* ============================================================
+   [NEW] LIQUID GLASS BG KEYFRAMES
+   ============================================================ */
+.animate-liquid-blob-1 {
+  animation: floatLiquid 18s ease-in-out infinite alternate;
+}
+.animate-liquid-blob-2 {
+  animation: floatLiquidReverse 22s ease-in-out infinite alternate;
+}
+
+@keyframes floatLiquid {
+  0% {
+    transform: translate(0, 0) scale(1);
+    border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%;
+  }
+  50% {
+    transform: translate(40px, -30px) scale(1.15);
+    border-radius: 60% 40% 50% 50% / 50% 60% 40% 50%;
+  }
+  100% {
+    transform: translate(-20px, 20px) scale(0.95);
+    border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%;
+  }
+}
+
+@keyframes floatLiquidReverse {
+  0% {
+    transform: translate(0, 0) scale(1);
+    border-radius: 50% 50% 50% 50% / 50% 50% 50% 50%;
+  }
+  50% {
+    transform: translate(-30px, 40px) scale(0.85);
+    border-radius: 30% 70% 40% 60% / 50% 30% 70% 50%;
+  }
+  100% {
+    transform: translate(20px, -20px) scale(1.1);
+    border-radius: 50% 50% 50% 50% / 50% 50% 50% 50%;
+  }
+}
+
+/* Custom scrollbar hiding utility */
+.scrollbar-none::-webkit-scrollbar,
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-none,
+.no-scrollbar {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+
+/* Mobile Touch Optimization */
+@media (max-width: 768px) {
+  * {
+    -webkit-tap-highlight-color: transparent;
+  }
+}
+

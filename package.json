@@ -1,13 +1,15 @@
 {
-  "name": "react-example",
+  "name": "rubta-web",
   "private": true,
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "tsx server.ts",
-    "build": "vite build && esbuild server.ts --bundle --platform=node --format=cjs --packages=external --sourcemap --outfile=dist/server.cjs",
+    "dev": "tsx server/server.ts",
+    "build": "vite build && esbuild server/server.ts --bundle --platform=node --format=cjs --packages=external --sourcemap --outfile=dist/server.cjs",
     "start": "node dist/server.cjs",
-    "lint": "tsc --noEmit"
+    "lint": "tsc --noEmit",
+    "seed": "tsx server/seed.ts",
+    "seed:products": "tsx server/seed.ts"
   },
   "dependencies": {
     "@google/genai": "^2.4.0",
