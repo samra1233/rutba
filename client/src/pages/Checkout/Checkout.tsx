@@ -1,7 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { useApp } from '../../AppContext';
 import { getCourierPartner } from '../Content/ContentPages';
 import { CURRENCIES } from '../../types';
+import { Elements, CardElement, useElements, useStripe } from '@stripe/react-stripe-js';
+import { loadStripe } from '@stripe/stripe-js';
+import { orderService as orderApi } from '../../services/orderService';
 import { 
   CreditCard, 
   Truck, 
@@ -24,11 +27,27 @@ import {
 } from 'lucide-react';
 
 export default function Checkout() {
+  const stripePromise = useMemo(() => loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY || ''), []);
+  return (
+    <Elements stripe={stripePromise}>
+      <CheckoutContent />
+    </Elements>
+  );
+}
+
+function CheckoutContent() {
   const { cart, products, placeOrder, setActivePage, user, setAuthModalOpen, settings, formatPrice, currency, setCurrency } = useApp();
+  const stripe = useStripe();
+  const elements = useElements();
   const activeCurrencyInfo = CURRENCIES[currency] || CURRENCIES.PKR;
+  const itemMissingSize = (cart?.items || []).find(item => {
+    const product = products.find(p => p.id === item.productId) || item.product;
+    const sizes = product?.sizes?.filter(Boolean) || [];
+    return product && sizes.length > 0 && (!item.selectedSize || !sizes.includes(item.selectedSize));
+  });
 
   const [processing, setProcessing] = useState(false);
-  const [paymentMethod, setPaymentMethod] = useState<'card' | 'cod'>('cod');
+  const paymentMethod = 'card' as const;
   
   // Credit Card fields
   const [cardNumber, setCardNumber] = useState('');
@@ -60,6 +79,22 @@ export default function Checkout() {
       }));
     }
   }, [currency]);
+
+  if (itemMissingSize) {
+    const product = products.find(p => p.id === itemMissingSize.productId) || itemMissingSize.product;
+    return (
+      <div className="min-h-screen pt-24 pb-16 flex items-center justify-center px-4 bg-[#f9f9f9] text-neutral-900">
+        <div className="max-w-md w-full text-center space-y-5 rounded-[32px] border border-neutral-200 bg-white p-8 shadow-sm">
+          <AlertCircle className="w-10 h-10 text-rose-600 mx-auto" />
+          <h2 className="text-xl font-serif font-bold">Size Selection Required</h2>
+          <p className="text-sm text-neutral-600">Please verify and select a size for {product?.name || 'your product'} before checkout.</p>
+          <button onClick={() => setActivePage('product-detail', itemMissingSize.productId)} className="w-full rounded-xl bg-[#003e1c] px-5 py-3 text-xs font-bold uppercase tracking-wider text-white">
+            Select Size
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   // Intercept guest checkout
   if (!user) {
@@ -136,7 +171,7 @@ export default function Checkout() {
   const subtotal = resolvedItems.reduce((acc, item) => acc + (item.product!.price * item.quantity), 0);
   
   const cardShippingFee = typeof settings?.cardShippingFee !== 'undefined' ? Number(settings.cardShippingFee) : 15;
-  const codShippingFee = typeof settings?.codShippingFee !== 'undefined' ? Number(settings.codShippingFee) : 25;
+  const internationalShippingFee = typeof settings?.internationalShippingFee !== 'undefined' ? Number(settings.internationalShippingFee) : 100;
   const freeLimit = typeof settings?.freeShippingThreshold !== 'undefined' ? Number(settings.freeShippingThreshold) : 500;
 
   const isLocalPakistan = shipping.country && (
@@ -145,9 +180,7 @@ export default function Checkout() {
   );
   const courierService = getCourierPartner(shipping.country);
     
-  let shippingCost = !isLocalPakistan 
-    ? 100 
-    : (paymentMethod === 'card' ? cardShippingFee : codShippingFee);
+  let shippingCost = !isLocalPakistan ? internationalShippingFee : cardShippingFee;
     
   if (isLocalPakistan && subtotal >= freeLimit) {
     shippingCost = 0;
@@ -271,26 +304,9 @@ export default function Checkout() {
       newErrors.postalCode = 'Postal / Zip code is required.';
     }
 
-    // Card Validations
+    // Stripe securely validates card number, expiry and CVC inside its hosted Element.
     if (!cardName || cardName.trim().length < 3) {
       newErrors.cardName = 'Cardholder name is required as printed on card.';
-    }
-
-    const cleanCard = cardNumber.replace(/\s/g, '');
-    if (!cleanCard) {
-      newErrors.cardNumber = 'Credit / Debit Card number is required.';
-    } else if (!validateCreditCardNumber(cleanCard)) {
-      newErrors.cardNumber = 'This card is not valid. Please enter a valid card number (Yeh card valid nahi hai).';
-    }
-
-    if (!cardExpiry) {
-      newErrors.cardExpiry = 'Expiry date required (MM/YY).';
-    } else if (!validateExpiryDate(cardExpiry)) {
-      newErrors.cardExpiry = 'Card is expired or MM/YY is invalid.';
-    }
-
-    if (!cardCvc || cardCvc.length < 3) {
-      newErrors.cardCvc = '3-digit CVC required.';
     }
 
     setErrors(newErrors);
@@ -299,35 +315,51 @@ export default function Checkout() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
-    // Basic shipping address validation
-    const newErrors: Record<string, string> = {};
-    if (!shipping.name || shipping.name.trim().length < 2) newErrors.name = 'Full Name is required.';
-    if (!shipping.email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(shipping.email)) newErrors.email = 'Valid email address is required.';
-    if (!shipping.phone || shipping.phone.trim().length < 8) newErrors.phone = 'WhatsApp contact number is required.';
-    if (!shipping.address || shipping.address.trim().length < 5) newErrors.address = 'Complete delivery address is required.';
-    if (!shipping.city || shipping.city.trim().length < 2) newErrors.city = 'City name is required.';
-    if (!shipping.postalCode || shipping.postalCode.trim().length < 3) newErrors.postalCode = 'Postal / Zip code is required.';
-
-    if (Object.keys(newErrors).length > 0) {
-      setErrors(newErrors);
+    if (!validateForm()) return;
+    if (!stripe || !elements) {
+      setErrors(prev => ({ ...prev, payment: 'Secure payment form is still loading. Please wait a moment.' }));
       return;
     }
-
-    // Rule 2 & 14: Card Payment Safety — Never mark fake card payment as authorized or paid!
-    if (paymentMethod === 'card') {
-      alert('⚠️ Online Card Payment Notice:\n\nCredit / Debit Card payments are currently in Maintenance / Test Mode. Please select Cash on Delivery (COD) to complete your order securely.');
+    const card = elements.getElement(CardElement);
+    if (!card) {
+      setErrors(prev => ({ ...prev, payment: 'Secure card form is unavailable. Please refresh and try again.' }));
       return;
     }
 
     setProcessing(true);
 
     try {
-      // Rule 7: COD Flow — Create order with paymentStatus = PENDING, orderStatus = Pending
+      const intent = await orderApi.createPaymentIntent({
+        items: cart?.items || [],
+        country: shipping.country,
+        currency,
+        customerEmail: shipping.email
+      });
+      const confirmation = await stripe.confirmCardPayment(intent.clientSecret, {
+        payment_method: {
+          card,
+          billing_details: {
+            name: cardName.trim(),
+            email: shipping.email.trim(),
+            phone: shipping.phone.trim(),
+            address: {
+              line1: shipping.address.trim(),
+              city: shipping.city.trim(),
+              postal_code: shipping.postalCode.trim(),
+              country: currency === 'PKR' ? 'PK' : currency === 'AED' ? 'AE' : undefined
+            }
+          }
+        }
+      });
+      if (confirmation.error || confirmation.paymentIntent?.status !== 'succeeded') {
+        setErrors(prev => ({ ...prev, payment: confirmation.error?.message || 'Payment was not completed.' }));
+        setProcessing(false);
+        return;
+      }
       const created = await placeOrder(
         shipping,
-        'cod',
-        { note: 'Cash on Delivery Order', isPaid: false }
+        'card',
+        { paymentIntentId: confirmation.paymentIntent.id, transactionId: confirmation.paymentIntent.id, isPaid: true }
       );
 
       if (created) {
@@ -338,7 +370,7 @@ export default function Checkout() {
       }
     } catch (err: any) {
       console.error('Order placement error:', err);
-      alert('⚠️ Checkout Alert: ' + (err.message || 'Service unavailable'));
+      setErrors(prev => ({ ...prev, payment: err.message || 'Payment service is unavailable.' }));
       setProcessing(false);
     }
   };
@@ -569,62 +601,49 @@ export default function Checkout() {
                 </div>
               </div>
 
-              {/* Payment Method Selector Tabs (COD & Card) */}
-              <div className="flex flex-wrap gap-3 pt-1 border-b border-neutral-200 pb-4">
-                <button
-                  type="button"
-                  onClick={() => setPaymentMethod('cod')}
-                  className={`px-4 py-3 rounded-xl font-mono text-[10px] uppercase tracking-wider font-extrabold flex items-center gap-2 cursor-pointer transition-all ${
-                    paymentMethod === 'cod'
-                      ? 'bg-[#003e1c] text-white shadow-md border border-[#003e1c]'
-                      : 'bg-neutral-100 text-neutral-600 hover:bg-neutral-200 border border-neutral-200'
-                  }`}
-                >
-                  <Wallet className="w-4 h-4" />
-                  <span>Cash on Delivery (COD)</span>
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setPaymentMethod('card')}
-                  className={`px-4 py-3 rounded-xl font-mono text-[10px] uppercase tracking-wider font-extrabold flex items-center gap-2 cursor-pointer transition-all ${
-                    paymentMethod === 'card'
-                      ? 'bg-[#003e1c] text-white shadow-md border border-[#003e1c]'
-                      : 'bg-neutral-100 text-neutral-600 hover:bg-neutral-200 border border-neutral-200'
-                  }`}
-                >
-                  <CreditCard className="w-4 h-4" />
-                  <span>Credit / Debit Card (Setup Mode)</span>
-                </button>
+              <div className="flex items-center gap-3 rounded-xl border border-emerald-200 bg-emerald-50 p-4 text-emerald-900">
+                <ShieldCheck className="h-5 w-5 shrink-0" />
+                <div>
+                  <p className="text-xs font-bold">Secure Stripe card payment</p>
+                  <p className="text-[10px] text-emerald-800">Card details are encrypted and sent directly to Stripe. RUTBA never stores your card number or CVC.</p>
+                </div>
               </div>
 
-              {/* COD Panel Notice */}
-              {paymentMethod === 'cod' && (
-                <div className="p-4 rounded-xl bg-[#003e1c]/5 border border-[#003e1c]/20 text-neutral-800 space-y-2 text-xs font-sans animate-fadeIn">
-                  <div className="flex items-center gap-2 text-[#003e1c] font-bold">
-                    <CheckCircle2 className="w-4 h-4 text-[#003e1c]" />
-                    <span>Cash on Delivery Enabled</span>
-                  </div>
-                  <p className="text-[11px] text-neutral-600 leading-relaxed font-medium">
-                    Pay with cash when your luxury parcel arrives at your doorstep. Order status will be set to <strong>Pending</strong> upon confirmation.
-                  </p>
-                </div>
-              )}
-
-              {/* Card Maintenance Notice */}
-              {paymentMethod === 'card' && (
-                <div className="p-4 rounded-xl bg-amber-50 border border-amber-200 text-amber-900 space-y-2 text-xs font-sans animate-fadeIn">
-                  <div className="flex items-center gap-2 text-amber-800 font-bold">
-                    <AlertCircle className="w-4 h-4 text-amber-600 shrink-0" />
-                    <span>Online Card Gateway in Setup Mode</span>
-                  </div>
-                  <p className="text-[11px] text-amber-800 leading-relaxed font-medium">
-                    Direct card charging is disabled in development mode to protect card credentials and prevent fake bank authorizations. Please select <strong>Cash on Delivery (COD)</strong> to place your test order safely.
-                  </p>
-                </div>
-              )}
-
               {/* Credit Card Panel */}
-              <div className="space-y-6 pt-2 animate-fadeIn">
+              <div className="space-y-4 pt-2 animate-fadeIn">
+                <div className="space-y-1.5">
+                  <label className="block text-[9px] font-bold uppercase tracking-wider text-neutral-600">Cardholder Name *</label>
+                  <input
+                    type="text"
+                    value={cardName}
+                    onChange={(e) => {
+                      setCardName(e.target.value);
+                      if (errors.cardName) setErrors(prev => ({ ...prev, cardName: '' }));
+                    }}
+                    autoComplete="cc-name"
+                    placeholder="Name as printed on card"
+                    className={`w-full rounded-xl border bg-neutral-50 px-4 py-3 text-sm text-neutral-900 focus:outline-none focus:ring-4 focus:ring-[#003e1c]/10 ${errors.cardName ? 'border-red-500' : 'border-neutral-200'}`}
+                  />
+                  {errors.cardName && <p className="text-[10px] font-bold text-red-600">{errors.cardName}</p>}
+                </div>
+                <div className="rounded-xl border border-neutral-200 bg-neutral-50 px-4 py-4 focus-within:border-[#003e1c] focus-within:ring-4 focus-within:ring-[#003e1c]/10">
+                  <CardElement options={{
+                    hidePostalCode: true,
+                    style: {
+                      base: { fontSize: '14px', color: '#171717', fontFamily: 'Arial, sans-serif', '::placeholder': { color: '#a3a3a3' } },
+                      invalid: { color: '#dc2626' }
+                    }
+                  }} />
+                </div>
+                {errors.payment && (
+                  <div className="flex items-start gap-2 rounded-xl border border-red-200 bg-red-50 p-3 text-xs font-bold text-red-700">
+                    <AlertCircle className="h-4 w-4 shrink-0" />
+                    <span>{errors.payment}</span>
+                  </div>
+                )}
+              </div>
+
+              <div className="hidden" aria-hidden="true">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
                   
                   {/* Realtime Visa Card UI */}
@@ -836,7 +855,7 @@ export default function Checkout() {
                 <span>SHIPPING FEE ({courierService})</span>
                 <span className="font-extrabold text-neutral-900 font-mono">
                   {!isLocalPakistan 
-                    ? formatPrice(100) 
+                    ? formatPrice(internationalShippingFee)
                     : shippingCost === 0 
                       ? 'FREE' 
                       : formatPrice(shippingCost)}

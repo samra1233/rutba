@@ -38,7 +38,7 @@ export const orderService = {
     });
   },
 
-  async createPaymentIntent(payload: { amount: number; currency: string; customerEmail?: string }): Promise<any> {
+  async createPaymentIntent(payload: { items: CartItem[]; country: string; currency: string; customerEmail?: string }): Promise<any> {
     return apiFetch('/api/create-payment-intent', {
       method: 'POST',
       body: JSON.stringify(payload)

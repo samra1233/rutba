@@ -6,11 +6,29 @@ import { inventoryService } from './inventoryService';
 import { Order, CartItem, ShippingDetails, OrderItemSnapshot, CurrencyCode } from '../../shared/types';
 
 export const orderService = {
+  calculateOrderTotal(items: CartItem[], country: string): { subtotal?: number; shippingCost?: number; total?: number; error?: string } {
+    if (!Array.isArray(items) || items.length === 0) return { error: 'Cart is empty' };
+    let subtotal = 0;
+    for (const item of items) {
+      const product = productRepository.findById(item.productId);
+      if (!product) return { error: `Product ${item.productId} not found` };
+      if (!Number.isInteger(item.quantity) || item.quantity < 1 || product.stock < item.quantity) {
+        return { error: `Invalid or unavailable quantity for ${product.name}` };
+      }
+      subtotal += (Number(product.salePrice || product.price) || 0) * item.quantity;
+    }
+    const storeSettings = settingsRepository.getSettings();
+    const local = ['pakistan', 'pk'].includes(String(country || '').trim().toLowerCase());
+    let shippingCost = local ? Number(storeSettings.cardShippingFee) : Number(storeSettings.internationalShippingFee);
+    if (local && subtotal >= Number(storeSettings.freeShippingThreshold)) shippingCost = 0;
+    return { subtotal, shippingCost, total: subtotal + shippingCost };
+  },
+
   createOrder(payload: {
     userId: string;
     items: CartItem[];
     shippingDetails: ShippingDetails;
-    paymentMethod: 'card' | 'jazzcash' | 'easypaisa' | 'cod';
+    paymentMethod: 'card';
     paymentDetails?: any;
     currency?: CurrencyCode;
   }): { order?: Order; error?: string } {
@@ -22,6 +40,10 @@ export const orderService = {
 
     if (!shippingDetails.name || !shippingDetails.email || !shippingDetails.address || !shippingDetails.city) {
       return { error: 'Required shipping address fields are missing' };
+    }
+
+    if (paymentMethod !== 'card' || !paymentDetails?.isPaid || !paymentDetails?.paymentIntentId) {
+      return { error: 'A verified Stripe card payment is required' };
     }
 
     const resolvedItems: (CartItem & { product: any })[] = [];
@@ -68,9 +90,9 @@ export const orderService = {
       shippingDetails.country.toLowerCase() === 'pk'
     );
       
-    let shippingCost = !isLocalPakistan 
-      ? 100 
-      : (paymentMethod === 'card' ? storeSettings.cardShippingFee : storeSettings.codShippingFee);
+    let shippingCost = !isLocalPakistan
+      ? storeSettings.internationalShippingFee
+      : storeSettings.cardShippingFee;
       
     if (isLocalPakistan && subtotal >= storeSettings.freeShippingThreshold) {
       shippingCost = 0;
@@ -89,7 +111,7 @@ export const orderService = {
     }
 
     // Rule 5: Separate Status Fields
-    const paymentStatus = paymentMethod === 'cod' ? 'PENDING' : (paymentDetails?.isPaid ? 'PAID' : 'PENDING');
+    const paymentStatus = 'PAID';
     const orderStatus = 'Pending';
     const fulfillmentStatus = 'UNFULFILLED';
 

@@ -8,7 +8,7 @@ import ProductCard from '../../components/product/ProductCard';
 export default function ProductDetail() {
   const { selectedProductId, products, addToCart, setActivePage, toggleWishlist, isWishlisted, formatPrice, addToast } = useApp();
   const [activeImageIdx, setActiveImageIdx] = useState(0);
-  const [selectedSize, setSelectedSize] = useState('Unstitched');
+  const [selectedSize, setSelectedSize] = useState('');
   const [quantity, setQuantity] = useState(1);
   const [adding, setAdding] = useState(false);
   const [selectedColor, setSelectedColor] = useState('Mustard');
@@ -28,9 +28,7 @@ export default function ProductDetail() {
   useEffect(() => {
     setActiveImageIdx(0);
     setQuantity(1);
-    if (availableSizes && availableSizes.length > 0) {
-      setSelectedSize(availableSizes[0]);
-    }
+    setSelectedSize('');
     if (product?.colors && product.colors.length > 0) {
       setSelectedColor(product.colors[0]);
     } else {
@@ -41,16 +39,22 @@ export default function ProductDetail() {
 
   if (!product) return null;
 
-  const handleAddToCart = async () => {
+  const handleAddToCart = async (): Promise<boolean> => {
+    if (availableSizes.length > 0 && !selectedSize) {
+      addToast('Please select your size before adding this product to the bag.', 'warn');
+      document.getElementById('product-size-selector')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      return false;
+    }
     setAdding(true);
     const imageEl = document.querySelector('.main-product-image') as HTMLElement;
     await addToCart(product.id, quantity, imageEl, product.images[activeImageIdx] || product.images[0], selectedSize, product.category, selectedColor);
     setTimeout(() => setAdding(false), 800);
+    return true;
   };
 
   const handleBuyNow = async () => {
-    await handleAddToCart();
-    setActivePage('checkout');
+    const added = await handleAddToCart();
+    if (added) setActivePage('checkout');
   };
 
   const colorsList = [
@@ -185,7 +189,7 @@ export default function ProductDetail() {
             </div>
 
             {/* Color Selector */}
-            <div className="space-y-2">
+            <div id="product-size-selector" className="space-y-2">
               <label className="block text-xs font-mono font-bold text-neutral-800 uppercase tracking-wider">
                 Color: <span className="text-[#A6803C]">{selectedColor}</span>
               </label>
@@ -248,6 +252,9 @@ export default function ProductDetail() {
                   </button>
                 ))}
               </div>
+              {!selectedSize && (
+                <p className="text-[11px] font-sans font-semibold text-rose-600">Select a size to continue.</p>
+              )}
             </div>
 
             {/* Quantity Selector */}

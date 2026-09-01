@@ -1,8 +1,6 @@
 import React, { createContext, useContext, useState, useEffect, useRef } from 'react';
 import { Product, Cart, CartItem, Order, ShippingDetails, RealTimeUpdateEvent, CurrencyCode, CURRENCIES, CategoryDef } from '../../shared/types';
 import initialDb from '../../shared/rubta_db.json';
-import { firestore } from './firebaseClient';
-import { collection, doc, onSnapshot, setDoc, deleteDoc } from 'firebase/firestore';
 
 export const DEFAULT_CATEGORIES: CategoryDef[] = [
   {
@@ -78,7 +76,7 @@ interface AppContextType {
   addToCart: (productId: string, quantity: number, startElement?: HTMLElement | null, imageUrl?: string, selectedSize?: string, selectedCategory?: string, selectedColor?: string) => Promise<void>;
   updateCartQty: (productId: string, quantity: number) => Promise<void>;
   removeFromCart: (productId: string) => Promise<void>;
-  placeOrder: (shippingDetails: ShippingDetails, paymentMethod: 'card' | 'jazzcash' | 'easypaisa' | 'cod', paymentDetails?: any) => Promise<Order | null>;
+  placeOrder: (shippingDetails: ShippingDetails, paymentMethod: 'card', paymentDetails?: any) => Promise<Order | null>;
   clearUserOrders: () => void;
   trackOrder: (orderId: string) => Promise<Order | null>;
   dismissAlert: (id: string) => void;
@@ -94,8 +92,8 @@ interface AppContextType {
   countryCode: string;
   setCountryAndCurrency: (countryCode: string, currency: CurrencyCode, isManual?: boolean) => void;
   formatPrice: (priceInAED: number) => string;
-  settings: { announcementText: string; homeMarqueeText: string; shippingFee?: number; cardShippingFee?: number; codShippingFee?: number; freeShippingThreshold?: number };
-  updateSettings: (updated: Partial<{ announcementText: string; homeMarqueeText: string; shippingFee?: number; cardShippingFee?: number; codShippingFee?: number; freeShippingThreshold?: number }>) => Promise<void>;
+  settings: { announcementText: string; homeMarqueeText: string; shippingFee?: number; cardShippingFee?: number; internationalShippingFee?: number; freeShippingThreshold?: number };
+  updateSettings: (updated: Partial<{ announcementText: string; homeMarqueeText: string; shippingFee?: number; cardShippingFee?: number; internationalShippingFee?: number; freeShippingThreshold?: number }>) => Promise<void>;
   categories: CategoryDef[];
   addCategory: (cat: Omit<CategoryDef, 'id' | 'num'>) => void;
   updateCategory: (id: string, updated: Partial<CategoryDef>) => void;
@@ -160,7 +158,7 @@ const defaultContextValue: AppContextType = {
   countryCode: 'AE',
   setCountryAndCurrency: () => {},
   formatPrice: (priceInAED: number) => `AED ${priceInAED.toLocaleString()}`,
-  settings: { announcementText: '', homeMarqueeText: '', shippingFee: 15, cardShippingFee: 15, codShippingFee: 25, freeShippingThreshold: 500 },
+  settings: { announcementText: '', homeMarqueeText: '', shippingFee: 15, cardShippingFee: 15, internationalShippingFee: 100, freeShippingThreshold: 500 },
   updateSettings: async () => {},
   categories: DEFAULT_CATEGORIES,
   addCategory: () => {},
@@ -354,7 +352,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     return `${cur.symbol} ${converted.toLocaleString()}`;
   };
 
-  const [settings, setSettings] = useState<{ announcementText: string; homeMarqueeText: string; shippingFee?: number; cardShippingFee?: number; codShippingFee?: number; freeShippingThreshold?: number }>({ announcementText: '', homeMarqueeText: '', shippingFee: 15, cardShippingFee: 15, codShippingFee: 25, freeShippingThreshold: 500 });
+  const [settings, setSettings] = useState<{ announcementText: string; homeMarqueeText: string; shippingFee?: number; cardShippingFee?: number; internationalShippingFee?: number; freeShippingThreshold?: number }>({ announcementText: '', homeMarqueeText: '', shippingFee: 15, cardShippingFee: 15, internationalShippingFee: 100, freeShippingThreshold: 500 });
   
   const [activeFilters, setActiveFilters] = useState<AppContextType['activeFilters']>({
     fabric: '',
@@ -577,29 +575,6 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     fetchProducts();
   }, [activeFilters]);
-
-  // Real-time Firebase Firestore listener for Products
-  useEffect(() => {
-    try {
-      const unsub = onSnapshot(collection(firestore, 'products'), (snapshot) => {
-        if (!snapshot.empty) {
-          const fbProds: Product[] = [];
-          snapshot.forEach((docSnap) => {
-            fbProds.push({ id: docSnap.id, ...docSnap.data() } as Product);
-          });
-          if (fbProds.length > 0) {
-            setProducts(fbProds);
-            localStorage.setItem('rotba_products_v2', JSON.stringify(fbProds));
-          }
-        }
-      }, (err) => {
-        console.warn('Firestore products snapshot listener notice:', err);
-      });
-      return () => unsub();
-    } catch (e) {
-      console.warn('Firestore products setup notice:', e);
-    }
-  }, []);
 
   // 3. Sync and fetch cart from API & Local Storage fallback
   const fetchCart = async (uId: string) => {
@@ -861,12 +836,20 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   ) => {
     const currentItems = cart?.items || [];
     const prod = products.find(p => p.id === productId) || staticCatalog.find(p => p.id === productId);
-    const sizeToSet = selectedSize || 'Unstitched';
+    const availableSizes = prod?.sizes?.filter(Boolean) || [];
+    const requiresSizeSelection = availableSizes.length > 0;
+    const sizeToSet = selectedSize?.trim() || '';
+
+    if (requiresSizeSelection && (!sizeToSet || !availableSizes.includes(sizeToSet))) {
+      addToast(`Please select a size for ${prod?.name || 'this product'} before adding it to your bag.`, 'warn');
+      setActivePage('product-detail', productId);
+      return;
+    }
     const catToSet = selectedCategory || prod?.category || 'Unstitched';
     const colorToSet = selectedColor || (prod?.colors?.[0] || '');
 
     const existingIndex = currentItems.findIndex(item => 
-      item.productId === productId && (item.selectedSize || 'Unstitched') === sizeToSet
+      item.productId === productId && (item.selectedSize || '') === sizeToSet
     );
     
     let updatedItems = [...currentItems];
@@ -874,7 +857,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
       updatedItems[existingIndex] = {
         ...updatedItems[existingIndex],
         quantity: updatedItems[existingIndex].quantity + quantity,
-        selectedSize: sizeToSet,
+        selectedSize: sizeToSet || undefined,
         selectedCategory: catToSet,
         selectedColor: colorToSet,
         product: updatedItems[existingIndex].product || prod
@@ -883,7 +866,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
       updatedItems.push({ 
         productId, 
         quantity, 
-        selectedSize: sizeToSet,
+        selectedSize: sizeToSet || undefined,
         selectedCategory: catToSet,
         selectedColor: colorToSet,
         product: prod 
@@ -928,13 +911,13 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   };
 
   // 8. Checkout / Order placing
-  const placeOrder = async (shippingDetails: ShippingDetails, paymentMethod: 'card' | 'jazzcash' | 'easypaisa' | 'cod', paymentDetails?: any) => {
+  const placeOrder = async (shippingDetails: ShippingDetails, paymentMethod: 'card', paymentDetails?: any) => {
     if (!cart || cart.items.length === 0) return null;
 
     const subtotal = cart.items.reduce((sum, item) => sum + ((item.product?.price || 0) * item.quantity), 0);
     
     const cardShippingFee = typeof settings?.cardShippingFee !== 'undefined' ? Number(settings.cardShippingFee) : 15;
-    const codShippingFee = typeof settings?.codShippingFee !== 'undefined' ? Number(settings.codShippingFee) : 25;
+    const internationalShippingFee = typeof settings?.internationalShippingFee !== 'undefined' ? Number(settings.internationalShippingFee) : 100;
     const freeLimit = typeof settings?.freeShippingThreshold !== 'undefined' ? Number(settings.freeShippingThreshold) : 500;
 
     const isLocalPakistan = shippingDetails.country && (
@@ -942,9 +925,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
       shippingDetails.country.toLowerCase() === 'pk'
     );
 
-    let shippingCost = !isLocalPakistan 
-      ? 100 
-      : (paymentMethod === 'card' ? cardShippingFee : codShippingFee);
+    let shippingCost = !isLocalPakistan ? internationalShippingFee : cardShippingFee;
 
     if (isLocalPakistan && subtotal >= freeLimit) {
       shippingCost = 0;
@@ -1043,16 +1024,12 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
         setActivePage('orders');
         return hydratedOrder;
       }
+      const errorData = await res.json().catch(() => null);
+      throw new Error(errorData?.error?.message || errorData?.error || 'Paid order could not be recorded. Please contact support with your Stripe payment reference.');
     } catch (e) {
-      console.log('Order created locally:', e);
+      console.error('Server order creation failed:', e);
+      throw e;
     }
-
-    setCart({ userId: userId || 'guest', items: [] });
-    localStorage.removeItem('rotba_guest_cart');
-    setTrackedOrder(fallbackOrder);
-    saveOrderLocal(fallbackOrder);
-    setActivePage('orders');
-    return fallbackOrder;
   };
 
   const clearUserOrders = async () => {
@@ -1091,7 +1068,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   };
 
   // 10. Settings Update
-  const updateSettings = async (updated: Partial<{ announcementText: string; homeMarqueeText: string; shippingFee?: number; cardShippingFee?: number; codShippingFee?: number; freeShippingThreshold?: number }>) => {
+  const updateSettings = async (updated: Partial<{ announcementText: string; homeMarqueeText: string; shippingFee?: number; cardShippingFee?: number; internationalShippingFee?: number; freeShippingThreshold?: number }>) => {
     try {
       const res = await fetch('/api/admin/settings', {
         method: 'PUT',
@@ -1125,97 +1102,30 @@ const sanitizeCategories = (cats: any[]): CategoryDef[] => {
   }));
 };
 
-  const [categories, setCategories] = useState<CategoryDef[]>(() => {
-    try {
-      const saved = localStorage.getItem('rotba_categories_v2');
-      if (saved) {
-        const parsed = JSON.parse(saved);
-        if (Array.isArray(parsed) && parsed.length > 0) return sanitizeCategories(parsed);
-      }
-    } catch (_) {}
-    return DEFAULT_CATEGORIES;
-  });
+  const [categories, setCategories] = useState<CategoryDef[]>(DEFAULT_CATEGORIES);
 
   useEffect(() => {
-    let firestoreHasData = false;
-
-    // 1. Real-time Firebase Firestore listener for Categories
-    try {
-      const unsub = onSnapshot(collection(firestore, 'categories'), (snapshot) => {
-        firestoreHasData = true;
-        const fbCats: CategoryDef[] = [];
-        snapshot.forEach((docSnap) => {
-          fbCats.push({ id: docSnap.id, ...docSnap.data() } as CategoryDef);
-        });
-        
-        fbCats.sort((a, b) => (parseInt(a.num || '0') - parseInt(b.num || '0')));
-        const cleaned = sanitizeCategories(fbCats);
+    // Categories are served by the same REST database used by the admin form.
+    // Keeping a second Firestore listener here allowed stale snapshots to replace
+    // a freshly uploaded image, so REST is intentionally the single source of truth.
+    const fetchCategories = async () => {
+      try {
+        const res = await fetch('/api/categories');
+        if (!res.ok) return;
+        const data = await res.json();
+        if (!Array.isArray(data)) return;
+        const cleaned = sanitizeCategories(data);
         setCategories(cleaned);
-        localStorage.setItem('rotba_categories_v2', JSON.stringify(cleaned));
-      }, (err) => {
-        console.warn('Firestore categories snapshot listener notice:', err);
-      });
-
-      // 2. Fallback fetch from server REST API only if Firestore didn't provide data
-      const fetchCategories = async () => {
-        if (firestoreHasData) return;
-        try {
-          const res = await fetch('/api/categories');
-          if (res.ok) {
-            const data = await res.json();
-            if (Array.isArray(data) && !firestoreHasData) {
-              const cleaned = sanitizeCategories(data);
-              setCategories(cleaned);
-              localStorage.setItem('rotba_categories_v2', JSON.stringify(cleaned));
-            }
-          }
-        } catch (e) {
-          console.error('Error fetching categories from server:', e);
-        }
-      };
-
-      setTimeout(() => {
-        if (!firestoreHasData) {
-          fetchCategories();
-        }
-      }, 500);
-
-      return () => unsub();
-    } catch (e) {
-      console.warn('Firestore setup notice:', e);
-    }
-  }, []);
-
-  useEffect(() => {
-    const handleStorageChange = (e: StorageEvent) => {
-      if (e.key === 'rotba_categories_v2' && e.newValue) {
-        try {
-          const parsed = JSON.parse(e.newValue);
-          if (Array.isArray(parsed)) {
-            setCategories(sanitizeCategories(parsed));
-          }
-        } catch (_) {}
+      } catch (e) {
+        console.error('Error fetching categories from server:', e);
       }
     };
-    window.addEventListener('storage', handleStorageChange);
-    return () => window.removeEventListener('storage', handleStorageChange);
+    fetchCategories();
   }, []);
 
-  const saveCategories = async (updated: CategoryDef[]) => {
+  const saveCategories = (updated: CategoryDef[]) => {
     const cleaned = sanitizeCategories(updated);
     setCategories(cleaned);
-    try {
-      localStorage.setItem('rotba_categories_v2', JSON.stringify(cleaned));
-    } catch (_) {}
-
-    // Real-time sync to Firebase Firestore
-    try {
-      for (const cat of cleaned) {
-        await setDoc(doc(firestore, 'categories', cat.id), cat, { merge: true });
-      }
-    } catch (e) {
-      console.warn('Firebase setDoc notice:', e);
-    }
   };
 
   const addCategory = async (catData: Omit<CategoryDef, 'id' | 'num'>) => {
@@ -1230,41 +1140,42 @@ const sanitizeCategories = (cats: any[]): CategoryDef[] => {
     saveCategories(updated);
 
     try {
-      await setDoc(doc(firestore, 'categories', newId), newCat);
-    } catch (e) {
-      console.warn('Firebase addDoc notice:', e);
-    }
-
-    try {
-      await fetch('/api/categories', {
+      const res = await fetch('/api/categories', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(newCat)
       });
+      if (!res.ok) throw new Error((await res.json()).error || 'Category save failed');
+      const saved = sanitizeCategories([await res.json()])[0];
+      saveCategories([...categories, saved]);
+      addToast(`Category "${catData.label}" added successfully!`, 'success');
     } catch (e) {
       console.error('Error adding category to server:', e);
+      saveCategories(categories);
+      addToast('Category save failed. Please sign in again and retry.', 'warn');
+      throw e;
     }
-    addToast(`Category "${catData.label}" added successfully!`, 'success');
   };
 
   const updateCategory = async (id: string, updatedData: Partial<CategoryDef>) => {
     const updated = categories.map(cat => cat.id === id ? { ...cat, ...updatedData } : cat);
     saveCategories(updated);
     try {
-      await setDoc(doc(firestore, 'categories', id), updatedData, { merge: true });
-    } catch (e) {
-      console.warn('Firebase updateDoc notice:', e);
-    }
-    try {
-      await fetch(`/api/categories/${id}`, {
+      const res = await fetch(`/api/categories/${id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(updatedData)
       });
+      if (!res.ok) throw new Error((await res.json()).error || 'Category update failed');
+      const saved = sanitizeCategories([await res.json()])[0];
+      saveCategories(categories.map(cat => cat.id === id ? saved : cat));
+      addToast('Category updated successfully!', 'success');
     } catch (e) {
       console.error('Error updating category on server:', e);
+      saveCategories(categories);
+      addToast('Category update failed. Your old category was restored.', 'warn');
+      throw e;
     }
-    addToast(`Category updated successfully!`, 'success');
   };
 
   const deleteCategory = async (id: string) => {
@@ -1272,33 +1183,17 @@ const sanitizeCategories = (cats: any[]): CategoryDef[] => {
     const renumbered = updated.map((c, i) => ({ ...c, num: (i + 1).toString().padStart(2, '0') }));
     
     setCategories(renumbered);
-    try {
-      localStorage.setItem('rotba_categories_v2', JSON.stringify(renumbered));
-    } catch (_) {}
 
-    // 1. Delete from Firebase Firestore in real time!
     try {
-      await deleteDoc(doc(firestore, 'categories', id));
-    } catch (e) {
-      console.warn('Firebase deleteDoc notice:', e);
-    }
-
-    // 2. Sync remaining renumbered categories in Firebase Firestore
-    try {
-      for (const cat of renumbered) {
-        await setDoc(doc(firestore, 'categories', cat.id), cat, { merge: true });
-      }
-    } catch (e) {
-      console.warn('Firebase setDoc notice:', e);
-    }
-
-    // 3. Delete from REST API server memory
-    try {
-      await fetch(`/api/categories/${id}`, { method: 'DELETE' });
+      const res = await fetch(`/api/categories/${id}`, { method: 'DELETE' });
+      if (!res.ok) throw new Error((await res.json()).error || 'Category delete failed');
+      addToast('Category removed!', 'info');
     } catch (e) {
       console.error('Error deleting category on server:', e);
+      saveCategories(categories);
+      addToast('Category could not be removed.', 'warn');
+      throw e;
     }
-    addToast(`Category removed!`, 'info');
   };
 
   const reorderCategories = (newCategories: CategoryDef[]) => {

@@ -1,43 +1,47 @@
 import fs from 'fs';
 import path from 'path';
-import { initializeApp, getApp, getApps } from 'firebase/app';
-import { getFirestore, doc, getDocFromServer, Firestore } from 'firebase/firestore';
+import { App, cert, getApp, getApps, initializeApp } from 'firebase-admin/app';
+import { Firestore, getFirestore } from 'firebase-admin/firestore';
+import { Storage, getStorage } from 'firebase-admin/storage';
 
+let firebaseApp: App | null = null;
 let firestoreInstance: Firestore | null = null;
-let firestoreInitialized = false;
+let storageInstance: Storage | null = null;
+let initialized = false;
 
 export function initFirebase(): Firestore | null {
-  if (firestoreInitialized) return firestoreInstance;
+  if (initialized) return firestoreInstance;
+  initialized = true;
 
   try {
-    const configPath = path.join(process.cwd(), 'firebase-applet-config.json');
-    if (fs.existsSync(configPath)) {
-      const config = JSON.parse(fs.readFileSync(configPath, 'utf-8'));
-      const firebaseConfig = {
-        apiKey: config.apiKey,
-        authDomain: config.authDomain,
-        projectId: config.projectId,
-        storageBucket: config.storageBucket,
-        messagingSenderId: config.messagingSenderId,
-        appId: config.appId
-      };
+    const webConfigPath = path.join(process.cwd(), 'firebase-applet-config.json');
+    const serviceAccountPath = process.env.FIREBASE_SERVICE_ACCOUNT_PATH
+      ? path.resolve(process.env.FIREBASE_SERVICE_ACCOUNT_PATH)
+      : path.join(process.cwd(), 'firebase-service-account.json');
 
-      const firebaseApp = getApps().length === 0 ? initializeApp(firebaseConfig) : getApp();
-      firestoreInstance = config.firestoreDatabaseId 
-        ? getFirestore(firebaseApp, config.firestoreDatabaseId)
-        : getFirestore(firebaseApp);
-
-      const dbName = config.firestoreDatabaseId || '(default)';
-      console.log(`Firebase Firestore initialized successfully (Database: ${dbName}, Project: ${config.projectId})`);
-
-      // Non-blocking connectivity test
-      getDocFromServer(doc(firestoreInstance, 'test', 'connection')).catch(() => {});
-      firestoreInitialized = true;
-    } else {
-      console.warn("firebase-applet-config.json not found, utilizing local fallback database.");
+    if (!fs.existsSync(webConfigPath) || !fs.existsSync(serviceAccountPath)) {
+      console.warn('Firebase Admin credentials are unavailable; using the local database cache.');
+      return null;
     }
-  } catch (e) {
-    console.error("Failed to initialize Firebase Firestore:", e);
+
+    const webConfig = JSON.parse(fs.readFileSync(webConfigPath, 'utf-8'));
+    const serviceAccount = JSON.parse(fs.readFileSync(serviceAccountPath, 'utf-8'));
+    firebaseApp = getApps().length > 0
+      ? getApp()
+      : initializeApp({
+          credential: cert(serviceAccount),
+          projectId: webConfig.projectId,
+          storageBucket: webConfig.storageBucket
+        });
+
+    firestoreInstance = webConfig.firestoreDatabaseId
+      ? getFirestore(firebaseApp, webConfig.firestoreDatabaseId)
+      : getFirestore(firebaseApp);
+    storageInstance = getStorage(firebaseApp);
+    console.log(`Firebase Admin initialized securely (Database: ${webConfig.firestoreDatabaseId || '(default)'}, Project: ${webConfig.projectId})`);
+  } catch (error) {
+    initialized = false;
+    console.error('Failed to initialize Firebase Admin:', error instanceof Error ? error.message : error);
   }
 
   return firestoreInstance;
@@ -45,4 +49,9 @@ export function initFirebase(): Firestore | null {
 
 export function getFirestoreDb(): Firestore | null {
   return firestoreInstance || initFirebase();
+}
+
+export function getFirebaseStorage(): Storage | null {
+  if (!initialized) initFirebase();
+  return storageInstance;
 }

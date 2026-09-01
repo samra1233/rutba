@@ -47,7 +47,7 @@ const itemVariants = {
 };
 
 export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
-  const { cart, products, updateCartQty, removeFromCart, setActivePage, formatPrice } = useApp();
+  const { cart, products, updateCartQty, removeFromCart, setActivePage, formatPrice, addToast } = useApp();
 
   // Resolve cart items with current product details
   const resolvedItems = (cart?.items || []).map(item => {
@@ -64,6 +64,10 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
   const freeShippingThreshold = 500;
   const remainingForFreeShipping = Math.max(0, freeShippingThreshold - subtotal);
   const shippingProgressPercent = Math.min(100, Math.round((subtotal / freeShippingThreshold) * 100));
+  const firstItemMissingSize = resolvedItems.find(item => {
+    const sizes = item.product.sizes?.filter(Boolean) || [];
+    return sizes.length > 0 && (!item.selectedSize || !sizes.includes(item.selectedSize));
+  });
 
   const handleQtyChange = async (productId: string, currentQty: number, change: number) => {
     const targetQty = currentQty + change;
@@ -72,13 +76,18 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
   };
 
   const handleCheckoutClick = () => {
+    if (firstItemMissingSize) {
+      addToast(`Select a valid size for ${firstItemMissingSize.product.name} before checkout.`, 'warn');
+      onClose();
+      setActivePage('product-detail', firstItemMissingSize.productId);
+      return;
+    }
     onClose();
     setActivePage('checkout');
   };
 
   const handleViewBagClick = () => {
-    onClose();
-    setActivePage('checkout');
+    handleCheckoutClick();
   };
 
   return (
@@ -230,7 +239,7 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
 
                             {/* Size & Color Specs */}
                             <div className="flex items-center gap-2 text-[10px] font-mono text-stone-600">
-                              <span>Size: <strong className="text-neutral-900 font-bold">{item.selectedSize || 'Unstitched'}</strong></span>
+                              <span>Size: <strong className={item.selectedSize ? 'text-neutral-900 font-bold' : 'text-rose-600 font-bold'}>{item.selectedSize || 'Selection required'}</strong></span>
                               <span>•</span>
                               <span>Color: <strong className="text-neutral-900 font-bold">{item.selectedColor || 'Mustard'}</strong></span>
                             </div>

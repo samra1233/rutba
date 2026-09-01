@@ -1,6 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { firestore } from '../../firebaseClient';
-import { doc, setDoc, deleteDoc } from 'firebase/firestore';
 import { useApp } from '../../AppContext';
 import { 
   LayoutDashboard, ShoppingBag, Users, LogOut, Plus, Edit, Trash2, 
@@ -100,7 +98,7 @@ export default function Admin() {
   const [settingsMarquee, setSettingsMarquee] = useState('');
   const [settingsShippingFee, setSettingsShippingFee] = useState('15');
   const [settingsCardShippingFee, setSettingsCardShippingFee] = useState('15');
-  const [settingsCodShippingFee, setSettingsCodShippingFee] = useState('25');
+  const [settingsInternationalShippingFee, setSettingsInternationalShippingFee] = useState('100');
   const [settingsFreeShippingThreshold, setSettingsFreeShippingThreshold] = useState('500');
 
   // Category management modal states
@@ -130,7 +128,7 @@ export default function Admin() {
       setSettingsMarquee(settings.homeMarqueeText || '');
       setSettingsShippingFee(typeof (settings as any).shippingFee !== 'undefined' ? (settings as any).shippingFee.toString() : '15');
       setSettingsCardShippingFee(typeof (settings as any).cardShippingFee !== 'undefined' ? (settings as any).cardShippingFee.toString() : '15');
-      setSettingsCodShippingFee(typeof (settings as any).codShippingFee !== 'undefined' ? (settings as any).codShippingFee.toString() : '25');
+      setSettingsInternationalShippingFee(typeof (settings as any).internationalShippingFee !== 'undefined' ? (settings as any).internationalShippingFee.toString() : '100');
       setSettingsFreeShippingThreshold(typeof (settings as any).freeShippingThreshold !== 'undefined' ? (settings as any).freeShippingThreshold.toString() : '500');
     }
   }, [settings]);
@@ -230,7 +228,7 @@ export default function Admin() {
       homeMarqueeText: settingsMarquee,
       shippingFee: Number(settingsShippingFee),
       cardShippingFee: Number(settingsCardShippingFee),
-      codShippingFee: Number(settingsCodShippingFee),
+      internationalShippingFee: Number(settingsInternationalShippingFee),
       freeShippingThreshold: Number(settingsFreeShippingThreshold)
     } as any);
   };
@@ -252,7 +250,7 @@ export default function Admin() {
     setFormDescription('');
     setFormColors('Ivory White');
     setFormFeatures('Embroidered Shirt (1.25m), Printed Dupatta (2.5m), Plain Trouser (2.5m)');
-    setFormImages('https://images.unsplash.com/photo-1608748010899-18f300247112?auto=format&fit=crop&q=80&w=800');
+    setFormImages('');
     setFormOnSale(false);
     setFormSalePrice('');
     setFormIsBestSeller(false);
@@ -312,18 +310,64 @@ export default function Admin() {
     setFormImages(slots.filter(Boolean).join('\n'));
   };
 
+  const handleProductImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = Array.from(e.target.files || []);
+    e.target.value = '';
+    if (!files.length) return;
+
+    const existing = formImages.split('\n').map(s => s.trim()).filter(Boolean);
+    const availableSlots = Math.max(0, 4 - existing.length);
+    if (!availableSlots) {
+      addToast('Maximum 4 product images are allowed. Remove one first.', 'warn');
+      return;
+    }
+
+    const selected = files.slice(0, availableSlots);
+    if (selected.some(file => !file.type.startsWith('image/'))) {
+      addToast('Please select image files only.', 'warn');
+      return;
+    }
+    if (selected.some(file => file.size > 5 * 1024 * 1024)) {
+      addToast('Each product image must be 5MB or smaller.', 'warn');
+      return;
+    }
+
+    const uploaded = await Promise.all(selected.map(file => new Promise<string>((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(String(reader.result || ''));
+      reader.onerror = () => reject(reader.error);
+      reader.readAsDataURL(file);
+    })));
+    setFormImages([...existing, ...uploaded.filter(Boolean)].join('\n'));
+    setActiveSlot(Math.min(existing.length, 3));
+    addToast(`${uploaded.length} product image${uploaded.length > 1 ? 's' : ''} uploaded.`, 'success');
+  };
+
   const handleProductSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const parsedPrice = parsePriceInput(formPrice);
     const parsedWasPrice = parsePriceInput(formWasPrice);
     const parsedSalePrice = parsePriceInput(formSalePrice);
 
-    if (!formName || parsedPrice <= 0 || !formStock) {
-      addToast('Please fill out Name, valid Price (greater than 0) and Stock', 'warn');
+    const parsedStock = Number(formStock);
+    const imgList = formImages.split('\n').map(s => s.trim()).filter(Boolean);
+
+    if (!formName.trim() || parsedPrice <= 0 || !Number.isInteger(parsedStock) || parsedStock < 0) {
+      addToast('Enter a product name, price above 0, and a valid whole stock quantity.', 'warn');
       return;
     }
-
-    const imgList = formImages.split('\n').map(s => s.trim()).filter(Boolean);
+    if (!formCategory || !formFabric || !formType) {
+      addToast('Category, fabric and suit style are required.', 'warn');
+      return;
+    }
+    if (!imgList.length) {
+      addToast('Upload or paste at least one product image.', 'warn');
+      return;
+    }
+    if (!formSizes.length) {
+      addToast('Select at least one available size.', 'warn');
+      return;
+    }
     const effectiveWasPrice = parsedWasPrice > 0 ? parsedWasPrice : (formOnSale && parsedSalePrice > 0 ? parsedPrice : null);
     const effectiveNowPrice = (formOnSale && parsedSalePrice > 0 && parsedWasPrice <= 0) ? parsedSalePrice : parsedPrice;
 
@@ -339,14 +383,14 @@ export default function Admin() {
       category: formCategory,
       pieces: formPieces,
       season: formSeason,
-      stock: Number(formStock),
+      stock: parsedStock,
       description: formDescription,
       onSale: Boolean(formOnSale || (effectiveWasPrice && effectiveWasPrice > effectiveNowPrice)),
       salePrice: (effectiveWasPrice && effectiveWasPrice > effectiveNowPrice) ? effectiveNowPrice : (formOnSale && parsedSalePrice > 0 ? parsedSalePrice : null),
       isBestSeller: formIsBestSeller,
       isNewArrival: formIsNewArrival,
       sizes: formSizes,
-      images: imgList.length > 0 ? imgList : ['https://images.unsplash.com/photo-1608748010899-18f300247112?auto=format&fit=crop&q=80&w=800'],
+      images: imgList,
       colors: formColors.split(',').map(s => s.trim()).filter(Boolean),
       features: formFeatures.split(',').map(s => s.trim()).filter(Boolean)
     };
@@ -370,13 +414,6 @@ export default function Admin() {
       if (res.ok) {
         const savedProduct = await res.json();
         
-        // Write to Firebase Firestore in real time!
-        try {
-          await setDoc(doc(firestore, 'products', savedProduct.id), savedProduct, { merge: true });
-        } catch (e) {
-          console.warn('Firebase product setDoc notice:', e);
-        }
-
         setProducts(prev => {
           const exists = prev.some(p => p.id === savedProduct.id);
           if (exists) {
@@ -410,13 +447,6 @@ export default function Admin() {
     try {
       const res = await fetch(`/api/admin/products/${id}`, { method: 'DELETE' });
       if (res.ok) {
-        // Delete from Firebase Firestore in real time!
-        try {
-          await deleteDoc(doc(firestore, 'products', id));
-        } catch (e) {
-          console.warn('Firebase product deleteDoc notice:', e);
-        }
-
         addToast('Product successfully deleted', 'success');
         setProducts(prev => prev.filter(p => p.id !== id));
         fetchDashboardData();
@@ -437,13 +467,6 @@ export default function Admin() {
         body: JSON.stringify({ stock: newStock })
       });
       if (res.ok) {
-        // Update stock in Firebase Firestore in real time!
-        try {
-          await setDoc(doc(firestore, 'products', pId), { stock: newStock }, { merge: true });
-        } catch (e) {
-          console.warn('Firebase stock setDoc notice:', e);
-        }
-
         setProducts(prev => prev.map(p => p.id === pId ? { ...p, stock: newStock } : p));
         addToast('Product stock level updated successfully', 'success');
         fetchDashboardData();
@@ -626,7 +649,12 @@ export default function Admin() {
 
   const handleCatImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
+    e.target.value = '';
     if (!file) return;
+    if (!file.type.startsWith('image/')) {
+      addToast('Please select an image file.', 'warn');
+      return;
+    }
     if (file.size > 5 * 1024 * 1024) {
       addToast('Image size exceeds 5MB limit', 'warn');
       return;
@@ -641,7 +669,7 @@ export default function Admin() {
     reader.readAsDataURL(file);
   };
 
-  const handleCatSubmit = (e: React.FormEvent) => {
+  const handleCatSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!catFormLabel.trim()) {
       addToast('Please enter a Category Name', 'warn');
@@ -657,12 +685,16 @@ export default function Admin() {
       filterValue: val,
     };
 
-    if (editingCat) {
-      updateCategory(editingCat.id, payload);
-    } else {
-      addCategory(payload);
+    try {
+      if (editingCat) {
+        await updateCategory(editingCat.id, payload);
+      } else {
+        await addCategory(payload);
+      }
+      setIsCatFormOpen(false);
+    } catch (_) {
+      // Keep the form open so the admin can retry without losing entered data.
     }
-    setIsCatFormOpen(false);
   };
 
   // Active header titles
@@ -1235,7 +1267,7 @@ export default function Admin() {
                                 <td className="p-6 font-mono font-bold text-neutral-805 text-base">
                                   {formatAdminPrice(order.total)}
                                   <span className="text-[9px] text-neutral-455 block font-mono font-bold uppercase tracking-wider mt-1.5 font-bold">
-                                    {order.paymentMethod === 'cod' ? 'Cash On Delivery' : 'Paid Card'}
+                                    Paid Card
                                   </span>
                                 </td>
                                 <td className="p-6">
@@ -1382,7 +1414,7 @@ export default function Admin() {
 
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                       <div>
-                        <label className="block text-[11px] text-neutral-500 uppercase tracking-wider mb-2 font-bold">Card Payment Shipping Fee (AED)</label>
+                        <label className="block text-[11px] text-neutral-500 uppercase tracking-wider mb-2 font-bold">Pakistan Delivery Charge (AED)</label>
                         <input 
                           type="number" 
                           value={settingsCardShippingFee}
@@ -1393,12 +1425,13 @@ export default function Admin() {
                       </div>
 
                       <div>
-                        <label className="block text-[11px] text-neutral-500 uppercase tracking-wider mb-2 font-bold">Cash on Delivery Shipping Fee (AED)</label>
+                        <label className="block text-[11px] text-neutral-500 uppercase tracking-wider mb-2 font-bold">International Delivery Charge (AED)</label>
                         <input 
                           type="number" 
-                          value={settingsCodShippingFee}
-                          onChange={(e) => setSettingsCodShippingFee(e.target.value)}
-                          placeholder="e.g. 25"
+                          min="0"
+                          value={settingsInternationalShippingFee}
+                          onChange={(e) => setSettingsInternationalShippingFee(e.target.value)}
+                          placeholder="e.g. 100"
                           className="w-full bg-neutral-50/50 border border-neutral-200 rounded-xl p-4.5 focus:outline-hidden focus:border-[#C5A059] transition-all font-medium text-neutral-800 text-sm shadow-inner"
                         />
                       </div>
@@ -1870,6 +1903,19 @@ export default function Admin() {
                     ))}
                   </div>
 
+                  <label className="w-full py-3 bg-white hover:bg-neutral-100 border border-neutral-300 text-neutral-800 rounded-xl cursor-pointer transition-all flex items-center justify-center gap-2 text-xs font-bold">
+                    <Upload className="w-4 h-4" />
+                    Upload product images (max 4)
+                    <input
+                      type="file"
+                      accept="image/*"
+                      multiple
+                      onChange={handleProductImageUpload}
+                      className="hidden"
+                    />
+                  </label>
+                  <p className="text-[10px] text-neutral-500 text-center">JPG, PNG or WebP · maximum 5MB per image</p>
+
                   {/* Showcase Preview zone */}
                   <div 
                     className="w-full h-80 border-2 border-dashed border-neutral-200 rounded-[2rem] bg-white flex flex-col items-center justify-center relative overflow-hidden shadow-inner group"
@@ -1900,7 +1946,7 @@ export default function Admin() {
                         </div>
                         <div className="space-y-0.5">
                           <span className="text-xs font-sans font-bold text-neutral-700 block">No image loaded in Slot {activeSlot + 1}</span>
-                          <span className="text-[10px] text-neutral-450 block font-sans">Paste image URLs below to render view</span>
+                          <span className="text-[10px] text-neutral-450 block font-sans">Upload an image or paste its URL below</span>
                         </div>
                       </div>
                     )}
@@ -1910,7 +1956,7 @@ export default function Admin() {
                 {/* Slot URL Input box */}
                 <div className="space-y-2 mt-6">
                   <span className="text-[10px] font-mono tracking-widest text-neutral-500 uppercase font-extrabold block">
-                    SLOT {activeSlot + 1} URL (OPTIONAL)
+                    SLOT {activeSlot + 1} IMAGE URL (OR USE UPLOAD)
                   </span>
                   <input 
                     type="text"
@@ -1943,7 +1989,7 @@ export default function Admin() {
                     
                     {/* PRODUCT NAME */}
                     <div className="space-y-1.5">
-                      <span className="text-[11px] font-sans font-bold text-neutral-700 uppercase tracking-wider block">PRODUCT NAME</span>
+                      <label className="text-[11px] font-sans font-bold text-neutral-700 uppercase tracking-wider block">PRODUCT NAME *</label>
                       <input 
                         type="text" 
                         required
@@ -1957,10 +2003,11 @@ export default function Admin() {
                     {/* NOW PRICE & WAS PRICE */}
                     <div className="grid grid-cols-2 gap-4">
                       <div className="space-y-1.5">
-                        <span className="text-[11px] font-sans font-bold text-neutral-700 uppercase tracking-wider block">NOW PRICE (AED)</span>
+                        <label className="text-[11px] font-sans font-bold text-neutral-700 uppercase tracking-wider block">NOW PRICE (AED) *</label>
                         <input 
-                          type="text" 
-                          inputMode="decimal"
+                          type="number"
+                          min="0.01"
+                          step="0.01"
                           required
                           value={formPrice}
                           onChange={(e) => setFormPrice(e.target.value)}
@@ -1972,8 +2019,9 @@ export default function Admin() {
                       <div className="space-y-1.5">
                         <span className="text-[11px] font-sans font-bold text-neutral-700 uppercase tracking-wider block">WAS PRICE / CUT PRICE (AED)</span>
                         <input 
-                          type="text" 
-                          inputMode="decimal"
+                          type="number"
+                          min="0"
+                          step="0.01"
                           value={formWasPrice}
                           onChange={(e) => setFormWasPrice(e.target.value)}
                           placeholder="e.g. 8999 (Original Cut Price)"
@@ -1997,22 +2045,20 @@ export default function Admin() {
 
                       <div className="space-y-1.5">
                         <span className="text-[11px] font-sans font-bold text-neutral-700 uppercase tracking-wider block">COLLECTION</span>
-                        <select 
+                        <input
+                          type="text"
                           value={formCollection}
                           onChange={(e) => setFormCollection(e.target.value)}
+                          placeholder="e.g. Festive Lawn 26"
                           className="w-full bg-stone-50 border border-neutral-300 text-neutral-900 rounded-xl p-3.5 focus:outline-none focus:border-stone-800 focus:bg-white text-sm font-semibold cursor-pointer shadow-xs"
-                        >
-                          <option value="Festive Lawn 26">Festive Lawn 26</option>
-                          <option value="New Arrivals 26">New Arrivals 26</option>
-                          <option value="Winter Luxury 25">Winter Luxury 25</option>
-                        </select>
+                        />
                       </div>
                     </div>
 
                     {/* CATEGORY & FABRIC */}
                     <div className="grid grid-cols-2 gap-4">
                       <div className="space-y-1.5">
-                        <span className="text-[11px] font-sans font-bold text-neutral-700 uppercase tracking-wider block">CATEGORY</span>
+                        <span className="text-[11px] font-sans font-bold text-neutral-700 uppercase tracking-wider block">CATEGORY *</span>
                         <select 
                           value={formCategory}
                           onChange={(e) => setFormCategory(e.target.value)}
@@ -2033,7 +2079,7 @@ export default function Admin() {
                       </div>
 
                       <div className="space-y-1.5">
-                        <span className="text-[11px] font-sans font-bold text-neutral-700 uppercase tracking-wider block">FABRIC</span>
+                        <span className="text-[11px] font-sans font-bold text-neutral-700 uppercase tracking-wider block">FABRIC *</span>
                         <select 
                           value={formFabric}
                           onChange={(e) => setFormFabric(e.target.value)}
@@ -2050,7 +2096,7 @@ export default function Admin() {
                     {/* STYLE & PIECES */}
                     <div className="grid grid-cols-2 gap-4">
                       <div className="space-y-1.5">
-                        <span className="text-[11px] font-sans font-bold text-neutral-700 uppercase tracking-wider block">SUIT STYLE</span>
+                        <span className="text-[11px] font-sans font-bold text-neutral-700 uppercase tracking-wider block">SUIT STYLE *</span>
                         <select 
                           value={formType}
                           onChange={(e) => setFormType(e.target.value)}
@@ -2072,6 +2118,33 @@ export default function Admin() {
                           <option value="2 Piece">2 Piece</option>
                           <option value="1 Piece">1 Piece</option>
                         </select>
+                      </div>
+                    </div>
+
+                    {/* SEASON & PRODUCT DETAILS */}
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                      <div className="space-y-1.5">
+                        <span className="text-[11px] font-sans font-bold text-neutral-700 uppercase tracking-wider block">SEASON</span>
+                        <select
+                          value={formSeason}
+                          onChange={(e) => setFormSeason(e.target.value)}
+                          className="w-full bg-stone-50 border border-neutral-300 text-neutral-900 rounded-xl p-3.5 focus:outline-none focus:border-stone-800 focus:bg-white text-sm font-semibold cursor-pointer shadow-xs"
+                        >
+                          <option value="Summer">Summer</option>
+                          <option value="Winter">Winter</option>
+                          <option value="Festive">Festive</option>
+                          <option value="All Season">All Season</option>
+                        </select>
+                      </div>
+                      <div className="space-y-1.5">
+                        <span className="text-[11px] font-sans font-bold text-neutral-700 uppercase tracking-wider block">FEATURES / PACKAGE CONTENTS</span>
+                        <input
+                          type="text"
+                          value={formFeatures}
+                          onChange={(e) => setFormFeatures(e.target.value)}
+                          placeholder="Comma separated, e.g. Shirt, Dupatta, Trouser"
+                          className="w-full bg-stone-50 border border-neutral-300 text-neutral-900 rounded-xl p-3.5 focus:outline-none focus:border-stone-800 focus:bg-white text-sm font-semibold shadow-xs"
+                        />
                       </div>
                     </div>
 

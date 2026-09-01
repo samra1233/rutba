@@ -4,37 +4,40 @@ import Stripe from 'stripe';
 import { initFirebase } from '../server/config/firebase';
 import { env } from '../server/config/env';
 import apiRouter from '../server/routes/index';
+import { orderService } from '../server/services/orderService';
+import { CURRENCIES, CurrencyCode } from '../shared/types';
 
 // Initialize Firebase Firestore safely
 initFirebase();
 
 const app = express();
-app.use(express.json());
+app.use(express.json({ limit: '30mb' }));
 app.use(cookieParser());
 
 // Stripe Payment Intent endpoint
 const stripeSecretKey = env.stripeSecretKey;
 const paymentIntentHandler = async (req: Request, res: Response) => {
   try {
-    const { amount, currency = 'usd', customerEmail } = req.body;
-    const numericAmount = Number(amount);
-    const normalizedCurrency = String(currency).trim().toLowerCase();
-    if (!Number.isFinite(numericAmount) || numericAmount <= 0) {
-      return res.status(400).json({ error: { code: 'INVALID_AMOUNT', message: 'A positive payment amount is required' } });
+    const { items, country, currency = 'AED', customerEmail } = req.body;
+    const totals = orderService.calculateOrderTotal(items, country);
+    if (totals.error || !totals.total) {
+      return res.status(400).json({ error: { code: 'INVALID_CART', message: totals.error || 'Unable to calculate order total' } });
     }
+    const normalizedCurrency = String(currency).trim().toLowerCase();
     if (!/^[a-z]{3}$/.test(normalizedCurrency)) {
       return res.status(400).json({ error: { code: 'INVALID_CURRENCY', message: 'Currency must be a three-letter ISO code' } });
     }
-    const amountInCents = Math.round(numericAmount * 100);
+    const currencyInfo = CURRENCIES[normalizedCurrency.toUpperCase() as CurrencyCode];
+    if (!currencyInfo) {
+      return res.status(400).json({ error: { code: 'UNSUPPORTED_CURRENCY', message: 'Currency is not supported' } });
+    }
+    const chargeAmount = currencyInfo.code === 'AED'
+      ? Math.round(totals.total)
+      : Math.round(totals.total * (CURRENCIES.AED.rateInPKR / currencyInfo.rateInPKR));
+    const amountInCents = chargeAmount * 100;
 
     if (!stripeSecretKey || stripeSecretKey.startsWith('mock_')) {
-      const mockId = `pi_demo_${Date.now()}_${Math.floor(1000 + Math.random() * 9000)}`;
-      return res.json({
-        clientSecret: `${mockId}_secret_demo`,
-        paymentIntentId: mockId,
-        isMock: true,
-        message: 'Stripe payment intent initialized in Test/Demo Mode'
-      });
+      return res.status(503).json({ error: { code: 'STRIPE_NOT_CONFIGURED', message: 'Card payments are temporarily unavailable' } });
     }
 
     const liveStripe = new Stripe(stripeSecretKey);
@@ -42,7 +45,8 @@ const paymentIntentHandler = async (req: Request, res: Response) => {
       amount: amountInCents,
       currency: normalizedCurrency,
       receipt_email: customerEmail || undefined,
-      automatic_payment_methods: { enabled: true },
+      payment_method_types: ['card'],
+      metadata: { orderTotalAED: String(totals.total), shippingCountry: String(country || '') }
     });
 
     res.json({
@@ -57,7 +61,7 @@ const paymentIntentHandler = async (req: Request, res: Response) => {
 };
 
 // Stripe payment endpoint
-app.post('/create-payment-intent', paymentIntentHandler);
+app.post(['/create-payment-intent', '/api/create-payment-intent'], paymentIntentHandler);
 
 // Mount API router - handle both /api/* and /* (Vercel may pass full path)
 app.use('/api', apiRouter);

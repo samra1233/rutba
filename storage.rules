@@ -1,0 +1,11 @@
+rules_version = '2';
+
+service firebase.storage {
+  match /b/{bucket}/o {
+    // Uploads are validated and performed by the authenticated server.
+    // Public image delivery uses per-object download tokens.
+    match /{object=**} {
+      allow read, write: if false;
+    }
+  }
+}

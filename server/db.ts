@@ -1,21 +1,16 @@
 import fs from 'fs';
 import path from 'path';
-import bcrypt from 'bcryptjs';
 import { Product, Order, Cart, CategoryDef, DEFAULT_CATEGORIES } from '../shared/types';
-import { 
-  collection, 
-  doc, 
-  setDoc, 
-  deleteDoc, 
-  onSnapshot 
-} from 'firebase/firestore';
 import { getFirestoreDb } from './config/firebase';
 
 const SHARED_DB_FILE = path.join(process.cwd(), 'shared', 'rubta_db.json');
 const ROOT_DB_FILE = path.join(process.cwd(), 'rubta_db.json');
 const NODE_MODULES_DB_FILE = path.join(process.cwd(), 'node_modules', 'rubta_db.json');
+const RUNTIME_DB_FILE = path.join(process.cwd(), 'runtime_db.json');
 
-const DB_FILE = fs.existsSync(SHARED_DB_FILE) 
+const DB_FILE = fs.existsSync(RUNTIME_DB_FILE)
+  ? RUNTIME_DB_FILE
+  : fs.existsSync(SHARED_DB_FILE)
   ? SHARED_DB_FILE 
   : fs.existsSync(ROOT_DB_FILE)
     ? ROOT_DB_FILE
@@ -2059,6 +2054,7 @@ interface DBState {
     shippingFee?: number;
     cardShippingFee?: number;
     codShippingFee?: number;
+    internationalShippingFee?: number;
     freeShippingThreshold?: number;
   };
 }
@@ -2074,7 +2070,57 @@ class Database {
 
   constructor() {
     this.load();
-    this.setupRealtimeListeners();
+  }
+
+  public async initializeFirebase(): Promise<void> {
+    const firestore = getFirestoreDb();
+    if (!firestore) return;
+
+    const markerRef = firestore.collection('_system').doc('database');
+    const marker = await markerRef.get();
+
+    if (!marker.exists) {
+      const writes: Promise<unknown>[] = [];
+      for (const product of this.state.products) {
+        writes.push(firestore.collection('products').doc(product.id).set(this.cleanForFirestore(product)));
+      }
+      for (const order of this.state.orders) {
+        writes.push(firestore.collection('orders').doc(order.id).set(this.cleanForFirestore(order)));
+      }
+      for (const [userId, cart] of Object.entries(this.state.carts)) {
+        writes.push(firestore.collection('carts').doc(userId).set(this.cleanForFirestore(cart)));
+      }
+      for (const category of this.getCategories()) {
+        writes.push(firestore.collection('categories').doc(category.id).set(this.cleanForFirestore(category)));
+      }
+      writes.push(firestore.collection('settings').doc('global').set(this.cleanForFirestore(this.getSettings())));
+      await Promise.all(writes);
+
+      const adminDocs = await firestore.collection('admins').get();
+      await Promise.all(adminDocs.docs.map(adminDoc => adminDoc.ref.delete()));
+      await markerRef.set({ initializedAt: new Date().toISOString(), source: 'verified-local-catalog' });
+      console.log(`Firebase seeded from verified local cache (${this.state.products.length} products).`);
+      return;
+    }
+
+    const [products, orders, carts, categories, settings] = await Promise.all([
+      firestore.collection('products').get(),
+      firestore.collection('orders').get(),
+      firestore.collection('carts').get(),
+      firestore.collection('categories').get(),
+      firestore.collection('settings').doc('global').get()
+    ]);
+
+    if (!products.empty) this.state.products = products.docs.map(item => item.data() as Product);
+    this.state.orders = orders.docs.map(item => item.data() as Order);
+    this.state.carts = Object.fromEntries(carts.docs.map(item => [item.id, item.data() as Cart]));
+    if (!categories.empty) {
+      this.state.categories = categories.docs.map(item => item.data() as CategoryDef)
+        .sort((a, b) => String(a.num).localeCompare(String(b.num)));
+    }
+    if (settings.exists) this.state.settings = settings.data() as DBState['settings'];
+    this.save();
+    console.log(`Firebase primary data loaded (${this.state.products.length} products, ${this.state.orders.length} orders).`);
   }
 
   private load() {
@@ -2100,16 +2146,9 @@ class Database {
           }
         });
         
-        // Ensure admins list is present and seeded
+        // Admin credentials come from secure environment variables, never seed defaults.
         if (!this.state.admins) {
           this.state.admins = [];
-        }
-        if (this.state.admins.length === 0) {
-          this.state.admins.push({
-            id: 'admin-001',
-            email: 'admin@zariha.com',
-            passwordHash: bcrypt.hashSync('admin123', 10)
-          });
         }
         // Ensure settings are present
         if (!this.state.settings) {
@@ -2123,13 +2162,7 @@ class Database {
           products: SEED_PRODUCTS,
           orders: [],
           carts: {},
-          admins: [
-            {
-              id: 'admin-001',
-              email: 'admin@zariha.com',
-              passwordHash: bcrypt.hashSync('admin123', 10)
-            }
-          ],
+          admins: [],
           settings: {
             announcementText: "✦ Complimentary Nationwide Shipping ✦ Custom Boutique Packing ✦",
             homeMarqueeText: "✦ Zariha Couture ✦ Unstitched Luxury ✦ Handloom Heritage ✦ Festive Archive ✦"
@@ -2143,60 +2176,8 @@ class Database {
         products: SEED_PRODUCTS,
         orders: [],
         carts: {},
-        admins: [
-          {
-            id: 'admin-001',
-            email: 'admin@zariha.com',
-            passwordHash: bcrypt.hashSync('admin123', 10)
-          }
-        ]
+        admins: []
       };
-    }
-  }
-
-  private setupRealtimeListeners() {
-    const firestore = getFirestoreDb();
-    if (!firestore) return;
-    try {
-      console.log("Setting up Firebase Firestore synchronization...");
-
-      // Setup real-time listeners to keep local state synchronized
-      onSnapshot(collection(firestore, 'products'), (snapshot) => {
-        const products: Product[] = [];
-        snapshot.forEach((docSnap) => {
-          products.push(docSnap.data() as Product);
-        });
-        if (products.length > 0) {
-          this.state.products = products;
-        }
-      });
-
-      onSnapshot(collection(firestore, 'orders'), (snapshot) => {
-        const orders: Order[] = [];
-        snapshot.forEach((docSnap) => {
-          orders.push(docSnap.data() as Order);
-        });
-        this.state.orders = orders;
-      });
-
-      onSnapshot(collection(firestore, 'carts'), (snapshot) => {
-        const carts: { [userId: string]: Cart } = {};
-        snapshot.forEach((docSnap) => {
-          const cart = docSnap.data() as Cart;
-          carts[cart.userId] = cart;
-        });
-        this.state.carts = carts;
-      });
-
-      onSnapshot(doc(firestore, 'settings', 'global'), (docSnap) => {
-        if (docSnap.exists()) {
-          this.state.settings = docSnap.data() as any;
-        }
-      });
-
-      console.log("Firestore real-time synchronization active!");
-    } catch (err) {
-      console.error("Error during Firebase setup sync:", err);
     }
   }
 
@@ -2227,7 +2208,7 @@ class Database {
     if (!firestore) return;
     try {
       const cleanedData = this.cleanForFirestore(data);
-      await setDoc(doc(firestore, colName, docId), cleanedData);
+      await firestore.collection(colName).doc(docId).set(cleanedData);
     } catch (e) {
       console.error(`Error writing to Firestore ${colName}/${docId}:`, e);
     }
@@ -2237,7 +2218,7 @@ class Database {
     const firestore = getFirestoreDb();
     if (!firestore) return;
     try {
-      await deleteDoc(doc(firestore, colName, docId));
+      await firestore.collection(colName).doc(docId).delete();
     } catch (e) {
       console.error(`Error deleting from Firestore ${colName}/${docId}:`, e);
     }
@@ -2246,10 +2227,7 @@ class Database {
   public save() {
     try {
       const data = JSON.stringify(this.state, null, 2);
-      fs.writeFileSync(ROOT_DB_FILE, data, 'utf-8');
-      if (fs.existsSync(path.dirname(NODE_MODULES_DB_FILE))) {
-        try { fs.writeFileSync(NODE_MODULES_DB_FILE, data, 'utf-8'); } catch (_) {}
-      }
+      fs.writeFileSync(RUNTIME_DB_FILE, data, 'utf-8');
     } catch (e) {
       console.error('Error saving DB', e);
     }
@@ -2410,6 +2388,7 @@ class Database {
         shippingFee: 15,
         cardShippingFee: 15,
         codShippingFee: 25,
+        internationalShippingFee: 100,
         freeShippingThreshold: 500
       };
       this.save();
@@ -2422,6 +2401,9 @@ class Database {
       }
       if (typeof this.state.settings.codShippingFee === 'undefined') {
         this.state.settings.codShippingFee = 25;
+      }
+      if (typeof this.state.settings.internationalShippingFee === 'undefined') {
+        this.state.settings.internationalShippingFee = 100;
       }
       if (this.state.settings.freeShippingThreshold === 5000 || typeof this.state.settings.freeShippingThreshold === 'undefined') {
         this.state.settings.freeShippingThreshold = 500;

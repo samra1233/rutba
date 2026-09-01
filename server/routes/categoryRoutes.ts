@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import { db } from '../db';
 import { requireAdminAuth } from '../middleware/adminAuth';
+import { persistImageDataUrl } from '../services/firebaseStorageService';
 
 const router = Router();
 
@@ -11,19 +12,22 @@ router.get('/', (req, res) => {
 });
 
 // POST /api/categories
-router.post('/', requireAdminAuth, (req, res) => {
-  const cat = req.body;
+router.post('/', requireAdminAuth, async (req, res) => {
+  const cat = { ...req.body };
   if (!cat || !cat.label) {
     return res.status(400).json({ error: 'Category label is required' });
   }
+  if (typeof cat.image === 'string') cat.image = await persistImageDataUrl(cat.image, 'categories');
   const created = db.createCategory(cat);
   res.json(created);
 });
 
 // PUT /api/categories/:id
-router.put('/:id', requireAdminAuth, (req, res) => {
+router.put('/:id', requireAdminAuth, async (req, res) => {
   const { id } = req.params;
-  const updated = db.updateCategory(id, req.body);
+  const changes = { ...req.body };
+  if (typeof changes.image === 'string') changes.image = await persistImageDataUrl(changes.image, 'categories');
+  const updated = db.updateCategory(id, changes);
   if (updated) {
     res.json(updated);
   } else {

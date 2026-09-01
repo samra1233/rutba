@@ -1,5 +1,4 @@
 import { initFirebase } from './config/firebase';
-import { collection, getDocs, setDoc, doc } from 'firebase/firestore';
 import { SEED_PRODUCTS } from './db';
 
 async function seedProducts() {
@@ -11,15 +10,15 @@ async function seedProducts() {
   }
 
   try {
-    const productsRef = collection(firestore, 'products');
-    const productsSnapshot = await getDocs(productsRef);
+    const productsRef = firestore.collection('products');
+    const productsSnapshot = await productsRef.get();
     const existingDocIds = new Set(productsSnapshot.docs.map(d => d.id));
 
     let addedCount = 0;
     for (const p of SEED_PRODUCTS) {
       if (!existingDocIds.has(p.id)) {
         console.log(`Seeding missing product ${p.id} to Firestore...`);
-        await setDoc(doc(firestore, 'products', p.id), p);
+        await productsRef.doc(p.id).set(p);
         addedCount++;
       }
     }

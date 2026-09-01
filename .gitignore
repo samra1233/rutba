@@ -4,4 +4,9 @@ dist/
 .env.*
 !.env.example
 *.log
+runtime_db.json
 .DS_Store
+
+# Firebase Admin credentials (never commit private keys)
+firebase-service-account.json
+*-firebase-adminsdk-*.json

@@ -256,11 +256,13 @@ export interface Order {
   shippingAddress?: Address;
   billingAddress?: Address;
 
-  paymentMethod: 'card' | 'jazzcash' | 'easypaisa' | 'cod';
+  paymentMethod: 'card';
   paymentDetails?: {
     accountNumber?: string;
     cardHolder?: string;
     transactionId?: string;
+    paymentIntentId?: string;
+    isPaid?: boolean;
   };
 
   subtotal: number;
@@ -301,7 +303,7 @@ export interface InventoryTransaction {
 export interface Payment {
   id: string;
   orderId: string;
-  provider: 'stripe' | 'cod' | 'jazzcash' | 'easypaisa';
+  provider: 'stripe';
   providerTransactionId?: string;
   amount: number;
   currency: CurrencyCode;
@@ -375,7 +377,7 @@ export interface StoreSettings {
   homeMarqueeText?: string;
   shippingFee: number;
   cardShippingFee: number;
-  codShippingFee: number;
+  internationalShippingFee: number;
   freeShippingThreshold: number;
 }
 

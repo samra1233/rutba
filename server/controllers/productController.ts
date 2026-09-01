@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import { productService } from '../services/productService';
 import { sendSuccess, sendError } from '../utils/responseFormatter';
+import { persistProductImages } from '../services/firebaseStorageService';
 
 export const productController = {
   getProducts(req: Request, res: Response) {
@@ -24,18 +25,20 @@ export const productController = {
     }
   },
 
-  createProduct(req: Request, res: Response) {
+  async createProduct(req: Request, res: Response) {
     try {
-      const product = productService.createProduct(req.body);
+      const images = await persistProductImages(req.body.images);
+      const product = productService.createProduct(images ? { ...req.body, images } : req.body);
       return res.status(201).json(product);
     } catch (err: any) {
       return sendError(res, err.message || 'Failed to create product', 400, 'CREATE_ERROR');
     }
   },
 
-  updateProduct(req: Request, res: Response) {
+  async updateProduct(req: Request, res: Response) {
     try {
-      const product = productService.updateProduct(req.params.id, req.body);
+      const images = await persistProductImages(req.body.images);
+      const product = productService.updateProduct(req.params.id, images ? { ...req.body, images } : req.body);
       if (!product) {
         return sendError(res, 'Product not found', 404, 'PRODUCT_NOT_FOUND');
       }

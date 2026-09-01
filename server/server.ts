@@ -5,6 +5,8 @@ import cookieParser from 'cookie-parser';
 import { WebSocketServer, WebSocket } from 'ws';
 import { createServer as createViteServer } from 'vite';
 import Stripe from 'stripe';
+import { orderService } from './services/orderService';
+import { CURRENCIES, CurrencyCode } from '../shared/types';
 import { initFirebase } from './config/firebase';
 import { env } from './config/env';
 import apiRouter from './routes/index';
@@ -14,7 +16,9 @@ import { db } from './db';
 initFirebase();
 
 const app = express();
-app.use(express.json());
+// Admin product/category images are stored as data URLs in the local database.
+// Express' 100KB default rejected otherwise valid uploads before they reached a route.
+app.use(express.json({ limit: '30mb' }));
 app.use(cookieParser());
 
 // Create HTTP server & WebSocket server
@@ -96,25 +100,26 @@ function broadcastViewerCount(productId: string) {
 const stripeSecretKey = env.stripeSecretKey;
 app.post('/api/create-payment-intent', async (req, res) => {
   try {
-    const { amount, currency = 'usd', customerEmail } = req.body;
-    const numericAmount = Number(amount);
-    const normalizedCurrency = String(currency).trim().toLowerCase();
-    if (!Number.isFinite(numericAmount) || numericAmount <= 0) {
-      return res.status(400).json({ error: { code: 'INVALID_AMOUNT', message: 'A positive payment amount is required' } });
+    const { items, country, currency = 'AED', customerEmail } = req.body;
+    const totals = orderService.calculateOrderTotal(items, country);
+    if (totals.error || !totals.total) {
+      return res.status(400).json({ error: { code: 'INVALID_CART', message: totals.error || 'Unable to calculate order total' } });
     }
+    const normalizedCurrency = String(currency).trim().toLowerCase();
     if (!/^[a-z]{3}$/.test(normalizedCurrency)) {
       return res.status(400).json({ error: { code: 'INVALID_CURRENCY', message: 'Currency must be a three-letter ISO code' } });
     }
-    const amountInCents = Math.round(numericAmount * 100);
+    const currencyInfo = CURRENCIES[normalizedCurrency.toUpperCase() as CurrencyCode];
+    if (!currencyInfo) {
+      return res.status(400).json({ error: { code: 'UNSUPPORTED_CURRENCY', message: 'Currency is not supported' } });
+    }
+    const chargeAmount = currencyInfo.code === 'AED'
+      ? Math.round(totals.total)
+      : Math.round(totals.total * (CURRENCIES.AED.rateInPKR / currencyInfo.rateInPKR));
+    const amountInCents = chargeAmount * 100;
 
     if (!stripeSecretKey || stripeSecretKey.startsWith('mock_')) {
-      const mockId = `pi_demo_${Date.now()}_${Math.floor(1000 + Math.random() * 9000)}`;
-      return res.json({
-        clientSecret: `${mockId}_secret_demo`,
-        paymentIntentId: mockId,
-        isMock: true,
-        message: 'Stripe payment intent initialized in Test/Demo Mode'
-      });
+      return res.status(503).json({ error: { code: 'STRIPE_NOT_CONFIGURED', message: 'Card payments are temporarily unavailable' } });
     }
 
     const liveStripe = new Stripe(stripeSecretKey);
@@ -122,7 +127,11 @@ app.post('/api/create-payment-intent', async (req, res) => {
       amount: amountInCents,
       currency: normalizedCurrency,
       receipt_email: customerEmail || undefined,
-      automatic_payment_methods: { enabled: true },
+      payment_method_types: ['card'],
+      metadata: {
+        orderTotalAED: String(totals.total),
+        shippingCountry: String(country || '')
+      }
     });
 
     res.json({
@@ -153,6 +162,14 @@ app.use((err: any, req: express.Request, res: express.Response, next: express.Ne
 
 // Vite Middleware Integration
 async function startServer() {
+  try {
+    await db.initializeFirebase();
+  } catch (error) {
+    console.error('Firebase startup synchronization failed; refusing to start with uncertain data:', error);
+    process.exitCode = 1;
+    return;
+  }
+
   if (env.nodeEnv !== 'production') {
     const vite = await createViteServer({
       server: { middlewareMode: true },

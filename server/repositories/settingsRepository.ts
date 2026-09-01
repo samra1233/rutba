@@ -28,7 +28,7 @@ export const settingsRepository = {
       orderPrefix: 'ORD',
       shippingFee: 15,
       cardShippingFee: 15,
-      codShippingFee: 25,
+      internationalShippingFee: 100,
       freeShippingThreshold: 500,
       ...raw
     };
@@ -48,7 +48,7 @@ export const settingsRepository = {
       orderPrefix: 'ORD',
       shippingFee: 15,
       cardShippingFee: 15,
-      codShippingFee: 25,
+      internationalShippingFee: 100,
       freeShippingThreshold: 500,
       ...updated
     };

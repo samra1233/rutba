@@ -3,8 +3,8 @@
     {
       "id": "ms-001",
       "name": "Embroidered 3 Piece Indigo Suit",
-      "price": 12,
-      "fabric": "Lawn",
+      "price": 155.0,
+      "fabric": "Cotton",
       "type": "Embroidered",
       "collection": "New Arrivals 26",
       "images": [
@@ -14,7 +14,7 @@
         "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/DSC09763.jpg?v=1779357461"
       ],
       "description": "Shirt : Complete Front Embroidered Fabric : Summer Cotton with Digital Print Dupatta : Chiffon Dupatta Trouser Fabric : Cotton Lawn with Digital Print Model is wearing small size",
-      "stock": 9,
+      "stock": 20,
       "colors": [
         "Indigo Blue"
       ],
@@ -27,7 +27,7 @@
         "Dupatta",
         "Trouser"
       ],
-      "category": "Unstitched",
+      "category": "Ready to Wear",
       "pieces": "3 Piece",
       "season": "Summer",
       "sizes": [
@@ -37,13 +37,16 @@
         "XL"
       ],
       "isBestSeller": true,
-      "onSale": false
+      "wasPrice": 220.0,
+      "compareAtPrice": 220.0,
+      "salePrice": 155.0,
+      "onSale": true
     },
     {
       "id": "ms-002",
       "name": "Embroidered 3 Piece Mustard Suite-Farshi",
-      "price": 6699,
-      "fabric": "Lawn",
+      "price": 155.0,
+      "fabric": "Cotton",
       "type": "Embroidered",
       "collection": "New Arrivals 26",
       "images": [
@@ -76,12 +79,15 @@
         "XL"
       ],
       "isBestSeller": false,
-      "onSale": false
+      "wasPrice": 220.0,
+      "compareAtPrice": 220.0,
+      "salePrice": 155.0,
+      "onSale": true
     },
     {
       "id": "ms-003",
       "name": "Embroidered 3-Piece Lilac Suit",
-      "price": 6699,
+      "price": 155.0,
       "fabric": "Lawn",
       "type": "Embroidered",
       "collection": "New Arrivals 26",
@@ -105,7 +111,7 @@
         "Dupatta",
         "Trouser"
       ],
-      "category": "Unstitched",
+      "category": "Ready to Wear",
       "pieces": "3 Piece",
       "season": "Summer",
       "sizes": [
@@ -115,12 +121,15 @@
         "XL"
       ],
       "isBestSeller": false,
-      "onSale": false
+      "wasPrice": 220.0,
+      "compareAtPrice": 220.0,
+      "salePrice": 155.0,
+      "onSale": true
     },
     {
       "id": "ms-004",
       "name": "Ivory Blossom Embroidered Suit-3 Piece",
-      "price": 6699,
+      "price": 155.0,
       "fabric": "Lawn",
       "type": "Embroidered",
       "collection": "New Arrivals 26",
@@ -144,7 +153,7 @@
         "Dupatta",
         "Trouser"
       ],
-      "category": "Unstitched",
+      "category": "Ready to Wear",
       "pieces": "3 Piece",
       "season": "Summer",
       "sizes": [
@@ -154,12 +163,15 @@
         "XL"
       ],
       "isBestSeller": false,
-      "onSale": false
+      "wasPrice": 220.0,
+      "compareAtPrice": 220.0,
+      "salePrice": 155.0,
+      "onSale": true
     },
     {
       "id": "ms-005",
       "name": "Blue Blossom 3 Piece Suit-Embroidered",
-      "price": 6599,
+      "price": 155.0,
       "fabric": "Lawn",
       "type": "Embroidered",
       "collection": "New Arrivals 26",
@@ -193,12 +205,15 @@
         "XL"
       ],
       "isBestSeller": false,
-      "onSale": false
+      "wasPrice": 220.0,
+      "compareAtPrice": 220.0,
+      "salePrice": 155.0,
+      "onSale": true
     },
     {
       "id": "ms-006",
       "name": "Aqua Floral Printed 3 Piece Suit-Embroidered",
-      "price": 6699,
+      "price": 155.0,
       "fabric": "Lawn",
       "type": "Embroidered",
       "collection": "New Arrivals 26",
@@ -222,7 +237,7 @@
         "Dupatta",
         "Trouser"
       ],
-      "category": "Unstitched",
+      "category": "Ready to Wear",
       "pieces": "3 Piece",
       "season": "Summer",
       "sizes": [
@@ -232,12 +247,15 @@
         "XL"
       ],
       "isBestSeller": false,
-      "onSale": false
+      "wasPrice": 220.0,
+      "compareAtPrice": 220.0,
+      "salePrice": 155.0,
+      "onSale": true
     },
     {
       "id": "ms-007",
       "name": "Embroidered 3 Piece Ochre Palette Suit",
-      "price": 6999,
+      "price": 180.0,
       "fabric": "Lawn",
       "type": "Embroidered",
       "collection": "New Arrivals 26",
@@ -248,7 +266,7 @@
         "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/RHP8326.jpg?v=1778064230"
       ],
       "description": "Shirt : Complete Front Embroidered Fabric : Summer Cotton with Digital Print Dupatta : Lawn Dupatta Trouser Fabric : Cotton Lawn with Digital Print Model is wearing small size",
-      "stock": 9,
+      "stock": 10,
       "colors": [
         "Ochre Yellow"
       ],
@@ -261,7 +279,7 @@
         "Dupatta",
         "Trouser"
       ],
-      "category": "Party Wear",
+      "category": "Ready to Wear",
       "pieces": "3 Piece",
       "season": "Summer",
       "sizes": [
@@ -271,12 +289,15 @@
         "XL"
       ],
       "isBestSeller": false,
-      "onSale": false
+      "wasPrice": 250.0,
+      "compareAtPrice": 250.0,
+      "salePrice": 180.0,
+      "onSale": true
     },
     {
       "id": "ms-008",
       "name": "3 Piece Vibrant Sky Blue Suit-Embroidered",
-      "price": 6999,
+      "price": 180.0,
       "fabric": "Lawn",
       "type": "Embroidered",
       "collection": "New Arrivals 26",
@@ -310,12 +331,15 @@
         "XL"
       ],
       "isBestSeller": false,
-      "onSale": false
+      "wasPrice": 250.0,
+      "compareAtPrice": 250.0,
+      "salePrice": 180.0,
+      "onSale": true
     },
     {
       "id": "ms-009",
       "name": "Embroidered 3 Piece Suit-Farshi",
-      "price": 6849,
+      "price": 165.0,
       "fabric": "Lawn",
       "type": "Embroidered",
       "collection": "New Arrivals 26",
@@ -339,7 +363,7 @@
         "Dupatta",
         "Farshi Shalwar :"
       ],
-      "category": "Party Wear",
+      "category": "Ready to Wear",
       "pieces": "3 Piece",
       "season": "Summer",
       "sizes": [
@@ -349,12 +373,15 @@
         "XL"
       ],
       "isBestSeller": true,
-      "onSale": false
+      "wasPrice": 235.0,
+      "compareAtPrice": 235.0,
+      "salePrice": 165.0,
+      "onSale": true
     },
     {
       "id": "ms-010",
       "name": "3 Piece Embroidered Black Floral Suit",
-      "price": 6999,
+      "price": 180.0,
       "fabric": "Lawn",
       "type": "Embroidered",
       "collection": "New Arrivals 26",
@@ -365,7 +392,7 @@
         "https://cdn.shopify.com/s/files/1/0723/2071/2952/files/RHP8430.jpg?v=1778062407"
       ],
       "description": "Shirt : Complete Front Embroidered Fabric : Summer Cotton with Digital Print Dupatta : Lawn Dupatta Trouser Fabric : Summer Cotton with Digital Print Model is wearing small size",
-      "stock": 10,
+      "stock": 11,
       "colors": [
         "Black"
       ],
@@ -378,7 +405,7 @@
         "Dupatta",
         "Trouser"
       ],
-      "category": "Unstitched",
+      "category": "Ready to Wear",
       "pieces": "3 Piece",
       "season": "Summer",
       "sizes": [
@@ -388,12 +415,15 @@
         "XL"
       ],
       "isBestSeller": false,
-      "onSale": false
+      "wasPrice": 250.0,
+      "compareAtPrice": 250.0,
+      "salePrice": 180.0,
+      "onSale": true
     },
     {
       "id": "ms-011",
       "name": "3 Piece Embroidered Mint Green Suit-Farshi",
-      "price": 6749,
+      "price": 165.0,
       "fabric": "Lawn",
       "type": "Embroidered",
       "collection": "New Arrivals 26",
@@ -427,12 +457,15 @@
         "XL"
       ],
       "isBestSeller": false,
-      "onSale": false
+      "wasPrice": 235.0,
+      "compareAtPrice": 235.0,
+      "salePrice": 165.0,
+      "onSale": true
     },
     {
       "id": "ms-012",
       "name": "3 Piece Embroidered Mustard Cotton Suit",
-      "price": 6999,
+      "price": 180.0,
       "fabric": "Lawn",
       "type": "Embroidered",
       "collection": "New Arrivals 26",
@@ -456,7 +489,7 @@
         "Dupatta",
         "Trouser"
       ],
-      "category": "Unstitched",
+      "category": "Ready to Wear",
       "pieces": "3 Piece",
       "season": "Summer",
       "sizes": [
@@ -466,12 +499,15 @@
         "XL"
       ],
       "isBestSeller": false,
-      "onSale": false
+      "wasPrice": 250.0,
+      "compareAtPrice": 250.0,
+      "salePrice": 180.0,
+      "onSale": true
     },
     {
       "id": "ms-013",
       "name": "3 Piece Embroidered Summer Cotton Suit",
-      "price": 6799,
+      "price": 165.0,
       "fabric": "Lawn",
       "type": "Embroidered",
       "collection": "New Arrivals 26",
@@ -495,7 +531,7 @@
         "Dupatta",
         "Trouser"
       ],
-      "category": "Unstitched",
+      "category": "Ready to Wear",
       "pieces": "3 Piece",
       "season": "Summer",
       "sizes": [
@@ -505,12 +541,15 @@
         "XL"
       ],
       "isBestSeller": false,
-      "onSale": false
+      "wasPrice": 235.0,
+      "compareAtPrice": 235.0,
+      "salePrice": 165.0,
+      "onSale": true
     },
     {
       "id": "ms-014",
       "name": "3 Piece Embroidered Peach Summer Cotton Suit",
-      "price": 6749,
+      "price": 165.0,
       "fabric": "Lawn",
       "type": "Embroidered",
       "collection": "New Arrivals 26",
@@ -534,7 +573,7 @@
         "Dupatta",
         "Trouser"
       ],
-      "category": "Party Wear",
+      "category": "Ready to Wear",
       "pieces": "3 Piece",
       "season": "Summer",
       "sizes": [
@@ -544,12 +583,15 @@
         "XL"
       ],
       "isBestSeller": false,
-      "onSale": false
+      "wasPrice": 235.0,
+      "compareAtPrice": 235.0,
+      "salePrice": 165.0,
+      "onSale": true
     },
     {
       "id": "ms-015",
       "name": "Embroidered 3 Piece Ivory Cream Suite With Floral Print",
-      "price": 6899,
+      "price": 165.0,
       "fabric": "Lawn",
       "type": "Embroidered",
       "collection": "New Arrivals 26",
@@ -573,7 +615,7 @@
         "Dupatta",
         "Trouser"
       ],
-      "category": "Unstitched",
+      "category": "Ready to Wear",
       "pieces": "3 Piece",
       "season": "Summer",
       "sizes": [
@@ -583,12 +625,15 @@
         "XL"
       ],
       "isBestSeller": false,
-      "onSale": false
+      "wasPrice": 235.0,
+      "compareAtPrice": 235.0,
+      "salePrice": 165.0,
+      "onSale": true
     },
     {
       "id": "ms-016",
       "name": "3 Piece Summer Cotton Suite-Embroidered",
-      "price": 6799,
+      "price": 165.0,
       "fabric": "Lawn",
       "type": "Embroidered",
       "collection": "New Arrivals 26",
@@ -622,12 +667,15 @@
         "XL"
       ],
       "isBestSeller": false,
-      "onSale": false
+      "wasPrice": 235.0,
+      "compareAtPrice": 235.0,
+      "salePrice": 165.0,
+      "onSale": true
     },
     {
       "id": "ms-017",
       "name": "3 Piece Mustard suite-Embroidered",
-      "price": 6999,
+      "price": 180.0,
       "fabric": "Lawn",
       "type": "Embroidered",
       "collection": "New Arrivals 26",
@@ -651,7 +699,7 @@
         "Dupatta",
         "Trouser"
       ],
-      "category": "Unstitched",
+      "category": "Ready to Wear",
       "pieces": "3 Piece",
       "season": "Summer",
       "sizes": [
@@ -661,12 +709,15 @@
         "XL"
       ],
       "isBestSeller": true,
-      "onSale": false
+      "wasPrice": 250.0,
+      "compareAtPrice": 250.0,
+      "salePrice": 180.0,
+      "onSale": true
     },
     {
       "id": "ms-018",
       "name": "3 Piece Embroidered Chestnut Brown Suite",
-      "price": 6999,
+      "price": 180.0,
       "fabric": "Lawn",
       "type": "Embroidered",
       "collection": "New Arrivals 26",
@@ -690,7 +741,7 @@
         "Dupatta",
         "Trouser"
       ],
-      "category": "Party Wear",
+      "category": "Ready to Wear",
       "pieces": "3 Piece",
       "season": "Summer",
       "sizes": [
@@ -700,12 +751,15 @@
         "XL"
       ],
       "isBestSeller": false,
-      "onSale": false
+      "wasPrice": 250.0,
+      "compareAtPrice": 250.0,
+      "salePrice": 180.0,
+      "onSale": true
     },
     {
       "id": "ms-019",
       "name": "3 Piece Summer Cotton Suite-Embroidered",
-      "price": 6799,
+      "price": 165.0,
       "fabric": "Lawn",
       "type": "Embroidered",
       "collection": "New Arrivals 26",
@@ -729,7 +783,7 @@
         "Dupatta",
         "Trouser"
       ],
-      "category": "Unstitched",
+      "category": "Ready to Wear",
       "pieces": "3 Piece",
       "season": "Summer",
       "sizes": [
@@ -739,12 +793,15 @@
         "XL"
       ],
       "isBestSeller": false,
-      "onSale": false
+      "wasPrice": 235.0,
+      "compareAtPrice": 235.0,
+      "salePrice": 165.0,
+      "onSale": true
     },
     {
       "id": "ms-020",
       "name": "Embroidered  3 Piece Ivory Cream suite",
-      "price": 6999,
+      "price": 180.0,
       "fabric": "Lawn",
       "type": "Embroidered",
       "collection": "New Arrivals 26",
@@ -778,12 +835,15 @@
         "XL"
       ],
       "isBestSeller": false,
-      "onSale": false
+      "wasPrice": 250.0,
+      "compareAtPrice": 250.0,
+      "salePrice": 180.0,
+      "onSale": true
     },
     {
       "id": "ms-021",
       "name": "3 Piece Orchid Pink suite-Embroidered",
-      "price": 6899,
+      "price": 165.0,
       "fabric": "Lawn",
       "type": "Embroidered",
       "collection": "New Arrivals 26",
@@ -807,7 +867,7 @@
         "Dupatta",
         "Trouser"
       ],
-      "category": "Unstitched",
+      "category": "Ready to Wear",
       "pieces": "3 Piece",
       "season": "Summer",
       "sizes": [
@@ -817,12 +877,15 @@
         "XL"
       ],
       "isBestSeller": false,
-      "onSale": false
+      "wasPrice": 235.0,
+      "compareAtPrice": 235.0,
+      "salePrice": 165.0,
+      "onSale": true
     },
     {
       "id": "ms-022",
       "name": "3 Piece Slate Teal suite-Embroidered",
-      "price": 6999,
+      "price": 180.0,
       "fabric": "Lawn",
       "type": "Embroidered",
       "collection": "New Arrivals 26",
@@ -846,7 +909,7 @@
         "Dupatta",
         "Trouser"
       ],
-      "category": "Unstitched",
+      "category": "Ready to Wear",
       "pieces": "3 Piece",
       "season": "Summer",
       "sizes": [
@@ -856,12 +919,15 @@
         "XL"
       ],
       "isBestSeller": false,
-      "onSale": false
+      "wasPrice": 250.0,
+      "compareAtPrice": 250.0,
+      "salePrice": 180.0,
+      "onSale": true
     },
     {
       "id": "ms-023",
       "name": "Embroidered 3 Piece Suite-Farshi Shalwar",
-      "price": 6799,
+      "price": 165.0,
       "fabric": "Lawn",
       "type": "Embroidered",
       "collection": "New Arrivals 26",
@@ -885,7 +951,7 @@
         "Dupatta",
         "Farshi Shalwar"
       ],
-      "category": "Unstitched",
+      "category": "Ready to Wear",
       "pieces": "3 Piece",
       "season": "Summer",
       "sizes": [
@@ -895,12 +961,15 @@
         "XL"
       ],
       "isBestSeller": false,
-      "onSale": false
+      "wasPrice": 235.0,
+      "compareAtPrice": 235.0,
+      "salePrice": 165.0,
+      "onSale": true
     },
     {
       "id": "ms-024",
       "name": "Embroidered 3 Piece Suite-Chiffon Dupatta",
-      "price": 6999,
+      "price": 180.0,
       "fabric": "Lawn",
       "type": "Embroidered",
       "collection": "New Arrivals 26",
@@ -924,7 +993,7 @@
         "Dupatta",
         "Trouser"
       ],
-      "category": "Unstitched",
+      "category": "Ready to Wear",
       "pieces": "3 Piece",
       "season": "Summer",
       "sizes": [
@@ -934,12 +1003,15 @@
         "XL"
       ],
       "isBestSeller": false,
-      "onSale": false
+      "wasPrice": 250.0,
+      "compareAtPrice": 250.0,
+      "salePrice": 180.0,
+      "onSale": true
     },
     {
       "id": "ms-025",
       "name": "Embroidered 3 Piece Suite-Chiffon Dupatta",
-      "price": 6899,
+      "price": 165.0,
       "fabric": "Lawn",
       "type": "Embroidered",
       "collection": "New Arrivals 26",
@@ -963,7 +1035,7 @@
         "Dupatta",
         "Trouser"
       ],
-      "category": "Unstitched",
+      "category": "Ready to Wear",
       "pieces": "3 Piece",
       "season": "Summer",
       "sizes": [
@@ -973,12 +1045,15 @@
         "XL"
       ],
       "isBestSeller": true,
-      "onSale": false
+      "wasPrice": 235.0,
+      "compareAtPrice": 235.0,
+      "salePrice": 165.0,
+      "onSale": true
     },
     {
       "id": "ms-026",
       "name": "Embroidered 3 Piece Suite-Chiffon Dupatta",
-      "price": 6799,
+      "price": 165.0,
       "fabric": "Lawn",
       "type": "Embroidered",
       "collection": "New Arrivals 26",
@@ -1002,7 +1077,7 @@
         "Dupatta",
         "Trouser"
       ],
-      "category": "Unstitched",
+      "category": "Ready to Wear",
       "pieces": "3 Piece",
       "season": "Summer",
       "sizes": [
@@ -1012,12 +1087,15 @@
         "XL"
       ],
       "isBestSeller": false,
-      "onSale": false
+      "wasPrice": 235.0,
+      "compareAtPrice": 235.0,
+      "salePrice": 165.0,
+      "onSale": true
     },
     {
       "id": "ms-027",
       "name": "Embroidered 3 Piece Suite-Chiffon Dupatta",
-      "price": 7199,
+      "price": 190.0,
       "fabric": "Lawn",
       "type": "Embroidered",
       "collection": "New Arrivals 26",
@@ -1041,7 +1119,7 @@
         "Dupatta",
         "Trouser"
       ],
-      "category": "Unstitched",
+      "category": "Ready to Wear",
       "pieces": "3 Piece",
       "season": "Summer",
       "sizes": [
@@ -1051,12 +1129,15 @@
         "XL"
       ],
       "isBestSeller": false,
-      "onSale": false
+      "wasPrice": 260.0,
+      "compareAtPrice": 260.0,
+      "salePrice": 190.0,
+      "onSale": true
     },
     {
       "id": "ms-028",
       "name": "Embroidered 3 Piece Suite-Chiffon Dupatta",
-      "price": 6999,
+      "price": 180.0,
       "fabric": "Lawn",
       "type": "Embroidered",
       "collection": "New Arrivals 26",
@@ -1080,7 +1161,7 @@
         "Dupatta",
         "Trouser"
       ],
-      "category": "Unstitched",
+      "category": "Ready to Wear",
       "pieces": "3 Piece",
       "season": "Summer",
       "sizes": [
@@ -1090,12 +1171,15 @@
         "XL"
       ],
       "isBestSeller": false,
-      "onSale": false
+      "wasPrice": 250.0,
+      "compareAtPrice": 250.0,
+      "salePrice": 180.0,
+      "onSale": true
     },
     {
       "id": "ms-029",
       "name": "Embroidered 3 Piece Suite-Chiffon Dupatta",
-      "price": 6999,
+      "price": 180.0,
       "fabric": "Lawn",
       "type": "Embroidered",
       "collection": "New Arrivals 26",
@@ -1119,7 +1203,7 @@
         "Dupatta",
         "Trouser"
       ],
-      "category": "Unstitched",
+      "category": "Ready to Wear",
       "pieces": "3 Piece",
       "season": "Summer",
       "sizes": [
@@ -1129,12 +1213,15 @@
         "XL"
       ],
       "isBestSeller": false,
-      "onSale": false
+      "wasPrice": 250.0,
+      "compareAtPrice": 250.0,
+      "salePrice": 180.0,
+      "onSale": true
     },
     {
       "id": "ms-030",
       "name": "Embroidered 3 Piece Suite-Chiffon Dupatta",
-      "price": 6999,
+      "price": 180.0,
       "fabric": "Lawn",
       "type": "Embroidered",
       "collection": "New Arrivals 26",
@@ -1158,7 +1245,7 @@
         "Dupatta",
         "Trouser"
       ],
-      "category": "Unstitched",
+      "category": "Ready to Wear",
       "pieces": "3 Piece",
       "season": "Summer",
       "sizes": [
@@ -1168,12 +1255,15 @@
         "XL"
       ],
       "isBestSeller": false,
-      "onSale": false
+      "wasPrice": 250.0,
+      "compareAtPrice": 250.0,
+      "salePrice": 180.0,
+      "onSale": true
     },
     {
       "id": "ms-031",
       "name": "Embroidered 3 Piece Suite-Chiffon Dupatta",
-      "price": 6999,
+      "price": 180.0,
       "fabric": "Lawn",
       "type": "Embroidered",
       "collection": "New Arrivals 26",
@@ -1197,7 +1287,7 @@
         "Dupatta",
         "Trouser"
       ],
-      "category": "Unstitched",
+      "category": "Ready to Wear",
       "pieces": "3 Piece",
       "season": "Summer",
       "sizes": [
@@ -1207,12 +1297,15 @@
         "XL"
       ],
       "isBestSeller": false,
-      "onSale": false
+      "wasPrice": 250.0,
+      "compareAtPrice": 250.0,
+      "salePrice": 180.0,
+      "onSale": true
     },
     {
       "id": "ms-032",
       "name": "3 Piece Cotton Lawn Suit Stitched-Embroidered",
-      "price": 5799,
+      "price": 165.0,
       "fabric": "Lawn",
       "type": "Embroidered",
       "collection": "New Arrivals 26",
@@ -1236,7 +1329,7 @@
         "Dupatta",
         "Trouser"
       ],
-      "category": "Unstitched",
+      "category": "Ready to Wear",
       "pieces": "3 Piece",
       "season": "Summer",
       "sizes": [
@@ -1246,12 +1339,15 @@
         "XL"
       ],
       "isBestSeller": false,
-      "onSale": false
+      "wasPrice": 235.0,
+      "compareAtPrice": 235.0,
+      "salePrice": 165.0,
+      "onSale": true
     },
     {
       "id": "ms-033",
       "name": "Embroidered 3 Piece Suite-Chiffon Dupatta",
-      "price": 6899,
+      "price": 165.0,
       "fabric": "Lawn",
       "type": "Embroidered",
       "collection": "New Arrivals 26",
@@ -1275,7 +1371,7 @@
         "Dupatta",
         "Trouser"
       ],
-      "category": "Unstitched",
+      "category": "Ready to Wear",
       "pieces": "3 Piece",
       "season": "Summer",
       "sizes": [
@@ -1285,12 +1381,15 @@
         "XL"
       ],
       "isBestSeller": true,
-      "onSale": false
+      "wasPrice": 235.0,
+      "compareAtPrice": 235.0,
+      "salePrice": 165.0,
+      "onSale": true
     },
     {
       "id": "ms-034",
       "name": "3 Piece Cotton Lawn Suit Stitched-Embroidered",
-      "price": 5699,
+      "price": 155.0,
       "fabric": "Lawn",
       "type": "Embroidered",
       "collection": "New Arrivals 26",
@@ -1314,7 +1413,7 @@
         "Dupatta",
         "Trouser"
       ],
-      "category": "Unstitched",
+      "category": "Ready to Wear",
       "pieces": "3 Piece",
       "season": "Summer",
       "sizes": [
@@ -1324,12 +1423,15 @@
         "XL"
       ],
       "isBestSeller": false,
-      "onSale": false
+      "wasPrice": 220.0,
+      "compareAtPrice": 220.0,
+      "salePrice": 155.0,
+      "onSale": true
     },
     {
       "id": "ms-035",
       "name": "3 Piece Cotton Lawn Suit Stitched-Embroidered",
-      "price": 5649,
+      "price": 165.0,
       "fabric": "Lawn",
       "type": "Embroidered",
       "collection": "New Arrivals 26",
@@ -1353,7 +1455,7 @@
         "Dupatta",
         "Trouser"
       ],
-      "category": "Unstitched",
+      "category": "Ready to Wear",
       "pieces": "3 Piece",
       "season": "Summer",
       "sizes": [
@@ -1363,12 +1465,15 @@
         "XL"
       ],
       "isBestSeller": false,
-      "onSale": false
+      "wasPrice": 235.0,
+      "compareAtPrice": 235.0,
+      "salePrice": 165.0,
+      "onSale": true
     },
     {
       "id": "ms-036",
       "name": "3 Piece Cotton Lawn Suit Stitched-Embroidered",
-      "price": 5699,
+      "price": 165.0,
       "fabric": "Lawn",
       "type": "Embroidered",
       "collection": "New Arrivals 26",
@@ -1392,7 +1497,7 @@
         "Dupatta",
         "Trouser"
       ],
-      "category": "Unstitched",
+      "category": "Ready to Wear",
       "pieces": "3 Piece",
       "season": "Summer",
       "sizes": [
@@ -1402,12 +1507,15 @@
         "XL"
       ],
       "isBestSeller": false,
-      "onSale": false
+      "wasPrice": 235.0,
+      "compareAtPrice": 235.0,
+      "salePrice": 165.0,
+      "onSale": true
     },
     {
       "id": "ms-037",
       "name": "Embroidered Summer Cotton Suit-3 Piece Stitched",
-      "price": 7299,
+      "price": 190.0,
       "fabric": "Lawn",
       "type": "Embroidered",
       "collection": "New Arrivals 26",
@@ -1431,7 +1539,7 @@
         "Dupatta",
         "Trouser"
       ],
-      "category": "Unstitched",
+      "category": "Ready to Wear",
       "pieces": "3 Piece",
       "season": "Summer",
       "sizes": [
@@ -1441,12 +1549,15 @@
         "XL"
       ],
       "isBestSeller": false,
-      "onSale": false
+      "wasPrice": 260.0,
+      "compareAtPrice": 260.0,
+      "salePrice": 190.0,
+      "onSale": true
     },
     {
       "id": "ms-038",
       "name": "3 Piece Embroidered Summer Cotton Suit-Stitched",
-      "price": 6849,
+      "price": 165.0,
       "fabric": "Lawn",
       "type": "Embroidered",
       "collection": "New Arrivals 26",
@@ -1470,7 +1581,7 @@
         "Dupatta",
         "Trouser"
       ],
-      "category": "Unstitched",
+      "category": "Ready to Wear",
       "pieces": "3 Piece",
       "season": "Summer",
       "sizes": [
@@ -1480,12 +1591,15 @@
         "XL"
       ],
       "isBestSeller": false,
-      "onSale": false
+      "wasPrice": 235.0,
+      "compareAtPrice": 235.0,
+      "salePrice": 165.0,
+      "onSale": true
     },
     {
       "id": "ms-039",
       "name": "3 Piece Embroidered Summer Cotton Suit-Stitched",
-      "price": 6699,
+      "price": 165.0,
       "fabric": "Lawn",
       "type": "Embroidered",
       "collection": "New Arrivals 26",
@@ -1509,7 +1623,7 @@
         "Dupatta",
         "Trouser"
       ],
-      "category": "Unstitched",
+      "category": "Ready to Wear",
       "pieces": "3 Piece",
       "season": "Summer",
       "sizes": [
@@ -1519,12 +1633,15 @@
         "XL"
       ],
       "isBestSeller": false,
-      "onSale": false
+      "wasPrice": 235.0,
+      "compareAtPrice": 235.0,
+      "salePrice": 165.0,
+      "onSale": true
     },
     {
       "id": "ms-040",
       "name": "3 Piece Embroidered Summer Cotton Suit-Stitched",
-      "price": 6899,
+      "price": 165.0,
       "fabric": "Lawn",
       "type": "Embroidered",
       "collection": "New Arrivals 26",
@@ -1548,7 +1665,7 @@
         "Dupatta",
         "Trouser"
       ],
-      "category": "Unstitched",
+      "category": "Ready to Wear",
       "pieces": "3 Piece",
       "season": "Summer",
       "sizes": [
@@ -1558,12 +1675,15 @@
         "XL"
       ],
       "isBestSeller": false,
-      "onSale": false
+      "wasPrice": 235.0,
+      "compareAtPrice": 235.0,
+      "salePrice": 165.0,
+      "onSale": true
     },
     {
       "id": "ms-041",
       "name": "3 Piece Embroidered Summer Cotton Suit-Stitched",
-      "price": 6749,
+      "price": 165.0,
       "fabric": "Lawn",
       "type": "Embroidered",
       "collection": "New Arrivals 26",
@@ -1587,7 +1707,7 @@
         "Dupatta",
         "Trouser"
       ],
-      "category": "Unstitched",
+      "category": "Ready to Wear",
       "pieces": "3 Piece",
       "season": "Summer",
       "sizes": [
@@ -1597,12 +1717,15 @@
         "XL"
       ],
       "isBestSeller": true,
-      "onSale": false
+      "wasPrice": 235.0,
+      "compareAtPrice": 235.0,
+      "salePrice": 165.0,
+      "onSale": true
     },
     {
       "id": "ms-042",
       "name": "3 Piece Embroidered Summer Cotton Suit-Stitched",
-      "price": 6799,
+      "price": 165.0,
       "fabric": "Lawn",
       "type": "Embroidered",
       "collection": "New Arrivals 26",
@@ -1626,7 +1749,7 @@
         "Dupatta",
         "Trouser"
       ],
-      "category": "Unstitched",
+      "category": "Ready to Wear",
       "pieces": "3 Piece",
       "season": "Summer",
       "sizes": [
@@ -1636,12 +1759,15 @@
         "XL"
       ],
       "isBestSeller": false,
-      "onSale": false
+      "wasPrice": 235.0,
+      "compareAtPrice": 235.0,
+      "salePrice": 165.0,
+      "onSale": true
     },
     {
       "id": "ms-043",
       "name": "3 Piece Cotton Lawn Suit Stitched-Embroidered",
-      "price": 5699,
+      "price": 165.0,
       "fabric": "Lawn",
       "type": "Embroidered",
       "collection": "New Arrivals 26",
@@ -1665,7 +1791,7 @@
         "Dupatta",
         "Trouser : Same"
       ],
-      "category": "Unstitched",
+      "category": "Ready to Wear",
       "pieces": "3 Piece",
       "season": "Summer",
       "sizes": [
@@ -1675,12 +1801,15 @@
         "XL"
       ],
       "isBestSeller": false,
-      "onSale": false
+      "wasPrice": 235.0,
+      "compareAtPrice": 235.0,
+      "salePrice": 165.0,
+      "onSale": true
     },
     {
       "id": "ms-044",
       "name": "3 Piece Cotton Lawn Suit Stitched-Embroidered",
-      "price": 5849,
+      "price": 165.0,
       "fabric": "Lawn",
       "type": "Embroidered",
       "collection": "New Arrivals 26",
@@ -1704,7 +1833,7 @@
         "Dupatta",
         "Trouser : Same"
       ],
-      "category": "Unstitched",
+      "category": "Ready to Wear",
       "pieces": "3 Piece",
       "season": "Summer",
       "sizes": [
@@ -1714,12 +1843,15 @@
         "XL"
       ],
       "isBestSeller": false,
-      "onSale": false
+      "wasPrice": 235.0,
+      "compareAtPrice": 235.0,
+      "salePrice": 165.0,
+      "onSale": true
     },
     {
       "id": "ms-045",
       "name": "3 Piece Cotton Lawn Suit Stitched-Embroidered",
-      "price": 5649,
+      "price": 165.0,
       "fabric": "Lawn",
       "type": "Embroidered",
       "collection": "New Arrivals 26",
@@ -1743,7 +1875,7 @@
         "Dupatta",
         "Trouser : Same"
       ],
-      "category": "Unstitched",
+      "category": "Ready to Wear",
       "pieces": "3 Piece",
       "season": "Summer",
       "sizes": [
@@ -1753,12 +1885,15 @@
         "XL"
       ],
       "isBestSeller": false,
-      "onSale": false
+      "wasPrice": 235.0,
+      "compareAtPrice": 235.0,
+      "salePrice": 165.0,
+      "onSale": true
     },
     {
       "id": "ms-046",
       "name": "3 Piece Cotton Lawn Suit Stitched-Embroidered",
-      "price": 5699,
+      "price": 165.0,
       "fabric": "Lawn",
       "type": "Embroidered",
       "collection": "New Arrivals 26",
@@ -1782,7 +1917,7 @@
         "Dupatta",
         "Trouser : Same"
       ],
-      "category": "Unstitched",
+      "category": "Ready to Wear",
       "pieces": "3 Piece",
       "season": "Summer",
       "sizes": [
@@ -1792,12 +1927,15 @@
         "XL"
       ],
       "isBestSeller": false,
-      "onSale": false
+      "wasPrice": 235.0,
+      "compareAtPrice": 235.0,
+      "salePrice": 165.0,
+      "onSale": true
     },
     {
       "id": "ms-047",
       "name": "3 Piece Cotton Lawn Suit Stitched-Embroidered",
-      "price": 5749,
+      "price": 165.0,
       "fabric": "Lawn",
       "type": "Embroidered",
       "collection": "New Arrivals 26",
@@ -1821,7 +1959,7 @@
         "Dupatta",
         "Trouser : Same"
       ],
-      "category": "Unstitched",
+      "category": "Ready to Wear",
       "pieces": "3 Piece",
       "season": "Summer",
       "sizes": [
@@ -1831,12 +1969,15 @@
         "XL"
       ],
       "isBestSeller": false,
-      "onSale": false
+      "wasPrice": 235.0,
+      "compareAtPrice": 235.0,
+      "salePrice": 165.0,
+      "onSale": true
     },
     {
       "id": "ms-048",
       "name": "3 Piece Cotton Lawn Suit Stitched-Embroidered",
-      "price": 5799,
+      "price": 165.0,
       "fabric": "Lawn",
       "type": "Embroidered",
       "collection": "New Arrivals 26",
@@ -1860,7 +2001,7 @@
         "Dupatta",
         "Trouser : Same"
       ],
-      "category": "Unstitched",
+      "category": "Ready to Wear",
       "pieces": "3 Piece",
       "season": "Summer",
       "sizes": [
@@ -1870,12 +2011,15 @@
         "XL"
       ],
       "isBestSeller": false,
-      "onSale": false
+      "wasPrice": 235.0,
+      "compareAtPrice": 235.0,
+      "salePrice": 165.0,
+      "onSale": true
     },
     {
       "id": "ms-049",
       "name": "3 Piece Cotton Lawn Suit Stitched-Embroidered",
-      "price": 5699,
+      "price": 165.0,
       "fabric": "Lawn",
       "type": "Embroidered",
       "collection": "New Arrivals 26",
@@ -1899,7 +2043,7 @@
         "Dupatta",
         "Trouser : Same"
       ],
-      "category": "Unstitched",
+      "category": "Ready to Wear",
       "pieces": "3 Piece",
       "season": "Summer",
       "sizes": [
@@ -1909,12 +2053,15 @@
         "XL"
       ],
       "isBestSeller": true,
-      "onSale": false
+      "wasPrice": 235.0,
+      "compareAtPrice": 235.0,
+      "salePrice": 165.0,
+      "onSale": true
     },
     {
       "id": "ms-050",
       "name": "3 Piece Summer Cotton Suit Stitched-Embroidered",
-      "price": 5499,
+      "price": 165.0,
       "fabric": "Lawn",
       "type": "Embroidered",
       "collection": "New Arrivals 26",
@@ -1938,7 +2085,7 @@
         "Dupatta",
         "Trouser"
       ],
-      "category": "Unstitched",
+      "category": "Ready to Wear",
       "pieces": "3 Piece",
       "season": "Summer",
       "sizes": [
@@ -1948,12 +2095,15 @@
         "XL"
       ],
       "isBestSeller": false,
-      "onSale": false
+      "wasPrice": 235.0,
+      "compareAtPrice": 235.0,
+      "salePrice": 165.0,
+      "onSale": true
     },
     {
       "id": "ms-051",
       "name": "Embroidered 3 Piece Suite-Summer Cotton",
-      "price": 5999,
+      "price": 165.0,
       "fabric": "Lawn",
       "type": "Embroidered",
       "collection": "New Arrivals 26",
@@ -1977,7 +2127,7 @@
         "Dupatta",
         "Trouser"
       ],
-      "category": "Unstitched",
+      "category": "Ready to Wear",
       "pieces": "3 Piece",
       "season": "Summer",
       "sizes": [
@@ -1987,12 +2137,15 @@
         "XL"
       ],
       "isBestSeller": false,
-      "onSale": false
+      "wasPrice": 235.0,
+      "compareAtPrice": 235.0,
+      "salePrice": 165.0,
+      "onSale": true
     },
     {
       "id": "ms-052",
       "name": "Embroidered 3 Piece Suite-Summer Cotton",
-      "price": 6099,
+      "price": 165.0,
       "fabric": "Lawn",
       "type": "Embroidered",
       "collection": "New Arrivals 26",
@@ -2016,7 +2169,7 @@
         "Dupatta",
         "Trouser"
       ],
-      "category": "Unstitched",
+      "category": "Ready to Wear",
       "pieces": "3 Piece",
       "season": "Summer",
       "sizes": [
@@ -2026,13 +2179,16 @@
         "XL"
       ],
       "isBestSeller": false,
-      "onSale": false
+      "wasPrice": 235.0,
+      "compareAtPrice": 235.0,
+      "salePrice": 165.0,
+      "onSale": true
     },
     {
       "id": "ms-053",
       "name": "Embroidered 3 Piece Suite-Summer Cotton",
-      "price": 6199,
-      "fabric": "Lawn",
+      "price": 165.0,
+      "fabric": "Cotton",
       "type": "Embroidered",
       "collection": "New Arrivals 26",
       "images": [
@@ -2055,7 +2211,7 @@
         "Dupatta",
         "Trouser"
       ],
-      "category": "Unstitched",
+      "category": "Ready to Wear",
       "pieces": "3 Piece",
       "season": "Summer",
       "sizes": [
@@ -2065,12 +2221,15 @@
         "XL"
       ],
       "isBestSeller": false,
-      "onSale": false
+      "wasPrice": 235.0,
+      "compareAtPrice": 235.0,
+      "salePrice": 165.0,
+      "onSale": true
     },
     {
       "id": "ms-054",
       "name": "3 Piece Embroidered Suite-Plain Soft Cotton",
-      "price": 5999,
+      "price": 165.0,
       "fabric": "Lawn",
       "type": "Embroidered",
       "collection": "New Arrivals 26",
@@ -2094,7 +2253,7 @@
         "Dupatta",
         "Trouser"
       ],
-      "category": "Unstitched",
+      "category": "Ready to Wear",
       "pieces": "3 Piece",
       "season": "Summer",
       "sizes": [
@@ -2104,12 +2263,15 @@
         "XL"
       ],
       "isBestSeller": false,
-      "onSale": false
+      "wasPrice": 235.0,
+      "compareAtPrice": 235.0,
+      "salePrice": 165.0,
+      "onSale": true
     },
     {
       "id": "ms-055",
       "name": "3 Piece Summer Cotton Suit-Embroidered",
-      "price": 5599,
+      "price": 165.0,
       "fabric": "Lawn",
       "type": "Embroidered",
       "collection": "New Arrivals 26",
@@ -2133,7 +2295,7 @@
         "Trouser Printed",
         "Trouser"
       ],
-      "category": "Unstitched",
+      "category": "Ready to Wear",
       "pieces": "3 Piece",
       "season": "Summer",
       "sizes": [
@@ -2143,12 +2305,15 @@
         "XL"
       ],
       "isBestSeller": false,
-      "onSale": false
+      "wasPrice": 235.0,
+      "compareAtPrice": 235.0,
+      "salePrice": 165.0,
+      "onSale": true
     },
     {
       "id": "ms-056",
       "name": "3 Piece Summer Cotton Suit-Embroidered",
-      "price": 5599,
+      "price": 165.0,
       "fabric": "Lawn",
       "type": "Embroidered",
       "collection": "New Arrivals 26",
@@ -2172,7 +2337,7 @@
         "Trouser Printed",
         "Trouser"
       ],
-      "category": "Unstitched",
+      "category": "Ready to Wear",
       "pieces": "3 Piece",
       "season": "Summer",
       "sizes": [
@@ -2182,12 +2347,15 @@
         "XL"
       ],
       "isBestSeller": false,
-      "onSale": false
+      "wasPrice": 235.0,
+      "compareAtPrice": 235.0,
+      "salePrice": 165.0,
+      "onSale": true
     },
     {
       "id": "ms-057",
       "name": "3 Piece Summer Cotton Suit-Embroidered",
-      "price": 5649,
+      "price": 165.0,
       "fabric": "Lawn",
       "type": "Embroidered",
       "collection": "New Arrivals 26",
@@ -2211,7 +2379,7 @@
         "Trouser Printed",
         "Trouser"
       ],
-      "category": "Unstitched",
+      "category": "Ready to Wear",
       "pieces": "3 Piece",
       "season": "Summer",
       "sizes": [
@@ -2221,12 +2389,15 @@
         "XL"
       ],
       "isBestSeller": true,
-      "onSale": false
+      "wasPrice": 235.0,
+      "compareAtPrice": 235.0,
+      "salePrice": 165.0,
+      "onSale": true
     },
     {
       "id": "ms-058",
       "name": "3 Piece Summer Cotton Suit-Embroidered",
-      "price": 5649,
+      "price": 165.0,
       "fabric": "Lawn",
       "type": "Embroidered",
       "collection": "New Arrivals 26",
@@ -2250,7 +2421,7 @@
         "Trouser Printed",
         "Trouser"
       ],
-      "category": "Unstitched",
+      "category": "Ready to Wear",
       "pieces": "3 Piece",
       "season": "Summer",
       "sizes": [
@@ -2260,12 +2431,15 @@
         "XL"
       ],
       "isBestSeller": false,
-      "onSale": false
+      "wasPrice": 235.0,
+      "compareAtPrice": 235.0,
+      "salePrice": 165.0,
+      "onSale": true
     },
     {
       "id": "ms-059",
       "name": "3 Piece Summer Cotton Suit-Embroidered",
-      "price": 5749,
+      "price": 165.0,
       "fabric": "Lawn",
       "type": "Embroidered",
       "collection": "New Arrivals 26",
@@ -2289,7 +2463,7 @@
         "Trouser Printed",
         "Trouser"
       ],
-      "category": "Unstitched",
+      "category": "Ready to Wear",
       "pieces": "3 Piece",
       "season": "Summer",
       "sizes": [
@@ -2299,12 +2473,15 @@
         "XL"
       ],
       "isBestSeller": false,
-      "onSale": false
+      "wasPrice": 235.0,
+      "compareAtPrice": 235.0,
+      "salePrice": 165.0,
+      "onSale": true
     },
     {
       "id": "ms-060",
       "name": "3 Piece Summer Cotton Suit-Embroidered",
-      "price": 5799,
+      "price": 165.0,
       "fabric": "Lawn",
       "type": "Embroidered",
       "collection": "New Arrivals 26",
@@ -2328,7 +2505,7 @@
         "Trouser Printed",
         "Trouser"
       ],
-      "category": "Unstitched",
+      "category": "Ready to Wear",
       "pieces": "3 Piece",
       "season": "Summer",
       "sizes": [
@@ -2338,7 +2515,10 @@
         "XL"
       ],
       "isBestSeller": false,
-      "onSale": false
+      "wasPrice": 235.0,
+      "compareAtPrice": 235.0,
+      "salePrice": 165.0,
+      "onSale": true
     },
     {
       "id": "ms-061",
@@ -2421,8 +2601,8 @@
     {
       "id": "ms-063",
       "name": "Stitched 3 Piece Summer Cotton Suit-Embroidered",
-      "price": 5649,
-      "fabric": "Lawn",
+      "price": 165.0,
+      "fabric": "Cotton",
       "type": "Embroidered",
       "collection": "New Arrivals 26",
       "images": [
@@ -2445,7 +2625,7 @@
         "Dupatta",
         "Trouser"
       ],
-      "category": "Unstitched",
+      "category": "Ready to Wear",
       "pieces": "3 Piece",
       "season": "Summer",
       "sizes": [
@@ -2455,7 +2635,10 @@
         "XL"
       ],
       "isBestSeller": false,
-      "onSale": false
+      "wasPrice": 235.0,
+      "compareAtPrice": 235.0,
+      "salePrice": 165.0,
+      "onSale": true
     },
     {
       "viewers": 11,
@@ -2532,38 +2715,16 @@
     }
   ],
   "orders": [],
-  "carts": {
-    "guest": {
-      "userId": "guest",
-      "items": []
-    },
-    "usr_f74f72vue": {
-      "userId": "usr_f74f72vue",
-      "items": []
-    },
-    "usr_samra_gmail_com": {
-      "userId": "usr_samra_gmail_com",
-      "items": []
-    },
-    "usr_opmn7t0mq": {
-      "userId": "usr_opmn7t0mq",
-      "items": []
-    }
-  },
-  "admins": [
-    {
-      "passwordHash": "$2b$10$kfyrFtsu7KS.4VtzjOyLPOs.3LUs1j0xbOdCo16TQaIKCDRWrKHrK",
-      "email": "admin@rotba.com",
-      "id": "admin-001"
-    }
-  ],
+  "carts": {},
+  "admins": [],
   "settings": {
     "homeMarqueeText": "✦ Unstitched Luxury ✦ Handloom Heritage ✦ Festive Archive ✦",
     "cardShippingFee": 15,
     "freeShippingThreshold": 500,
     "shippingFee": 15,
     "announcementText": "",
-    "codShippingFee": 25
+    "codShippingFee": 25,
+    "internationalShippingFee": 100
   },
   "categories": [
     {
