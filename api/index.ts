@@ -59,8 +59,8 @@ const paymentIntentHandler = async (req: Request, res: Response) => {
 // Stripe payment endpoint
 app.post('/create-payment-intent', paymentIntentHandler);
 
-// Mount API router at root
-// Vercel strips /api prefix before passing to this function
+// Mount API router - handle both /api/* and /* (Vercel may pass full path)
+app.use('/api', apiRouter);
 app.use('/', apiRouter);
 
 // Global Error Handler Middleware
