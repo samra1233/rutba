@@ -2118,7 +2118,6 @@ class Database {
             homeMarqueeText: "✦ Zariha Couture ✦ Unstitched Luxury ✦ Handloom Heritage ✦ Festive Archive ✦"
           };
         }
-        this.save();
       } else {
         this.state = {
           products: SEED_PRODUCTS,
@@ -2195,16 +2194,6 @@ class Database {
         }
       });
 
-      onSnapshot(collection(firestore, 'admins'), (snapshot) => {
-        const admins: AdminUser[] = [];
-        snapshot.forEach((docSnap) => {
-          admins.push(docSnap.data() as AdminUser);
-        });
-        if (admins.length > 0) {
-          this.state.admins = admins;
-        }
-      });
-
       console.log("Firestore real-time synchronization active!");
     } catch (err) {
       console.error("Error during Firebase setup sync:", err);
@@ -2233,7 +2222,7 @@ class Database {
     return obj;
   }
 
-  private async writeFirestoreDoc(colName: string, docId: string, data: any) {
+  public async writeFirestoreDoc(colName: string, docId: string, data: any) {
     const firestore = getFirestoreDb();
     if (!firestore) return;
     try {

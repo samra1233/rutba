@@ -7,7 +7,7 @@ export const productService = {
 
     if (!queryFilters) return products;
 
-    const { fabric, type, collection, search, sort, color, sizes, season, sale, bestSeller, category, pieces, newArrival } = queryFilters;
+    const { fabric, type, collection, search, sort, color, sizes, season, sale, bestSeller, category, pieces, newArrival, minPrice, maxPrice } = queryFilters;
 
     if (search) {
       const term = String(search).toLowerCase();
@@ -72,6 +72,15 @@ export const productService = {
 
     if (pieces) {
       products = products.filter(p => p.pieces && p.pieces.toLowerCase() === String(pieces).toLowerCase());
+    }
+
+    const parsedMinPrice = minPrice === undefined || minPrice === '' ? undefined : Number(minPrice);
+    const parsedMaxPrice = maxPrice === undefined || maxPrice === '' ? undefined : Number(maxPrice);
+    if (parsedMinPrice !== undefined && Number.isFinite(parsedMinPrice)) {
+      products = products.filter(p => (p.onSale && p.salePrice ? p.salePrice : p.price) >= parsedMinPrice);
+    }
+    if (parsedMaxPrice !== undefined && Number.isFinite(parsedMaxPrice)) {
+      products = products.filter(p => (p.onSale && p.salePrice ? p.salePrice : p.price) <= parsedMaxPrice);
     }
 
     if (sort) {

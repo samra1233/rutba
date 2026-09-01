@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { signInWithEmailAndPassword } from 'firebase/auth';
-import { auth, firestore } from '../../firebaseClient';
+import { firestore } from '../../firebaseClient';
 import { doc, setDoc, deleteDoc } from 'firebase/firestore';
 import { useApp } from '../../AppContext';
 import { 
@@ -151,8 +150,13 @@ export default function Admin() {
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    const loginEmail = email || 'rutabaglobal@gmail.com';
-    const loginPass = password || 'admin123';
+    const loginEmail = email.trim();
+    const loginPass = password;
+
+    if (!loginEmail || !loginPass) {
+      addToast('Email and password are required', 'warn');
+      return;
+    }
 
     setLoading(true);
     try {
@@ -170,36 +174,10 @@ export default function Admin() {
         return;
       }
       
-      // 2. Firebase Auth Fallback
-      try {
-        const userCredential = await signInWithEmailAndPassword(auth, loginEmail, loginPass);
-        if (userCredential.user?.email) {
-          setAdminUser({ id: userCredential.user.uid, email: userCredential.user.email });
-          setIsLoggedIn(true);
-          addToast('Admin panel logged in successfully', 'success');
-          return;
-        }
-      } catch (fbErr) {}
-
-      // 3. Master Access Fallback
-      if (loginPass === 'admin123' || loginPass === 'rotba123' || loginPass === 'admin' || loginPass === '123456') {
-        setAdminUser({ id: 'admin-master', email: loginEmail });
-        setIsLoggedIn(true);
-        addToast('Master Admin Portal Unlocked', 'success');
-        return;
-      }
-
-      addToast(data.error || 'Invalid admin credentials', 'warn');
+      addToast(data.error?.message || 'Invalid admin credentials', 'warn');
     } catch (err: any) {
       console.error('Admin Auth Error:', err);
-      // Master Access
-      if (loginPass === 'admin123' || loginPass === 'rotba123' || loginPass === 'admin' || loginPass === '123456') {
-        setAdminUser({ id: 'admin-master', email: loginEmail });
-        setIsLoggedIn(true);
-        addToast('Master Admin Portal Unlocked', 'success');
-      } else {
-        addToast('Authentication failed', 'warn');
-      }
+      addToast('Authentication failed', 'warn');
     } finally {
       setLoading(false);
     }

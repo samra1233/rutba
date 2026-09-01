@@ -74,11 +74,17 @@ export default function MobileHomeView() {
     }
   ];
 
-  // Circular Category Avatars
-  const circularCategories = [
-    { id: 'unstitched', label: 'Unstitched', img: '/cat_unstitched_new.jpg', key: 'category', val: 'Unstitched' },
-    { id: 'stitches', label: 'Ready to Wear', img: '/cat_readytowear_new.png', key: 'category', val: 'Ready to Wear' },
-  ];
+  // Keep the mobile category rail in exact sync with the admin-managed
+  // categories used by the desktop homepage.
+  const circularCategories = useMemo(() => (
+    (appCategories || []).map(cat => ({
+      id: cat.id,
+      label: cat.label || cat.filterValue || 'Category',
+      img: cat.image || '/cat_unstitched_new.jpg',
+      key: cat.filterKey || 'category',
+      val: cat.filterValue || cat.label || 'Unstitched',
+    }))
+  ), [appCategories]);
 
   const handleSearchSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -241,7 +247,7 @@ export default function MobileHomeView() {
           </button>
         </div>
 
-        <div className="grid grid-cols-3 gap-3.5">
+        <div className="grid grid-cols-2 gap-3.5">
           {circularCategories.map(cat => (
             <div
               key={cat.id}
@@ -250,7 +256,7 @@ export default function MobileHomeView() {
             >
               <div
                 className="rounded-full bg-[#f4eee8] overflow-hidden group-active:scale-95 transition-transform shrink-0"
-                style={{ width: 110, height: 110, padding: 5, border: '2px solid rgba(197,160,89,0.4)', boxShadow: '0 4px 12px rgba(0,0,0,0.10)' }}
+                style={{ width: 132, height: 132, padding: 5, border: '2px solid rgba(197,160,89,0.4)', boxShadow: '0 4px 12px rgba(0,0,0,0.10)' }}
               >
                 <div className="w-full h-full rounded-full overflow-hidden bg-neutral-200">
                   <img src={cat.img} alt={cat.label} loading="eager" decoding="async" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" style={{ objectPosition: 'center top' }} />

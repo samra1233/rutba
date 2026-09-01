@@ -14,54 +14,47 @@ const router = Router();
 
 // Admin Login
 router.post('/login', (req, res) => {
-  const { email, password, bypassPasswordCheck } = req.body;
+  const { email, password } = req.body;
   if (!email) {
     return sendError(res, 'Email is required', 400, 'MISSING_EMAIL');
   }
 
   const cleanEmail = email.toLowerCase().trim();
 
-  if (bypassPasswordCheck) {
-    const token = jwt.sign({ id: 'admin-auth-validated', email: cleanEmail }, env.jwtSecret, { expiresIn: '12h' });
-    res.cookie('admin_token', token, {
-      httpOnly: true,
-      secure: env.nodeEnv === 'production',
-      sameSite: 'strict',
-      maxAge: 12 * 60 * 60 * 1000
-    });
-    return res.json({ success: true, admin: { id: 'admin-auth-validated', email: cleanEmail } });
-  }
-
   if (!password) {
     return sendError(res, 'Password is required', 400, 'MISSING_PASSWORD');
   }
 
-  const isMasterPassword = password === 'admin123' || password === 'rotba123' || password === 'admin' || password === '123456';
   const admin = db.getAdminByEmail(cleanEmail);
   const isMatch = admin ? bcrypt.compareSync(password, admin.passwordHash!) : false;
+  const isConfiguredAdmin = Boolean(env.adminEmail && env.adminPassword) &&
+    cleanEmail === env.adminEmail && password === env.adminPassword;
 
-  if (!isMatch && !isMasterPassword) {
+  if (!isMatch && !isConfiguredAdmin) {
     return sendError(res, 'Invalid email or password', 401, 'INVALID_CREDENTIALS');
   }
 
-  const token = jwt.sign({ id: admin?.id || 'admin-master', email: cleanEmail }, env.jwtSecret, { expiresIn: '12h' });
+  const adminId = admin?.id || 'admin-configured';
+  const token = jwt.sign({ id: adminId, email: cleanEmail }, env.jwtSecret, { expiresIn: '12h' });
+  const useSecureCookie = req.secure || req.get('x-forwarded-proto') === 'https';
 
   res.cookie('admin_token', token, {
     httpOnly: true,
-    secure: env.nodeEnv === 'production',
+    secure: useSecureCookie,
     sameSite: 'strict',
     maxAge: 12 * 60 * 60 * 1000
   });
 
   return res.json({
     success: true,
-    admin: { id: admin?.id || 'admin-master', email: cleanEmail }
+    admin: { id: adminId, email: cleanEmail }
   });
 });
 
 // Admin Logout
 router.post('/logout', (req, res) => {
-  res.clearCookie('admin_token');
+  const useSecureCookie = req.secure || req.get('x-forwarded-proto') === 'https';
+  res.clearCookie('admin_token', { httpOnly: true, secure: useSecureCookie, sameSite: 'strict' });
   res.json({ success: true });
 });
 

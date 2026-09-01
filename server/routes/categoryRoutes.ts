@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import { db } from '../db';
+import { requireAdminAuth } from '../middleware/adminAuth';
 
 const router = Router();
 
@@ -10,7 +11,7 @@ router.get('/', (req, res) => {
 });
 
 // POST /api/categories
-router.post('/', (req, res) => {
+router.post('/', requireAdminAuth, (req, res) => {
   const cat = req.body;
   if (!cat || !cat.label) {
     return res.status(400).json({ error: 'Category label is required' });
@@ -20,7 +21,7 @@ router.post('/', (req, res) => {
 });
 
 // PUT /api/categories/:id
-router.put('/:id', (req, res) => {
+router.put('/:id', requireAdminAuth, (req, res) => {
   const { id } = req.params;
   const updated = db.updateCategory(id, req.body);
   if (updated) {
@@ -31,7 +32,7 @@ router.put('/:id', (req, res) => {
 });
 
 // DELETE /api/categories/:id
-router.delete('/:id', (req, res) => {
+router.delete('/:id', requireAdminAuth, (req, res) => {
   const { id } = req.params;
   const success = db.deleteCategory(id);
   if (success) {

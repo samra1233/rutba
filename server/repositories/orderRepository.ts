@@ -10,8 +10,9 @@ export const orderRepository = {
     return db.getOrder(id);
   },
 
-  create(orderData: Omit<Order, 'id' | 'createdAt' | 'trackingNumber' | 'status'>): Order {
-    return db.createOrder(orderData as any);
+  create(orderData: Omit<Order, 'id' | 'createdAt' | 'trackingNumber'>): Order {
+    const { status: _status, ...persistedOrder } = orderData;
+    return db.createOrder(persistedOrder);
   },
 
   updateStatus(id: string, status: Order['status']): Order | undefined {

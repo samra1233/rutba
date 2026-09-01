@@ -94,12 +94,18 @@ function broadcastViewerCount(productId: string) {
 
 // Stripe Payment Intent endpoint
 const stripeSecretKey = env.stripeSecretKey;
-const stripe = stripeSecretKey ? new Stripe(stripeSecretKey) : null;
-
 app.post('/api/create-payment-intent', async (req, res) => {
   try {
     const { amount, currency = 'usd', customerEmail } = req.body;
-    const amountInCents = Math.max(50, Math.round(Number(amount) * 100));
+    const numericAmount = Number(amount);
+    const normalizedCurrency = String(currency).trim().toLowerCase();
+    if (!Number.isFinite(numericAmount) || numericAmount <= 0) {
+      return res.status(400).json({ error: { code: 'INVALID_AMOUNT', message: 'A positive payment amount is required' } });
+    }
+    if (!/^[a-z]{3}$/.test(normalizedCurrency)) {
+      return res.status(400).json({ error: { code: 'INVALID_CURRENCY', message: 'Currency must be a three-letter ISO code' } });
+    }
+    const amountInCents = Math.round(numericAmount * 100);
 
     if (!stripeSecretKey || stripeSecretKey.startsWith('mock_')) {
       const mockId = `pi_demo_${Date.now()}_${Math.floor(1000 + Math.random() * 9000)}`;
@@ -114,7 +120,7 @@ app.post('/api/create-payment-intent', async (req, res) => {
     const liveStripe = new Stripe(stripeSecretKey);
     const paymentIntent = await liveStripe.paymentIntents.create({
       amount: amountInCents,
-      currency: currency.toLowerCase(),
+      currency: normalizedCurrency,
       receipt_email: customerEmail || undefined,
       automatic_payment_methods: { enabled: true },
     });

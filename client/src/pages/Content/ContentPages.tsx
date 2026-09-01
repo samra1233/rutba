@@ -3,7 +3,7 @@ import { useApp } from '../../AppContext';
 import { 
   ShieldCheck, MapPin, Phone, Mail, Clock, HelpCircle, Map, Eye, Search, AlertCircle, CheckCircle, Package, ArrowRight,
   Truck, Sparkles, Globe, ChevronRight, CreditCard, Calendar, User, Copy, FileText, Check, ExternalLink, RefreshCw, X,
-  Crown, Award, LogOut, CheckCircle2
+  Crown, Award, LogOut, CheckCircle2, AlertTriangle
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 

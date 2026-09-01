@@ -27,6 +27,17 @@ export const DEFAULT_CATEGORIES: CategoryDef[] = [
   },
 ];
 
+interface AppUser {
+  id?: string;
+  name: string;
+  email: string;
+  phone?: string;
+  address?: string;
+  city?: string;
+  postalCode?: string;
+  country?: string;
+}
+
 interface AppContextType {
   products: Product[];
   cart: Cart | null;
@@ -46,14 +57,17 @@ interface AppContextType {
     newArrival: string;
     category: string;
     pieces: string;
+    minPrice?: number;
+    maxPrice?: number;
   };
   liveAlerts: { id: string; message: string; type: 'info' | 'success' | 'warn' }[];
   globalViewers: number;
   userId: string;
   trackedOrder: Order | null;
   userOrders: Order[];
+  orders: Order[];
   loading: boolean;
-  user: { name: string; email: string; phone?: string } | null;
+  user: AppUser | null;
   isAuthModalOpen: boolean;
   setAuthModalOpen: (open: boolean) => void;
   login: (name: string, email: string, phone?: string) => void;
@@ -117,6 +131,7 @@ const defaultContextValue: AppContextType = {
   userId: '',
   trackedOrder: null,
   userOrders: [],
+  orders: [],
   loading: false,
   user: null,
   isAuthModalOpen: false,
@@ -147,6 +162,12 @@ const defaultContextValue: AppContextType = {
   formatPrice: (priceInAED: number) => `AED ${priceInAED.toLocaleString()}`,
   settings: { announcementText: '', homeMarqueeText: '', shippingFee: 15, cardShippingFee: 15, codShippingFee: 25, freeShippingThreshold: 500 },
   updateSettings: async () => {},
+  categories: DEFAULT_CATEGORIES,
+  addCategory: () => {},
+  updateCategory: () => {},
+  deleteCategory: () => {},
+  reorderCategories: () => {},
+  resetCategoriesToDefault: () => {},
 };
 
 const AppContext = createContext<AppContextType>(defaultContextValue);
@@ -228,7 +249,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
       return [];
     }
   });
-  const [user, setUser] = useState<{ name: string; email: string; phone?: string } | null>(() => {
+  const [user, setUser] = useState<AppUser | null>(() => {
     try {
       const saved = localStorage.getItem('rubta_user_profile');
       return saved ? JSON.parse(saved) : null;
@@ -335,7 +356,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
 
   const [settings, setSettings] = useState<{ announcementText: string; homeMarqueeText: string; shippingFee?: number; cardShippingFee?: number; codShippingFee?: number; freeShippingThreshold?: number }>({ announcementText: '', homeMarqueeText: '', shippingFee: 15, cardShippingFee: 15, codShippingFee: 25, freeShippingThreshold: 500 });
   
-  const [activeFilters, setActiveFilters] = useState({
+  const [activeFilters, setActiveFilters] = useState<AppContextType['activeFilters']>({
     fabric: '',
     type: '',
     collection: '',
@@ -454,7 +475,13 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   const login = (name: string, email: string, phone?: string) => {
-    const newUser = { name, email, phone };
+    const normalizedEmail = email.trim().toLowerCase();
+    const newUser: AppUser = {
+      id: `usr_${normalizedEmail.replace(/[^a-zA-Z0-9]/g, '_')}`,
+      name,
+      email: normalizedEmail,
+      phone
+    };
     setUser(newUser);
     localStorage.setItem('rubta_logged_user', JSON.stringify(newUser));
     
@@ -500,6 +527,8 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     if (activeFilters.season) filtered = filtered.filter(p => p.season === activeFilters.season);
     if (activeFilters.bestSeller === 'true') filtered = filtered.filter(p => p.isBestSeller);
     if (activeFilters.newArrival === 'true') filtered = filtered.filter(p => p.isNewArrival);
+    if (activeFilters.minPrice !== undefined) filtered = filtered.filter(p => (p.onSale && p.salePrice ? p.salePrice : p.price) >= activeFilters.minPrice!);
+    if (activeFilters.maxPrice !== undefined) filtered = filtered.filter(p => (p.onSale && p.salePrice ? p.salePrice : p.price) <= activeFilters.maxPrice!);
     if (activeFilters.search) {
       const q = activeFilters.search.toLowerCase();
       filtered = filtered.filter(p => p.name.toLowerCase().includes(q) || (p.description && p.description.toLowerCase().includes(q)));
@@ -525,6 +554,8 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
       if (activeFilters.newArrival) query.append('newArrival', activeFilters.newArrival);
       if (activeFilters.category) query.append('category', activeFilters.category);
       if (activeFilters.pieces) query.append('pieces', activeFilters.pieces);
+      if (activeFilters.minPrice !== undefined) query.append('minPrice', String(activeFilters.minPrice));
+      if (activeFilters.maxPrice !== undefined) query.append('maxPrice', String(activeFilters.maxPrice));
 
       const res = await fetch(`/api/products?${query.toString()}`);
       if (res.ok) {
@@ -1293,6 +1324,7 @@ const sanitizeCategories = (cats: any[]): CategoryDef[] => {
       userId,
       trackedOrder,
       userOrders,
+      orders: userOrders,
       loading,
       user,
       isAuthModalOpen,

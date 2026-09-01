@@ -8,7 +8,7 @@ import { useApp } from '../../AppContext';
 import ProductCard from '../../components/product/ProductCard';
 import SkeletonGrid from '../../components/common/SkeletonGrid';
 import { ArrowUpDown, Sparkles, X, Gem, ChevronRight, SlidersHorizontal, ChevronDown, ChevronUp, RotateCcw } from 'lucide-react';
-import { motion, useScroll, useTransform, AnimatePresence } from 'motion/react';
+import { motion, useScroll, useTransform, AnimatePresence, type Variants } from 'motion/react';
 
 /* ── Clean Editorial tokens ────────────────────────────────────────── */
 const GLASS_LIGHT = {
@@ -70,7 +70,7 @@ function LiquidBlob({ hue, size, className = '', style }: LiquidBlobProps) {
 
 const PRODUCTS_PER_PAGE = 30;
 
-const staggerContainer = {
+const staggerContainer: Variants = {
   hidden: { opacity: 0 },
   show: {
     opacity: 1,
@@ -80,7 +80,7 @@ const staggerContainer = {
   },
 };
 
-const fadeInUp = {
+const fadeInUp: Variants = {
   hidden: { opacity: 0, y: 15 },
   show: {
     opacity: 1,

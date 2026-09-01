@@ -11,7 +11,8 @@ export async function apiFetch<T>(endpoint: string, options?: RequestInit): Prom
     let errorMessage = `API Request failed with status ${response.status}`;
     try {
       const errorData = await response.json();
-      if (errorData?.error) errorMessage = errorData.error;
+      if (typeof errorData?.error === 'string') errorMessage = errorData.error;
+      else if (errorData?.error?.message) errorMessage = errorData.error.message;
     } catch (_) {}
     throw new Error(errorMessage);
   }

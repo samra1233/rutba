@@ -19,11 +19,12 @@ export default function DesktopHighlightsSection() {
         id: cat.id,
         title: (cat.label || cat.filterValue || 'CATEGORY').toUpperCase(),
         image: cat.image || '/cat_unstitched_new.jpg',
+        filterKey: cat.filterKey || 'category',
         filterVal: cat.filterValue || cat.label || 'Unstitched',
       }))
     : [
-        { id: 'unstitched', title: 'UNSTITCHED', image: '/cat_unstitched_new.jpg', filterVal: 'Unstitched' },
-        { id: 'ready-to-wear', title: 'READY TO WEAR', image: '/cat_readytowear_new.png', filterVal: 'Ready to Wear' },
+        { id: 'unstitched', title: 'UNSTITCHED', image: '/cat_unstitched_new.jpg', filterKey: 'category', filterVal: 'Unstitched' },
+        { id: 'ready-to-wear', title: 'READY TO WEAR', image: '/cat_readytowear_new.png', filterKey: 'category', filterVal: 'Ready to Wear' },
       ];
 
   const gridColsClass = categoriesList.length === 3 
@@ -68,8 +69,12 @@ export default function DesktopHighlightsSection() {
               transition={{ duration: 0.5, delay: idx * 0.1, ease: 'easeOut' }}
               whileHover={{ y: -8 }}
               onClick={() => {
+                updateFilters({
+                  fabric: '', type: '', collection: '', search: '', color: '', sizes: '',
+                  season: '', sale: '', bestSeller: '', newArrival: '', category: '', pieces: '',
+                  [cat.filterKey]: cat.filterVal,
+                });
                 setActivePage('shop');
-                updateFilters({ type: cat.filterVal, fabric: '', collection: '' });
               }}
               className="relative h-[380px] sm:h-[400px] md:h-[440px] rounded-2xl md:rounded-3xl overflow-hidden group cursor-pointer shadow-md hover:shadow-2xl transition-all duration-300 border border-neutral-200/80 bg-neutral-900"
             >

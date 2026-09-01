@@ -26,6 +26,10 @@ export const settingsRepository = {
       supportEmail: 'care@rubta.com',
       supportPhone: '+92 300 123 4567',
       orderPrefix: 'ORD',
+      shippingFee: 15,
+      cardShippingFee: 15,
+      codShippingFee: 25,
+      freeShippingThreshold: 500,
       ...raw
     };
   },
@@ -42,6 +46,10 @@ export const settingsRepository = {
       supportEmail: 'care@rubta.com',
       supportPhone: '+92 300 123 4567',
       orderPrefix: 'ORD',
+      shippingFee: 15,
+      cardShippingFee: 15,
+      codShippingFee: 25,
+      freeShippingThreshold: 500,
       ...updated
     };
   }

@@ -114,7 +114,7 @@ export default function BestSellersSection() {
 
                   {/* Product Outfit Image */}
                   <img
-                    src={product.image || product.images?.[0]}
+                    src={product.images?.[0]}
                     alt={product.name}
                     loading="lazy"
                     className="w-full h-full object-cover object-top group-hover:scale-106 transition-transform duration-700 ease-out"
