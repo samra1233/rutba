@@ -2332,6 +2332,26 @@ class Database {
     return this.state.admins.find(a => a.email.toLowerCase() === email.toLowerCase());
   }
 
+  public createAdmin(admin: AdminUser): AdminUser {
+    const existing = this.state.admins.find(a => a.email.toLowerCase() === admin.email.toLowerCase());
+    if (existing) {
+      Object.assign(existing, admin);
+      this.save();
+      this.writeFirestoreDoc('admins', existing.id, this.cleanForFirestore(existing));
+      return existing;
+    }
+    const newAdmin: AdminUser = {
+      id: admin.id || `admin-${Date.now()}`,
+      email: admin.email.toLowerCase().trim(),
+      passwordHash: admin.passwordHash,
+    };
+    this.state.admins.push(newAdmin);
+    this.save();
+    this.writeFirestoreDoc('admins', newAdmin.id, this.cleanForFirestore(newAdmin));
+    return newAdmin;
+
+  }
+
   public createProduct(p: Product): Product {
     // Generate simple ID if none provided
     if (!p.id) {

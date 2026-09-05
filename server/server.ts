@@ -1,6 +1,7 @@
 import express from 'express';
 import http from 'http';
 import path from 'path';
+import { gzipSync } from 'zlib';
 import cookieParser from 'cookie-parser';
 import { WebSocketServer, WebSocket } from 'ws';
 import { createServer as createViteServer } from 'vite';
@@ -20,6 +21,29 @@ const app = express();
 // Express' 100KB default rejected otherwise valid uploads before they reached a route.
 app.use(express.json({ limit: '30mb' }));
 app.use(cookieParser());
+
+// Gzip compression for JSON/static payloads (skips already-compressed or tiny responses)
+app.use((req, res, next) => {
+  res.setHeader('Vary', 'Accept-Encoding');
+  const originalSend = res.send as any;
+  res.send = function (this: Response, body: any): any {
+    const accept = req.headers['accept-encoding'] || '';
+    const type = res.getHeader('content-type') as string | undefined;
+    if (
+      res.statusCode >= 200 && res.statusCode < 300 &&
+      typeof body === 'string' &&
+      (type?.includes('json') || type?.includes('javascript') || type?.includes('html')) &&
+      body.length > 1024 &&
+      accept.includes('gzip')
+    ) {
+      res.setHeader('Content-Encoding', 'gzip');
+      res.removeHeader('Content-Length');
+      return originalSend.call(this, gzipSync(Buffer.from(body)));
+    }
+    return originalSend.call(this, body);
+  } as any;
+  next();
+});
 
 // Create HTTP server & WebSocket server
 const server = http.createServer(app);
@@ -175,10 +199,12 @@ async function startServer() {
       server: { middlewareMode: true },
       appType: 'spa'
     });
+    app.use('/uploads', express.static(path.join(process.cwd(), 'dist', 'uploads')));
     app.use(vite.middlewares);
     console.log('Vite middleware mounted');
   } else {
     const distPath = path.join(process.cwd(), 'dist');
+    app.use('/uploads', express.static(path.join(distPath, 'uploads')));
     app.use(express.static(distPath));
     app.get('*', (req, res) => {
       res.sendFile(path.join(distPath, 'index.html'));

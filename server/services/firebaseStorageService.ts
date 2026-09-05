@@ -1,4 +1,6 @@
 import { randomUUID } from 'crypto';
+import fs from 'fs';
+import path from 'path';
 import { getFirebaseStorage } from '../config/firebase';
 
 const DATA_URL_PATTERN = /^data:(image\/(?:jpeg|png|webp|gif));base64,([A-Za-z0-9+/=]+)$/;
@@ -13,7 +15,16 @@ export async function persistImageDataUrl(value: string, folder: 'products' | 'c
   if (buffer.length > 5 * 1024 * 1024) throw new Error('Each image must be 5MB or smaller');
 
   const storage = getFirebaseStorage();
-  if (!storage) throw new Error('Firebase Storage is not configured');
+  if (!storage) {
+    // Firebase Storage unavailable (sandbox): persist image locally under dist/uploads/
+    // so admin uploads survive restarts without bloating the JSON database with base64.
+    const uploadsDir = path.join(process.cwd(), 'dist', 'uploads', folder);
+    fs.mkdirSync(uploadsDir, { recursive: true });
+    const extension = contentType === 'image/jpeg' ? 'jpg' : contentType.split('/')[1];
+    const filename = `${Date.now()}-${randomUUID()}.${extension}`;
+    fs.writeFileSync(path.join(uploadsDir, filename), buffer);
+    return `/uploads/${folder}/${filename}`;
+  }
 
   const extension = contentType === 'image/jpeg' ? 'jpg' : contentType.split('/')[1];
   const objectName = `${folder}/${Date.now()}-${randomUUID()}.${extension}`;

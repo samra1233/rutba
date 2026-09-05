@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import { orderService } from '../services/orderService';
 import { sendSuccess, sendError } from '../utils/responseFormatter';
+import { validateOrderPayload } from '../utils/validation';
 import Stripe from 'stripe';
 import { env } from '../config/env';
 import { CURRENCIES, CurrencyCode } from '../../shared/types';
@@ -70,6 +71,11 @@ export const orderController = {
     } catch (err: any) {
       return sendError(res, err.message || 'Error fetching order details', 500, 'FETCH_ORDER_ERROR');
     }
+  },
+
+  clearAllOrders(req: Request, res: Response) {
+    orderService.clearAllOrders();
+    return sendSuccess(res, { cleared: true }, 200, { message: 'All orders cleared' });
   },
 
   updateOrderStatus(req: Request, res: Response) {
