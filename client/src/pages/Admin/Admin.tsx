@@ -500,25 +500,22 @@ export default function Admin() {
     if (!matchesSearch) return false;
 
     // Pill filters
-    switch (catalogFilter) {
-      case 'UNSTITCHED':
-        return p.category === 'Unstitched';
-      case 'READY TO WEAR':
-        return p.category === 'Ready to Wear';
-      case 'LAWN':
-        return p.fabric === 'Lawn';
-      case 'CHIFFON':
-        return p.fabric === 'Chiffon';
-      case 'BEST SELLERS':
-        return !!p.isBestSeller;
-      case 'NEW ARRIVALS':
-        return !!p.isNewArrival;
-      case 'ON SALE':
-        return !!p.onSale;
-      case 'ALL PRODUCTS':
-      default:
-        return true;
-    }
+    const filterUpper = catalogFilter.toUpperCase();
+    if (filterUpper === 'ALL PRODUCTS') return true;
+    if (filterUpper === 'BEST SELLERS') return !!p.isBestSeller;
+    if (filterUpper === 'NEW ARRIVALS') return !!p.isNewArrival;
+    if (filterUpper === 'ON SALE') return !!p.onSale;
+    if (filterUpper === 'LAWN') return p.fabric?.toLowerCase() === 'lawn';
+    if (filterUpper === 'CHIFFON') return p.fabric?.toLowerCase() === 'chiffon';
+
+    const pCatLower = (p.category || '').trim().toLowerCase();
+    const filterLower = catalogFilter.trim().toLowerCase();
+    if (pCatLower === filterLower) return true;
+
+    const readyAliases = ['ready to wear', 'stitches', 'stitched', 'pret-a-porter'];
+    if (readyAliases.includes(filterLower) && readyAliases.includes(pCatLower)) return true;
+
+    return false;
   });
 
   if (!isLoggedIn) {
@@ -1591,7 +1588,11 @@ export default function Admin() {
                               </button>
                               <button
                                 onClick={() => {
-                                  if (confirm(`Are you sure you want to delete category "${label}"?`)) {
+                                  const matchingProducts = products.filter(p => p.category && p.category.trim().toLowerCase() === filterVal.trim().toLowerCase());
+                                  const warnMsg = matchingProducts.length > 0
+                                    ? `Category "${label}" currently has ${matchingProducts.length} product(s) assigned to it. Deleting this category will not delete the products, but they will no longer be grouped under this category. Are you sure?`
+                                    : `Are you sure you want to delete category "${label}"?`;
+                                  if (confirm(warnMsg)) {
                                     deleteCategory(cat.id);
                                   }
                                 }}
