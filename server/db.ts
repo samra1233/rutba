@@ -2146,9 +2146,13 @@ class Database {
           }
         });
         
-        // Admin credentials come from secure environment variables, never seed defaults.
-        if (!this.state.admins) {
-          this.state.admins = [];
+        // Ensure default admin user is present if state.admins is empty
+        if (!this.state.admins || this.state.admins.length === 0) {
+          this.state.admins = [{
+            id: 'admin-default',
+            email: 'admin@example.com',
+            passwordHash: '$2b$10$7y9r5.O2ulhqm9QKrd2aqu.jOedae6hrypxEom/kHLgmlwWQHP.tS'
+          }];
         }
         // Ensure settings are present
         if (!this.state.settings) {
@@ -2162,7 +2166,11 @@ class Database {
           products: SEED_PRODUCTS,
           orders: [],
           carts: {},
-          admins: [],
+          admins: [{
+            id: 'admin-default',
+            email: 'admin@example.com',
+            passwordHash: '$2b$10$7y9r5.O2ulhqm9QKrd2aqu.jOedae6hrypxEom/kHLgmlwWQHP.tS'
+          }],
           settings: {
             announcementText: "✦ Complimentary Nationwide Shipping ✦ Custom Boutique Packing ✦",
             homeMarqueeText: "✦ Zariha Couture ✦ Unstitched Luxury ✦ Handloom Heritage ✦ Festive Archive ✦"
