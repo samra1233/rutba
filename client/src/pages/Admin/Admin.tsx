@@ -560,7 +560,7 @@ export default function Admin() {
                 type="email" 
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="rutabaglobal@gmail.com"
+                placeholder="admin@example.com"
                 className="w-full bg-[#FCFAF7] text-neutral-800 border border-neutral-200/85 focus:border-[#C5A059] focus:ring-4 focus:ring-[#C5A059]/10 rounded-xl py-3 px-4 text-xs font-mono placeholder-neutral-400 focus:outline-hidden transition-all shadow-inner"
               />
             </div>

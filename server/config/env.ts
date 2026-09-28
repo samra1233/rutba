@@ -15,8 +15,8 @@ export function validateEnv(): ServerEnv {
   const nodeEnv = process.env.NODE_ENV || 'development';
   const jwtSecret = process.env.JWT_SECRET || 'super-secret-rubta-jwt-key';
   const stripeSecretKey = process.env.STRIPE_SECRET_KEY || '';
-  const adminEmail = (process.env.ADMIN_EMAIL || '').trim().toLowerCase();
-  const adminPassword = process.env.ADMIN_PASSWORD || '';
+  const adminEmail = (process.env.ADMIN_EMAIL || 'admin@example.com').trim().toLowerCase();
+  const adminPassword = process.env.ADMIN_PASSWORD || 'use_a_strong_password_here';
 
   return {
     port,
