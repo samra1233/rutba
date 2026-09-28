@@ -264,9 +264,9 @@ export default function Admin() {
     setActiveSlot(0);
     setFormId(p.id);
     setFormName(p.name);
-    const { currentPrice, wasPrice } = getProductPrices(p);
-    setFormPrice(currentPrice.toString());
-    setFormWasPrice(wasPrice ? wasPrice.toString() : '');
+    setFormPrice(p.price ? p.price.toString() : '');
+    const existingWas = p.wasPrice || p.compareAtPrice || '';
+    setFormWasPrice(existingWas ? existingWas.toString() : '');
     setFormFabric(p.fabric);
     setFormType(p.type);
     setFormCollection(p.collection || '');
@@ -278,7 +278,7 @@ export default function Admin() {
     setFormColors(p.colors ? p.colors.join(', ') : '');
     setFormFeatures(p.features ? p.features.join(', ') : '');
     setFormImages(p.images ? p.images.join('\n') : '');
-    setFormOnSale(p.onSale || Boolean(wasPrice && wasPrice > currentPrice));
+    setFormOnSale(Boolean(p.onSale));
     setFormSalePrice(p.salePrice ? p.salePrice.toString() : '');
     setFormIsBestSeller(p.isBestSeller || false);
     setFormIsNewArrival(p.isNewArrival || false);
@@ -368,15 +368,12 @@ export default function Admin() {
       addToast('Select at least one available size.', 'warn');
       return;
     }
-    const effectiveWasPrice = parsedWasPrice > 0 ? parsedWasPrice : (formOnSale && parsedSalePrice > 0 ? parsedPrice : null);
-    const effectiveNowPrice = (formOnSale && parsedSalePrice > 0 && parsedWasPrice <= 0) ? parsedSalePrice : parsedPrice;
-
     const payload = {
       id: formId || undefined,
       name: formName,
-      price: effectiveNowPrice,
-      wasPrice: effectiveWasPrice,
-      compareAtPrice: effectiveWasPrice,
+      price: parsedPrice,
+      wasPrice: parsedWasPrice > 0 ? parsedWasPrice : null,
+      compareAtPrice: parsedWasPrice > 0 ? parsedWasPrice : null,
       fabric: formFabric,
       type: formType,
       collection: formCollection,
@@ -385,8 +382,8 @@ export default function Admin() {
       season: formSeason,
       stock: parsedStock,
       description: formDescription,
-      onSale: Boolean(formOnSale || (effectiveWasPrice && effectiveWasPrice > effectiveNowPrice)),
-      salePrice: (effectiveWasPrice && effectiveWasPrice > effectiveNowPrice) ? effectiveNowPrice : (formOnSale && parsedSalePrice > 0 ? parsedSalePrice : null),
+      onSale: Boolean(formOnSale),
+      salePrice: formOnSale && parsedSalePrice > 0 ? parsedSalePrice : null,
       isBestSeller: formIsBestSeller,
       isNewArrival: formIsNewArrival,
       sizes: formSizes,
