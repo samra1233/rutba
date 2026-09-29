@@ -5,12 +5,28 @@ import { validateOrderPayload } from '../utils/validation';
 import Stripe from 'stripe';
 import { env } from '../config/env';
 import { CURRENCIES, CurrencyCode } from '../../shared/types';
+import fs from 'fs';
+import path from 'path';
+import dotenv from 'dotenv';
 
 export const orderController = {
   async createOrder(req: Request, res: Response) {
     try {
       const { paymentMethod, paymentDetails, items, shippingDetails, currency = 'AED' } = req.body;
-      if (paymentMethod !== 'card' || !paymentDetails?.paymentIntentId || !env.stripeSecretKey) {
+      let stripeKey = process.env.STRIPE_SECRET_KEY || env.stripeSecretKey || '';
+      if (!stripeKey || stripeKey.includes('your_stripe_secret_key_here')) {
+        try {
+          const envPath = path.resolve(process.cwd(), '.env');
+          if (fs.existsSync(envPath)) {
+            const parsed = dotenv.parse(fs.readFileSync(envPath, 'utf8'));
+            if (parsed.STRIPE_SECRET_KEY && !parsed.STRIPE_SECRET_KEY.includes('your_stripe_secret_key_here')) {
+              stripeKey = parsed.STRIPE_SECRET_KEY;
+              process.env.STRIPE_SECRET_KEY = stripeKey;
+            }
+          }
+        } catch (_) {}
+      }
+      if (paymentMethod !== 'card' || !paymentDetails?.paymentIntentId || !stripeKey) {
         return sendError(res, 'A verified Stripe card payment is required', 402, 'PAYMENT_REQUIRED');
       }
       const existingOrder = orderService.getOrders().find(order =>
@@ -18,7 +34,7 @@ export const orderController = {
         order.paymentDetails?.transactionId === paymentDetails.paymentIntentId
       );
       if (existingOrder) return res.json(existingOrder);
-      const stripe = new Stripe(env.stripeSecretKey);
+      const stripe = new Stripe(stripeKey);
       const intent = await stripe.paymentIntents.retrieve(paymentDetails.paymentIntentId);
       const totals = orderService.calculateOrderTotal(items, shippingDetails?.country);
       if (totals.error || !totals.total) {

@@ -3,30 +3,48 @@ import fs from 'fs';
 import path from 'path';
 import { getFirebaseStorage } from '../config/firebase';
 
-const DATA_URL_PATTERN = /^data:(image\/(?:jpeg|png|webp|gif));base64,([A-Za-z0-9+/=]+)$/;
-
 export async function persistImageDataUrl(value: string, folder: 'products' | 'categories'): Promise<string> {
+  if (!value || typeof value !== 'string') return '';
   if (!value.startsWith('data:')) return value;
-  const match = value.match(DATA_URL_PATTERN);
-  if (!match) throw new Error('Only JPG, PNG, WebP or GIF images are supported');
 
-  const [, contentType, encoded] = match;
-  const buffer = Buffer.from(encoded, 'base64');
-  if (buffer.length > 5 * 1024 * 1024) throw new Error('Each image must be 5MB or smaller');
+  const commaIndex = value.indexOf(',');
+  if (commaIndex === -1) return value;
+
+  const header = value.substring(0, commaIndex);
+  const base64Data = value.substring(commaIndex + 1).replace(/\s/g, '');
+
+  let contentType = 'image/png';
+  let extension = 'png';
+
+  const typeMatch = header.match(/^data:([^;]+)/);
+  if (typeMatch && typeMatch[1]) {
+    contentType = typeMatch[1].toLowerCase();
+    if (contentType.includes('jpeg') || contentType.includes('jpg')) {
+      extension = 'jpg';
+      contentType = 'image/jpeg';
+    } else if (contentType.includes('webp')) {
+      extension = 'webp';
+    } else if (contentType.includes('gif')) {
+      extension = 'gif';
+    } else if (contentType.includes('svg')) {
+      extension = 'svg';
+    }
+  }
+
+  const buffer = Buffer.from(base64Data, 'base64');
+  if (buffer.length > 10 * 1024 * 1024) throw new Error('Each image must be 10MB or smaller');
 
   const storage = getFirebaseStorage();
   if (!storage) {
-    // Firebase Storage unavailable (sandbox): persist image locally under dist/uploads/
-    // so admin uploads survive restarts without bloating the JSON database with base64.
-    const uploadsDir = path.join(process.cwd(), 'dist', 'uploads', folder);
+    // Firebase Storage unavailable (sandbox): persist image locally under uploads/
+    // so admin uploads survive rebuilds and restarts without bloating the JSON database with base64.
+    const uploadsDir = path.join(process.cwd(), 'uploads', folder);
     fs.mkdirSync(uploadsDir, { recursive: true });
-    const extension = contentType === 'image/jpeg' ? 'jpg' : contentType.split('/')[1];
     const filename = `${Date.now()}-${randomUUID()}.${extension}`;
     fs.writeFileSync(path.join(uploadsDir, filename), buffer);
     return `/uploads/${folder}/${filename}`;
   }
 
-  const extension = contentType === 'image/jpeg' ? 'jpg' : contentType.split('/')[1];
   const objectName = `${folder}/${Date.now()}-${randomUUID()}.${extension}`;
   const downloadToken = randomUUID();
   const bucket = storage.bucket();

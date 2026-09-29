@@ -111,6 +111,7 @@ export const productService = {
 
   createProduct(data: Partial<Product>): Product {
     const newProduct: Product = {
+      ...data,
       id: data.id || `ms-${Math.floor(100 + Math.random() * 900)}`,
       name: data.name || 'New Product',
       price: Number(data.price) || 0,
@@ -118,13 +119,22 @@ export const productService = {
       fabric: data.fabric || 'Lawn',
       type: data.type || 'Embroidered',
       collection: data.collection || 'General',
-      images: Array.isArray(data.images) && data.images.length > 0 ? data.images : ['https://images.unsplash.com/photo-1608748010899-18f300247112?auto=format&fit=crop&q=80&w=800'],
+      category: data.category || 'Unstitched',
+      pieces: data.pieces || '3 Piece',
+      season: data.season || 'Summer',
+      images: Array.isArray(data.images) && data.images.length > 0 ? data.images : [],
       description: data.description || '',
       stock: isNaN(Number(data.stock)) ? 10 : Number(data.stock),
-      colors: Array.isArray(data.colors) ? data.colors : ['Multicolor'],
-      viewers: 0,
-      isNewArrival: true,
-      features: Array.isArray(data.features) ? data.features : []
+      colors: Array.isArray(data.colors) && data.colors.length > 0 ? data.colors : ['Multicolor'],
+      sizes: Array.isArray(data.sizes) && data.sizes.length > 0 ? data.sizes : ['Unstitched'],
+      onSale: Boolean(data.onSale),
+      salePrice: data.salePrice ? Number(data.salePrice) : null,
+      wasPrice: data.wasPrice ? Number(data.wasPrice) : null,
+      compareAtPrice: data.compareAtPrice ? Number(data.compareAtPrice) : null,
+      isBestSeller: Boolean(data.isBestSeller),
+      isNewArrival: data.isNewArrival !== undefined ? Boolean(data.isNewArrival) : true,
+      features: Array.isArray(data.features) ? data.features : [],
+      viewers: 0
     };
 
     return productRepository.create(newProduct);

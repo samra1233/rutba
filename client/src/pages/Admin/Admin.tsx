@@ -243,7 +243,8 @@ export default function Admin() {
     setFormFabric('Lawn');
     setFormType('Embroidered');
     setFormCollection('Festive Lawn 26');
-    setFormCategory('Unstitched');
+    const firstCat = categories && categories.length > 0 ? (categories[0].filterValue || categories[0].label || 'Unstitched') : 'Unstitched';
+    setFormCategory(firstCat);
     setFormPieces('3 Piece');
     setFormSeason('Summer');
     setFormStock('15');
@@ -401,12 +402,14 @@ export default function Admin() {
         res = await fetch(`/api/admin/products/${editingProduct.id}`, {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
+          credentials: 'include',
           body: JSON.stringify(payload)
         });
       } else {
         res = await fetch('/api/admin/products', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
+          credentials: 'include',
           body: JSON.stringify(payload)
         });
       }
@@ -445,7 +448,10 @@ export default function Admin() {
   const handleDeleteProduct = async (id: string) => {
     if (!window.confirm('Are you absolutely sure you want to delete this product? This will remove it from store listing.')) return;
     try {
-      const res = await fetch(`/api/admin/products/${id}`, { method: 'DELETE' });
+      const res = await fetch(`/api/admin/products/${id}`, { 
+        method: 'DELETE',
+        credentials: 'include'
+      });
       if (res.ok) {
         addToast('Product successfully deleted', 'success');
         setProducts(prev => prev.filter(p => p.id !== id));
@@ -464,6 +470,7 @@ export default function Admin() {
       const res = await fetch(`/api/admin/products/${pId}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
         body: JSON.stringify({ stock: newStock })
       });
       if (res.ok) {
@@ -610,9 +617,9 @@ export default function Admin() {
   const handleOpenNewCat = () => {
     setEditingCat(null);
     setCatFormLabel('');
-    setCatFormTag('Artisan Yardage');
-    setCatFormSublabel('Premium tailored collection');
-    setCatFormImage('/cat_unstitched_new.jpg');
+    setCatFormTag('');
+    setCatFormSublabel('');
+    setCatFormImage('');
     setCatFormFilterKey('category');
     setCatFormFilterValue('');
     setIsCatFormOpen(true);
@@ -621,9 +628,9 @@ export default function Admin() {
   const handleEditCat = (cat: any) => {
     setEditingCat(cat);
     setCatFormLabel(cat.label || cat.name || cat.filterValue || '');
-    setCatFormTag(cat.tag || 'Curated Edit');
-    setCatFormSublabel(cat.sublabel || 'Premium collection');
-    setCatFormImage(cat.image || cat.imageUrl || '/cat_unstitched_new.jpg');
+    setCatFormTag(cat.tag || '');
+    setCatFormSublabel(cat.sublabel || '');
+    setCatFormImage(cat.image || cat.imageUrl || '');
     setCatFormFilterKey(cat.filterKey || 'category');
     setCatFormFilterValue(cat.filterValue || cat.label || '');
     setIsCatFormOpen(true);
@@ -678,10 +685,10 @@ export default function Admin() {
     const val = catFormFilterValue.trim() || catFormLabel.trim();
     const payload = {
       label: catFormLabel.trim(),
-      tag: catFormTag.trim() || 'Curated Edit',
-      sublabel: catFormSublabel.trim() || 'Premium collection',
-      image: catFormImage.trim() || '/cat_unstitched_new.jpg',
-      filterKey: catFormFilterKey,
+      tag: catFormTag.trim(),
+      sublabel: catFormSublabel.trim(),
+      image: catFormImage.trim(),
+      filterKey: catFormFilterKey || 'category',
       filterValue: val,
     };
 
@@ -1501,11 +1508,11 @@ export default function Admin() {
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                   {categories.map((cat, idx) => {
                     const label = cat.label || cat.filterValue || 'Untitled Category';
-                    const tag = cat.tag || 'Curated Edit';
-                    const sublabel = cat.sublabel || 'Luxury Couture Collection';
+                    const tag = cat.tag || '';
+                    const sublabel = cat.sublabel || '';
                     const num = cat.num || (idx + 1).toString().padStart(2, '0');
-                    const imgUrl = cat.image || '/cat_unstitched_new.jpg';
-                    const filterVal = cat.filterValue || cat.label || 'Unstitched';
+                    const imgUrl = cat.image || '';
+                    const filterVal = cat.filterValue || cat.label || '';
 
                     return (
                       <div
@@ -1514,14 +1521,20 @@ export default function Admin() {
                       >
                         {/* Category Image Header */}
                         <div className="relative h-56 w-full bg-[#14261C] overflow-hidden group">
-                          <img
-                            src={imgUrl}
-                            alt={label}
-                            onError={(e) => {
-                              (e.currentTarget as HTMLImageElement).src = 'https://images.unsplash.com/photo-1608748010899-18f300247112?auto=format&fit=crop&q=80&w=800';
-                            }}
-                            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                          />
+                          {imgUrl ? (
+                            <img
+                              src={imgUrl}
+                              alt={label}
+                              onError={(e) => {
+                                (e.currentTarget as HTMLImageElement).style.opacity = '0.3';
+                              }}
+                              className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                            />
+                          ) : (
+                            <div className="w-full h-full flex items-center justify-center text-stone-400 text-xs font-mono">
+                              No image set
+                            </div>
+                          )}
                           <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-black/20" />
                           
                           {/* Top Badges */}
@@ -1529,9 +1542,11 @@ export default function Admin() {
                             <span className="text-[11px] font-mono font-bold uppercase tracking-wider px-3 py-1 rounded-lg bg-[#C5A059] text-black shadow-md">
                               {num}
                             </span>
-                            <span className="text-[10px] font-sans font-bold uppercase tracking-wider px-3 py-1 rounded-lg bg-black/70 text-white backdrop-blur-md border border-white/20 shadow-md">
-                              {tag}
-                            </span>
+                            {tag ? (
+                              <span className="text-[10px] font-sans font-bold uppercase tracking-wider px-3 py-1 rounded-lg bg-black/70 text-white backdrop-blur-md border border-white/20 shadow-md">
+                                {tag}
+                              </span>
+                            ) : <span />}
                           </div>
 
                           {/* Bottom Label on Image */}
@@ -1539,9 +1554,11 @@ export default function Admin() {
                             <h3 className="text-xl font-serif font-extrabold text-white drop-shadow-md">
                               {label}
                             </h3>
-                            <p className="text-xs font-sans text-stone-200 line-clamp-2 font-light leading-snug">
-                              {sublabel}
-                            </p>
+                            {sublabel && (
+                              <p className="text-xs font-sans text-stone-200 line-clamp-2 font-light leading-snug">
+                                {sublabel}
+                              </p>
+                            )}
                           </div>
                         </div>
 
@@ -1660,36 +1677,48 @@ export default function Admin() {
                   </span>
                   
                   <div className="relative h-64 w-full rounded-2xl overflow-hidden border border-neutral-300 shadow-md bg-[#14261C]">
-                    <img
-                      src={catFormImage || '/cat_unstitched_new.jpg'}
-                      alt="Category Preview"
-                      onError={(e) => {
-                        (e.currentTarget as HTMLImageElement).src = 'https://images.unsplash.com/photo-1608748010899-18f300247112?auto=format&fit=crop&q=80&w=800';
-                      }}
-                      className="w-full h-full object-cover"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-black/20" />
+                    {catFormImage ? (
+                      <img
+                        src={catFormImage}
+                        alt="Category Preview"
+                        onError={(e) => {
+                          (e.currentTarget as HTMLImageElement).style.opacity = '0.3';
+                        }}
+                        className="w-full h-full object-cover"
+                      />
+                    ) : (
+                      <div className="w-full h-full flex flex-col items-center justify-center text-stone-400 font-mono text-xs p-4 text-center">
+                        <Upload className="w-8 h-8 mb-2 opacity-40" />
+                        <span>No image selected</span>
+                        <span className="text-[10px] text-stone-500 mt-1">Upload a file or enter an image URL</span>
+                      </div>
+                    )}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-black/20 pointer-events-none" />
                     
-                    <div className="absolute top-3 left-3 right-3 flex items-center justify-between">
+                    <div className="absolute top-3 left-3 right-3 flex items-center justify-between pointer-events-none">
                       <span className="text-[10px] font-mono font-bold uppercase px-2.5 py-1 rounded-md bg-[#C5A059] text-black">
-                        01
+                        {editingCat?.num || (categories.length + 1).toString().padStart(2, '0')}
                       </span>
-                      <span className="text-[10px] font-sans font-bold uppercase px-2.5 py-1 rounded-md bg-black/70 text-white backdrop-blur-md border border-white/20">
-                        {catFormTag || 'Curated Edit'}
-                      </span>
+                      {catFormTag ? (
+                        <span className="text-[10px] font-sans font-bold uppercase px-2.5 py-1 rounded-md bg-black/70 text-white backdrop-blur-md border border-white/20">
+                          {catFormTag}
+                        </span>
+                      ) : <span />}
                     </div>
 
-                    <div className="absolute bottom-3 left-4 right-4 text-white space-y-1 text-left">
+                    <div className="absolute bottom-3 left-4 right-4 text-white space-y-1 text-left pointer-events-none">
                       <h4 className="text-xl font-serif font-bold text-white drop-shadow">
                         {catFormLabel || 'Category Name'}
                       </h4>
-                      <p className="text-xs font-sans text-stone-200 line-clamp-2 font-light">
-                        {catFormSublabel || 'Subtitle description will appear here...'}
-                      </p>
+                      {catFormSublabel && (
+                        <p className="text-xs font-sans text-stone-200 line-clamp-2 font-light">
+                          {catFormSublabel}
+                        </p>
+                      )}
                     </div>
                   </div>
                   <p className="text-[11px] font-mono text-neutral-400 text-center pt-1">
-                    Matches parameter: <strong className="text-neutral-700">category = "{catFormFilterValue || catFormLabel || 'Unstitched'}"</strong>
+                    Matches parameter: <strong className="text-neutral-700">category = "{catFormFilterValue || catFormLabel || '...'}"</strong>
                   </p>
                 </div>
 
@@ -1704,7 +1733,13 @@ export default function Admin() {
                       type="text"
                       required
                       value={catFormLabel}
-                      onChange={(e) => setCatFormLabel(e.target.value)}
+                      onChange={(e) => {
+                        const val = e.target.value;
+                        if (!catFormFilterValue || catFormFilterValue === catFormLabel) {
+                          setCatFormFilterValue(val);
+                        }
+                        setCatFormLabel(val);
+                      }}
                       placeholder="e.g. Ready to Wear, Unstitched, Party Wear"
                       className="w-full bg-stone-50 border border-neutral-300 rounded-xl p-3 focus:outline-hidden focus:border-[#C5A059] text-sm font-semibold text-neutral-900"
                     />
@@ -1715,62 +1750,27 @@ export default function Admin() {
                     <label className="block text-[11px] font-bold text-neutral-700 uppercase tracking-wider">
                       Database Filter Value (Category parameter in Products)
                     </label>
-                    <div className="flex gap-2">
-                      <input
-                        type="text"
-                        value={catFormFilterValue}
-                        onChange={(e) => setCatFormFilterValue(e.target.value)}
-                        placeholder="e.g. Ready to Wear"
-                        className="w-full bg-stone-50 border border-neutral-300 rounded-xl p-3 focus:outline-hidden focus:border-[#C5A059] text-sm font-semibold text-neutral-900"
-                      />
-                    </div>
-                    {/* Preset filter pills */}
-                    <div className="flex flex-wrap gap-1.5 pt-1">
-                      {['Unstitched', 'Ready to Wear', 'Stitches', 'Kurta Set'].map((val) => (
-                        <button
-                          key={val}
-                          type="button"
-                          onClick={() => setCatFormFilterValue(val)}
-                          className={`text-[10px] font-mono px-2 py-0.5 rounded-md border transition-all cursor-pointer ${
-                            catFormFilterValue === val
-                              ? 'bg-[#003e1c] text-white border-[#003e1c]'
-                              : 'bg-stone-100 text-stone-600 border-stone-200 hover:bg-stone-200'
-                          }`}
-                        >
-                          {val}
-                        </button>
-                      ))}
-                    </div>
+                    <input
+                      type="text"
+                      value={catFormFilterValue}
+                      onChange={(e) => setCatFormFilterValue(e.target.value)}
+                      placeholder="e.g. Ready to Wear"
+                      className="w-full bg-stone-50 border border-neutral-300 rounded-xl p-3 focus:outline-hidden focus:border-[#C5A059] text-sm font-semibold text-neutral-900"
+                    />
                   </div>
 
                   {/* Badge Tag */}
                   <div className="space-y-1.5">
                     <label className="block text-[11px] font-bold text-neutral-700 uppercase tracking-wider">
-                      Top Badge Tag (e.g. Pret-A-Porter, Festive Glam)
+                      Top Badge Tag
                     </label>
                     <input
                       type="text"
                       value={catFormTag}
                       onChange={(e) => setCatFormTag(e.target.value)}
-                      placeholder="e.g. Pret-A-Porter"
+                      placeholder="e.g. Pret-A-Porter, Festive Glam"
                       className="w-full bg-stone-50 border border-neutral-300 rounded-xl p-3 focus:outline-hidden focus:border-[#C5A059] text-sm font-semibold text-neutral-900"
                     />
-                    <div className="flex flex-wrap gap-1.5 pt-1">
-                      {['Artisan Yardage', 'Pret-A-Porter', 'Festive Glam', 'Trending Now', 'Chic Edit'].map((t) => (
-                        <button
-                          key={t}
-                          type="button"
-                          onClick={() => setCatFormTag(t)}
-                          className={`text-[10px] font-mono px-2 py-0.5 rounded-md border transition-all cursor-pointer ${
-                            catFormTag === t
-                              ? 'bg-[#14261C] text-white border-[#14261C]'
-                              : 'bg-stone-100 text-stone-600 border-stone-200 hover:bg-stone-200'
-                          }`}
-                        >
-                          {t}
-                        </button>
-                      ))}
-                    </div>
                   </div>
 
                   {/* Subtitle Description */}
@@ -1807,38 +1807,11 @@ export default function Admin() {
 
                     <input
                       type="text"
-                      required
                       value={catFormImage}
                       onChange={(e) => setCatFormImage(e.target.value)}
                       placeholder="e.g. /cat_readytowear_new.png or image URL"
                       className="w-full bg-stone-50 border border-neutral-300 rounded-xl p-3 focus:outline-hidden focus:border-[#C5A059] text-xs font-mono text-neutral-900"
                     />
-
-                    {/* Preset Image Options */}
-                    <div className="space-y-1 pt-1">
-                      <span className="text-[10px] font-mono text-neutral-500 block">Quick Image Presets:</span>
-                      <div className="flex flex-wrap gap-2">
-                        {[
-                          { name: 'Unstitched', url: '/cat_unstitched_new.jpg' },
-                          { name: 'Ready To Wear', url: '/cat_readytowear_new.png' },
-                          { name: 'Summer', url: '/cat_summer_new.png' },
-                          { name: 'New Arrivals', url: '/cat_newarrivals_new.png' },
-                        ].map((preset) => (
-                          <button
-                            key={preset.url}
-                            type="button"
-                            onClick={() => setCatFormImage(preset.url)}
-                            className={`text-[10px] font-mono px-2.5 py-1 rounded-lg border transition-all cursor-pointer ${
-                              catFormImage === preset.url
-                                ? 'bg-[#14261C] text-white border-[#14261C] font-bold shadow-xs'
-                                : 'bg-stone-100 text-stone-600 border-stone-200 hover:bg-stone-200'
-                            }`}
-                          >
-                            {preset.name}
-                          </button>
-                        ))}
-                      </div>
-                    </div>
                   </div>
 
                   {/* Submit Buttons */}
@@ -2065,13 +2038,10 @@ export default function Admin() {
                           className="w-full bg-stone-50 border border-neutral-300 text-neutral-900 rounded-xl p-3.5 focus:outline-none focus:border-stone-800 focus:bg-white text-sm font-semibold cursor-pointer shadow-xs"
                         >
                           {Array.from(new Set([
-                            'Unstitched',
-                            'Ready to Wear',
-                            'Stitches',
-                            'Kurta Set',
-                            'Co ord set',
-                            'Indian Saree',
-                            ...(categories ? categories.map(c => c.label || c.filterValue).filter(Boolean) : [])
+                            ...(categories && categories.length > 0
+                              ? categories.map(c => (c.filterValue || c.label || '').trim()).filter(Boolean)
+                              : ['Unstitched', 'Ready to Wear']),
+                            ...(formCategory ? [formCategory] : [])
                           ])).map(catName => (
                             <option key={catName} value={catName}>{catName}</option>
                           ))}

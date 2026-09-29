@@ -1,11 +1,13 @@
 import express from 'express';
 import http from 'http';
 import path from 'path';
+import fs from 'fs';
 import { gzipSync } from 'zlib';
 import cookieParser from 'cookie-parser';
 import { WebSocketServer, WebSocket } from 'ws';
 import { createServer as createViteServer } from 'vite';
 import Stripe from 'stripe';
+import dotenv from 'dotenv';
 import { orderService } from './services/orderService';
 import { CURRENCIES, CurrencyCode } from '../shared/types';
 import { initFirebase } from './config/firebase';
@@ -120,8 +122,38 @@ function broadcastViewerCount(productId: string) {
   });
 }
 
+// Stripe Configuration helper (re-reads .env if process.env has placeholder)
+function getStripeConfig() {
+  let secretKey = process.env.STRIPE_SECRET_KEY || '';
+  let publishableKey = process.env.VITE_STRIPE_PUBLISHABLE_KEY || '';
+
+  if (!secretKey || secretKey.includes('your_stripe_secret_key_here') || !publishableKey || publishableKey.includes('your_stripe_publishable_key_here')) {
+    try {
+      const envPath = path.resolve(process.cwd(), '.env');
+      if (fs.existsSync(envPath)) {
+        const raw = fs.readFileSync(envPath, 'utf8');
+        const parsed = dotenv.parse(raw);
+        if (parsed.STRIPE_SECRET_KEY && !parsed.STRIPE_SECRET_KEY.includes('your_stripe_secret_key_here')) {
+          secretKey = parsed.STRIPE_SECRET_KEY;
+          process.env.STRIPE_SECRET_KEY = secretKey;
+        }
+        if (parsed.VITE_STRIPE_PUBLISHABLE_KEY && !parsed.VITE_STRIPE_PUBLISHABLE_KEY.includes('your_stripe_publishable_key_here')) {
+          publishableKey = parsed.VITE_STRIPE_PUBLISHABLE_KEY;
+          process.env.VITE_STRIPE_PUBLISHABLE_KEY = publishableKey;
+        }
+      }
+    } catch (_) {}
+  }
+  return { secretKey, publishableKey };
+}
+
+// Endpoint to provide publishable key to frontend dynamically
+app.get('/api/stripe/publishable-key', (req, res) => {
+  const { publishableKey } = getStripeConfig();
+  res.json({ publishableKey });
+});
+
 // Stripe Payment Intent endpoint
-const stripeSecretKey = env.stripeSecretKey;
 app.post('/api/create-payment-intent', async (req, res) => {
   try {
     const { items, country, currency = 'AED', customerEmail } = req.body;
@@ -142,11 +174,12 @@ app.post('/api/create-payment-intent', async (req, res) => {
       : Math.round(totals.total * (CURRENCIES.AED.rateInPKR / currencyInfo.rateInPKR));
     const amountInCents = chargeAmount * 100;
 
-    if (!stripeSecretKey || stripeSecretKey.startsWith('mock_')) {
+    const { secretKey } = getStripeConfig();
+    if (!secretKey || secretKey.includes('your_stripe_secret_key_here') || secretKey.startsWith('mock_')) {
       return res.status(503).json({ error: { code: 'STRIPE_NOT_CONFIGURED', message: 'Card payments are temporarily unavailable' } });
     }
 
-    const liveStripe = new Stripe(stripeSecretKey);
+    const liveStripe = new Stripe(secretKey);
     const paymentIntent = await liveStripe.paymentIntents.create({
       amount: amountInCents,
       currency: normalizedCurrency,
@@ -194,17 +227,27 @@ async function startServer() {
     return;
   }
 
+  const uploadsDir = path.join(process.cwd(), 'uploads');
+  const legacyUploadsDir = path.join(process.cwd(), 'dist', 'uploads');
+  fs.mkdirSync(uploadsDir, { recursive: true });
+  app.use('/uploads', express.static(uploadsDir));
+  if (fs.existsSync(legacyUploadsDir)) {
+    app.use('/uploads', express.static(legacyUploadsDir));
+  }
+  // If an uploaded image does not exist, return a clean 404 instead of letting Vite crash with 500
+  app.use('/uploads', (req, res) => {
+    res.status(404).send('Image Not Found');
+  });
+
   if (env.nodeEnv !== 'production') {
     const vite = await createViteServer({
       server: { middlewareMode: true },
       appType: 'spa'
     });
-    app.use('/uploads', express.static(path.join(process.cwd(), 'dist', 'uploads')));
     app.use(vite.middlewares);
     console.log('Vite middleware mounted');
   } else {
     const distPath = path.join(process.cwd(), 'dist');
-    app.use('/uploads', express.static(path.join(distPath, 'uploads')));
     app.use(express.static(distPath));
     app.get('*', (req, res) => {
       res.sendFile(path.join(distPath, 'index.html'));

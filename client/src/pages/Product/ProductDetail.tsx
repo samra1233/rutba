@@ -6,7 +6,8 @@ import { motion, AnimatePresence } from 'motion/react';
 import ProductCard from '../../components/product/ProductCard';
 
 export default function ProductDetail() {
-  const { selectedProductId, products, addToCart, setActivePage, toggleWishlist, isWishlisted, formatPrice, addToast } = useApp();
+  const { selectedProductId, allProducts, products, addToCart, setActivePage, toggleWishlist, isWishlisted, formatPrice, addToast } = useApp();
+  const masterCatalog = (allProducts && allProducts.length > 0) ? allProducts : products;
   const [activeImageIdx, setActiveImageIdx] = useState(0);
   const [selectedSize, setSelectedSize] = useState('');
   const [quantity, setQuantity] = useState(1);
@@ -16,8 +17,8 @@ export default function ProductDetail() {
   const [showSizeChart, setShowSizeChart] = useState(false);
   const [showFullImageModal, setShowFullImageModal] = useState(false);
 
-  const product = products.find(p => p.id === selectedProductId) || products[0];
-  const relatedProducts = products.filter(p => p.id !== product?.id).slice(0, 5);
+  const product = masterCatalog.find(p => p.id === selectedProductId) || masterCatalog[0];
+  const relatedProducts = masterCatalog.filter(p => p.id !== product?.id).slice(0, 5);
   const wishlisted = product ? isWishlisted(product.id) : false;
   const { currentPrice, wasPrice, hasDiscount, discountPercent } = product ? getProductPrices(product) : { currentPrice: 0, wasPrice: undefined, hasDiscount: false, discountPercent: 0 };
 

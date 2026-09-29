@@ -26,16 +26,74 @@ import {
   Globe 
 } from 'lucide-react';
 
+const DEFAULT_STRIPE_KEY = (import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY && !import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY.includes('your_stripe_publishable_key_here'))
+  ? import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY
+  : '';
+
 export default function Checkout() {
-  const stripePromise = useMemo(() => loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY || ''), []);
+  const [stripePromise, setStripePromise] = useState<Promise<any> | null>(() => {
+    if (typeof window !== 'undefined' && (window as any).Stripe) {
+      try {
+        return Promise.resolve((window as any).Stripe(DEFAULT_STRIPE_KEY));
+      } catch (_) {}
+    }
+    const rawKey = import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY;
+    const initialKey = (rawKey && !rawKey.includes('your_stripe_publishable_key_here')) ? rawKey : DEFAULT_STRIPE_KEY;
+    return loadStripe(initialKey).catch(err => {
+      console.warn('Initial Stripe load failed:', err);
+      return null;
+    });
+  });
+
+  const [stripeLoadError, setStripeLoadError] = useState<boolean>(false);
+
+  const retryLoadStripe = useCallback(async () => {
+    setStripeLoadError(false);
+    try {
+      if (typeof window !== 'undefined' && (window as any).Stripe) {
+        setStripePromise(Promise.resolve((window as any).Stripe(DEFAULT_STRIPE_KEY)));
+        return;
+      }
+      const res = await fetch('/api/stripe/publishable-key');
+      const data = await res.json();
+      const key = (data.publishableKey && !data.publishableKey.includes('your_stripe_publishable_key_here'))
+        ? data.publishableKey
+        : DEFAULT_STRIPE_KEY;
+      const promise = loadStripe(key);
+      const instance = await promise;
+      if (!instance) {
+        setStripeLoadError(true);
+      } else {
+        setStripePromise(Promise.resolve(instance));
+      }
+    } catch (e) {
+      console.error('Retry Stripe load failed:', e);
+      setStripeLoadError(true);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (stripePromise) {
+      stripePromise
+        .then(instance => {
+          if (!instance) {
+            setStripeLoadError(true);
+          }
+        })
+        .catch(() => {
+          setStripeLoadError(true);
+        });
+    }
+  }, [stripePromise]);
+
   return (
     <Elements stripe={stripePromise}>
-      <CheckoutContent />
+      <CheckoutContent stripeLoadError={stripeLoadError} onRetryStripe={retryLoadStripe} />
     </Elements>
   );
 }
 
-function CheckoutContent() {
+function CheckoutContent({ stripeLoadError = false, onRetryStripe }: { stripeLoadError?: boolean; onRetryStripe?: () => void }) {
   const { cart, products, placeOrder, setActivePage, user, setAuthModalOpen, settings, formatPrice, currency, setCurrency } = useApp();
   const stripe = useStripe();
   const elements = useElements();
@@ -626,15 +684,40 @@ function CheckoutContent() {
                   />
                   {errors.cardName && <p className="text-[10px] font-bold text-red-600">{errors.cardName}</p>}
                 </div>
-                <div className="rounded-xl border border-neutral-200 bg-neutral-50 px-4 py-4 focus-within:border-[#003e1c] focus-within:ring-4 focus-within:ring-[#003e1c]/10">
-                  <CardElement options={{
-                    hidePostalCode: true,
-                    style: {
-                      base: { fontSize: '14px', color: '#171717', fontFamily: 'Arial, sans-serif', '::placeholder': { color: '#a3a3a3' } },
-                      invalid: { color: '#dc2626' }
-                    }
-                  }} />
-                </div>
+                {stripeLoadError ? (
+                  <div className="rounded-xl border border-amber-300 bg-amber-50 p-4 text-amber-900 space-y-2.5">
+                    <div className="flex items-center gap-2 font-bold text-xs">
+                      <AlertCircle className="w-4 h-4 text-amber-600 shrink-0" />
+                      <span>Stripe Connection Timed Out</span>
+                    </div>
+                    <p className="text-[11px] leading-relaxed text-amber-800">
+                      Aap ke internet connection ya browser extension (maslan AdBlocker) ne Stripe script (<code>js.stripe.com</code>) ko time out kar diya hai.
+                    </p>
+                    <ul className="text-[10px] text-amber-800 list-disc list-inside space-y-0.5">
+                      <li>AdBlocker ya privacy extensions ko disable karein</li>
+                      <li>VPN connect karein ya doosra internet network switch karein</li>
+                    </ul>
+                    {onRetryStripe && (
+                      <button
+                        type="button"
+                        onClick={onRetryStripe}
+                        className="mt-1 px-3 py-1.5 bg-[#003e1c] text-white rounded-lg text-xs font-bold hover:bg-[#002f15] cursor-pointer"
+                      >
+                        Retry Connecting to Stripe
+                      </button>
+                    )}
+                  </div>
+                ) : (
+                  <div className="rounded-xl border border-neutral-200 bg-neutral-50 px-4 py-4 focus-within:border-[#003e1c] focus-within:ring-4 focus-within:ring-[#003e1c]/10">
+                    <CardElement options={{
+                      hidePostalCode: true,
+                      style: {
+                        base: { fontSize: '14px', color: '#171717', fontFamily: 'Arial, sans-serif', '::placeholder': { color: '#a3a3a3' } },
+                        invalid: { color: '#dc2626' }
+                      }
+                    }} />
+                  </div>
+                )}
                 {errors.payment && (
                   <div className="flex items-start gap-2 rounded-xl border border-red-200 bg-red-50 p-3 text-xs font-bold text-red-700">
                     <AlertCircle className="h-4 w-4 shrink-0" />

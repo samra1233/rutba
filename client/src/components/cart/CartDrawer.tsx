@@ -47,11 +47,12 @@ const itemVariants = {
 };
 
 export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
-  const { cart, products, updateCartQty, removeFromCart, setActivePage, formatPrice, addToast } = useApp();
+  const { cart, allProducts, products, updateCartQty, removeFromCart, setActivePage, formatPrice, addToast } = useApp();
+  const masterCatalog = (allProducts && allProducts.length > 0) ? allProducts : products;
 
   // Resolve cart items with current product details
   const resolvedItems = (cart?.items || []).map(item => {
-    const product = products.find(p => p.id === item.productId);
+    const product = masterCatalog.find(p => p.id === item.productId);
     return {
       ...item,
       product

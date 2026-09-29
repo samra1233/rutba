@@ -22,6 +22,27 @@ export default function Home() {
   const { setActivePage, updateFilters } = useApp();
   const bannerRef = React.useRef<HTMLDivElement>(null);
 
+  // Ensure any sticky category/shop filters are completely reset when entering Home
+  React.useEffect(() => {
+    updateFilters({
+      fabric: '',
+      type: '',
+      collection: '',
+      sort: '',
+      search: '',
+      color: '',
+      sizes: '',
+      season: '',
+      sale: '',
+      bestSeller: '',
+      newArrival: '',
+      category: '',
+      pieces: '',
+      minPrice: undefined,
+      maxPrice: undefined,
+    });
+  }, []);
+
   // Scroll Parallax logic on the banner element
   const { scrollYProgress } = useScroll({
     target: bannerRef,

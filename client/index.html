@@ -30,9 +30,18 @@
     content="Premium Pakistani unstitched 3-piece lawn & chiffon suits with authentic embroidery." />
   <meta name="twitter:image" content="/og-image.jpg" />
 
-  <!-- Preconnect to image CDNs for instant DNS lookup & SSL handshake -->
+  <!-- Preconnect to Stripe and image CDNs for instant DNS lookup & SSL handshake -->
+  <link rel="preconnect" href="https://js.stripe.com" crossorigin />
+  <link rel="dns-prefetch" href="https://js.stripe.com" />
+  <link rel="preconnect" href="https://m.stripe.network" crossorigin />
+  <link rel="dns-prefetch" href="https://m.stripe.network" />
+  <link rel="preconnect" href="https://api.stripe.com" crossorigin />
+  <link rel="dns-prefetch" href="https://api.stripe.com" />
   <link rel="preconnect" href="https://cdn.shopify.com" crossorigin />
   <link rel="dns-prefetch" href="https://cdn.shopify.com" />
+
+  <!-- Stripe JS SDK in Head for instant parallel loading -->
+  <script src="https://js.stripe.com/v3/" async></script>
   
   <!-- Favicon -->
   <link rel="icon" type="image/png" href="/logo.png" />

@@ -86,7 +86,25 @@ export default function Navbar({ onOpenCart, onOpenWishlist }: NavbarProps) {
   ];
 
   const handleNavClick = (pageId: string) => {
-    if (pageId === 'shop') {
+    if (pageId === 'home') {
+      updateFilters({
+        fabric: '',
+        type: '',
+        collection: '',
+        sort: '',
+        search: '',
+        color: '',
+        sizes: '',
+        season: '',
+        sale: '',
+        bestSeller: '',
+        newArrival: '',
+        category: '',
+        pieces: '',
+        minPrice: undefined,
+        maxPrice: undefined,
+      });
+    } else if (pageId === 'shop') {
       updateFilters({ fabric: '', type: '', collection: '' });
     }
     setActivePage(pageId);

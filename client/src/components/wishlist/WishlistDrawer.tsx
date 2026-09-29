@@ -47,10 +47,11 @@ const itemVariants = {
 };
 
 export default function WishlistDrawer({ isOpen, onClose }: WishlistDrawerProps) {
-  const { wishlist, products, toggleWishlist, addToCart, setActivePage, formatPrice, addToast } = useApp();
+  const { wishlist, allProducts, products, toggleWishlist, addToCart, setActivePage, formatPrice, addToast } = useApp();
+  const masterCatalog = (allProducts && allProducts.length > 0) ? allProducts : products;
 
   // Filter products that are in the global wishlist
-  const resolvedItems = products.filter(p => wishlist.includes(p.id));
+  const resolvedItems = masterCatalog.filter(p => wishlist.includes(p.id));
 
   const handleMoveToBag = (product: any, e: React.MouseEvent) => {
     e.stopPropagation();

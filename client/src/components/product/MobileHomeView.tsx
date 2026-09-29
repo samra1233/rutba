@@ -21,7 +21,8 @@ import {
 import { CURRENCIES, CurrencyCode } from '../../types';
 
 export default function MobileHomeView() {
-  const { products, setActivePage, updateFilters, addToCart, toggleWishlist, isWishlisted, currency, setCurrency, formatPrice, categories: appCategories } = useApp();
+  const { allProducts, products, setActivePage, updateFilters, addToCart, toggleWishlist, isWishlisted, currency, setCurrency, formatPrice, categories: appCategories } = useApp();
+  const masterCatalog = (allProducts && allProducts.length > 0) ? allProducts : products;
   const [isCurrencyModalOpen, setIsCurrencyModalOpen] = useState(false);
   const currentCurrencyInfo = CURRENCIES[currency] || CURRENCIES.PKR;
   
@@ -101,8 +102,8 @@ export default function MobileHomeView() {
 
   // Clean products list excluding any irrelevant non-clothing categories
   const relevantProducts = useMemo(() => {
-    return products.filter(p => p.category !== 'Undergarments' && p.category !== 'Bags' && p.images && p.images.length > 0);
-  }, [products]);
+    return masterCatalog.filter(p => p.category !== 'Undergarments' && p.category !== 'Bags' && p.images && p.images.length > 0);
+  }, [masterCatalog]);
 
   // Filtered Products List
   const filteredProducts = useMemo(() => {

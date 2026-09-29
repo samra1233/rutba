@@ -13,25 +13,44 @@ import { useApp } from '../../AppContext';
 import { Heart, ArrowRight } from 'lucide-react';
 
 export default function BestSellersSection() {
-  const { products, formatPrice, setActivePage, updateFilters, wishlist, toggleWishlist } = useApp();
+  const { allProducts, products, formatPrice, setActivePage, updateFilters, wishlist, toggleWishlist } = useApp();
   const [activeDot, setActiveDot] = useState(0);
 
-  // Take top best seller products from live products catalog
-  const filteredBestSellers = products && products.length > 0
-    ? products.filter(p => p.isBestSeller || p.category === 'Ready to Wear' || p.category === 'Party Wear')
-    : [];
+  // Master catalog is completely unlinked from any category filter
+  const masterCatalog = (allProducts && allProducts.length > 0) ? allProducts : products;
 
-  const bestSellerProducts = filteredBestSellers.length > 0
+  // Take top best seller products from live master catalog across all categories
+  const filteredBestSellers = masterCatalog.filter(p => p.isBestSeller);
+
+  // If fewer than 4 marked best sellers, backfill from other store products
+  const bestSellerProducts = filteredBestSellers.length >= 4
     ? filteredBestSellers.slice(0, 4)
-    : (products && products.length > 0 ? products.slice(0, 4) : []);
+    : [
+        ...filteredBestSellers,
+        ...masterCatalog.filter(p => !filteredBestSellers.some(b => b.id === p.id))
+      ].slice(0, 4);
 
   const handleProductClick = (productId: string) => {
     setActivePage('shop', productId);
   };
 
   const handleViewAll = () => {
+    updateFilters({
+      fabric: '',
+      type: '',
+      collection: '',
+      sort: '',
+      search: '',
+      color: '',
+      sizes: '',
+      season: '',
+      sale: '',
+      bestSeller: 'true',
+      newArrival: '',
+      category: '',
+      pieces: '',
+    });
     setActivePage('shop');
-    updateFilters({ bestSeller: 'true', sale: '', newArrival: '', collection: '' });
   };
 
   return (

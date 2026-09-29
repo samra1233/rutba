@@ -150,18 +150,29 @@ function TrendingLookbookCard({ product, index, variants, onCardClick }: CardPro
 
 // ─── Main Component ───
 export default function TrendingSection() {
-  const { products, setActivePage } = useApp();
+  const { allProducts, products, setActivePage } = useApp();
   const [activeTab, setActiveTab] = useState<TabType>('ready-to-wear');
+
+  // Master catalog is completely unlinked from any category filter
+  const masterCatalog = (allProducts && allProducts.length > 0) ? allProducts : products;
 
   const filteredProducts = useMemo(() => {
     if (activeTab === 'ready-to-wear') {
-      return products.filter(p => p.type === 'Embroidered' || p.category === 'Ready to Wear' || p.category === 'Stitches').slice(0, 12);
+      return masterCatalog.filter(p => {
+        const cat = (p.category || '').toLowerCase();
+        const type = (p.type || '').toLowerCase();
+        return cat.includes('ready') || cat.includes('stitch') || type.includes('embroidered');
+      }).slice(0, 12);
     } else if (activeTab === 'unstitched') {
-      return products.filter(p => p.type === 'Printed' || p.category === 'Unstitched').slice(0, 12);
+      return masterCatalog.filter(p => {
+        const cat = (p.category || '').toLowerCase();
+        const type = (p.type || '').toLowerCase();
+        return cat.includes('unstitched') || type.includes('printed');
+      }).slice(0, 12);
     } else {
-      return products.filter(p => p.isNewArrival || p.isBestSeller || p.collection?.toLowerCase().includes('festive')).slice(0, 12);
+      return masterCatalog.filter(p => p.isNewArrival || p.isBestSeller || p.collection?.toLowerCase().includes('festive')).slice(0, 12);
     }
-  }, [products, activeTab]);
+  }, [masterCatalog, activeTab]);
 
   return (
     <section

@@ -2128,27 +2128,17 @@ class Database {
       if (fs.existsSync(DB_FILE)) {
         const data = fs.readFileSync(DB_FILE, 'utf-8');
         this.state = JSON.parse(data);
-        // Ensure all seeded products exist (merge / add missing ones)
-        const existingIds = new Set(this.state.products.map(p => p.id));
-        // Remove any old dummy products that are no longer in SEED_PRODUCTS
-        const seedIds = new Set(SEED_PRODUCTS.map(s => s.id));
-        this.state.products = this.state.products.filter(p => seedIds.has(p.id) || !p.id.startsWith('zar-'));
-        SEED_PRODUCTS.forEach(seed => {
-          const idx = this.state.products.findIndex(p => p.id === seed.id);
-          if (idx !== -1) {
-            // merge: seed properties act as defaults, saved DB item overrides seed
-            this.state.products[idx] = {
-              ...seed,
-              ...this.state.products[idx]
-            };
-          } else {
-            this.state.products.push(seed);
-          }
-        });
+        if (!Array.isArray(this.state.products)) {
+          this.state.products = [...SEED_PRODUCTS];
+        }
         
         // Admin credentials come from secure environment variables, never seed defaults.
         if (!this.state.admins) {
           this.state.admins = [];
+        }
+        // Ensure categories are present
+        if (!this.state.categories || !Array.isArray(this.state.categories)) {
+          this.state.categories = [...DEFAULT_CATEGORIES];
         }
         // Ensure settings are present
         if (!this.state.settings) {
@@ -2228,6 +2218,12 @@ class Database {
     try {
       const data = JSON.stringify(this.state, null, 2);
       fs.writeFileSync(RUNTIME_DB_FILE, data, 'utf-8');
+      if (fs.existsSync(ROOT_DB_FILE)) {
+        fs.writeFileSync(ROOT_DB_FILE, data, 'utf-8');
+      }
+      if (fs.existsSync(SHARED_DB_FILE)) {
+        fs.writeFileSync(SHARED_DB_FILE, data, 'utf-8');
+      }
     } catch (e) {
       console.error('Error saving DB', e);
     }

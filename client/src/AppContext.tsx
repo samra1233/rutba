@@ -49,6 +49,7 @@ interface AppUser {
 
 interface AppContextType {
   products: Product[];
+  allProducts: Product[];
   cart: Cart | null;
   activePage: string;
   selectedProductId: string | null;
@@ -117,6 +118,7 @@ const staticCatalog: Product[] = (initialDb && initialDb.products) ? (initialDb.
 
 const defaultContextValue: AppContextType = {
   products: staticCatalog,
+  allProducts: staticCatalog,
   cart: null,
   activePage: 'home',
   selectedProductId: null,
@@ -237,7 +239,16 @@ const parseLocationToPage = (): { page: string; productId: string | null } => {
 };
 
 export function AppProvider({ children }: { children: React.ReactNode }) {
-  const [products, setProducts] = useState<Product[]>(staticCatalog);
+  const [products, setProductsState] = useState<Product[]>(staticCatalog);
+  const [allProducts, setAllProducts] = useState<Product[]>(staticCatalog);
+
+  const setProducts: React.Dispatch<React.SetStateAction<Product[]>> = (action) => {
+    setProductsState(prev => {
+      const next = typeof action === 'function' ? action(prev) : action;
+      setAllProducts(next);
+      return next;
+    });
+  };
   const [cart, setCart] = useState<Cart | null>(null);
   const [activePage, setActivePageInternal] = useState<string>(() => {
     const { page } = parseLocationToPage();
@@ -365,7 +376,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
 
   const [settings, setSettings] = useState<{ announcementText: string; homeMarqueeText: string; shippingFee?: number; cardShippingFee?: number; internationalShippingFee?: number; freeShippingThreshold?: number }>({ announcementText: '', homeMarqueeText: '', shippingFee: 15, cardShippingFee: 15, internationalShippingFee: 100, freeShippingThreshold: 500 });
   
-  const [activeFilters, setActiveFilters] = useState<AppContextType['activeFilters']>({
+  const EMPTY_ACTIVE_FILTERS: AppContextType['activeFilters'] = {
     fabric: '',
     type: '',
     collection: '',
@@ -378,8 +389,12 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     bestSeller: '',
     newArrival: '',
     category: '',
-    pieces: ''
-  });
+    pieces: '',
+    minPrice: undefined,
+    maxPrice: undefined,
+  };
+
+  const [activeFilters, setActiveFilters] = useState<AppContextType['activeFilters']>(EMPTY_ACTIVE_FILTERS);
 
   const wsRef = useRef<WebSocket | null>(null);
 
@@ -420,19 +435,29 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   // PopState listener for browser history navigation (Back/Forward)
   useEffect(() => {
     const handlePopState = (event: PopStateEvent) => {
+      let targetPage = 'home';
+      let targetProdId: string | null = null;
       if (event.state && event.state.page) {
-        setActivePageInternal(event.state.page);
-        setSelectedProductId(event.state.productId || null);
+        targetPage = event.state.page;
+        targetProdId = event.state.productId || null;
       } else {
-        const { page, productId } = parseLocationToPage();
-        setActivePageInternal(page);
-        setSelectedProductId(productId);
+        const parsed = parseLocationToPage();
+        targetPage = parsed.page;
+        targetProdId = parsed.productId;
       }
+      if (targetPage === 'home') {
+        setActiveFilters(EMPTY_ACTIVE_FILTERS);
+      }
+      setActivePageInternal(targetPage);
+      setSelectedProductId(targetProdId);
     };
 
     window.addEventListener('popstate', handlePopState);
     
     const { page, productId } = parseLocationToPage();
+    if (page === 'home') {
+      setActiveFilters(EMPTY_ACTIVE_FILTERS);
+    }
     setActivePageInternal(page);
     setSelectedProductId(productId);
     const cleanPath = getUrlPathForPage(page, productId);
@@ -549,6 +574,24 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   const fetchProducts = async () => {
     setLoading(true);
     try {
+      const hasAnyFilter = Boolean(
+        activeFilters.fabric ||
+        activeFilters.type ||
+        activeFilters.collection ||
+        activeFilters.sort ||
+        activeFilters.search ||
+        activeFilters.color ||
+        activeFilters.sizes ||
+        activeFilters.season ||
+        activeFilters.sale ||
+        activeFilters.bestSeller ||
+        activeFilters.newArrival ||
+        activeFilters.category ||
+        activeFilters.pieces ||
+        activeFilters.minPrice !== undefined ||
+        activeFilters.maxPrice !== undefined
+      );
+
       const query = new URLSearchParams();
       if (activeFilters.fabric) query.append('fabric', activeFilters.fabric);
       if (activeFilters.type) query.append('type', activeFilters.type);
@@ -566,18 +609,28 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
       if (activeFilters.minPrice !== undefined) query.append('minPrice', String(activeFilters.minPrice));
       if (activeFilters.maxPrice !== undefined) query.append('maxPrice', String(activeFilters.maxPrice));
 
-      const res = await fetch(`/api/products?${query.toString()}`);
+      const queryString = query.toString();
+      const res = await fetch(`/api/products${queryString ? `?${queryString}` : ''}`);
       if (res.ok) {
         const data = await res.json();
         if (Array.isArray(data)) {
-          setProducts(data);
+          setProductsState(data);
+          if (!hasAnyFilter) {
+            setAllProducts(data);
+          }
           return;
         }
       }
-      setProducts(filterFallbackProducts(staticCatalog));
+      const fallback = filterFallbackProducts(staticCatalog);
+      setProductsState(fallback);
+      if (!hasAnyFilter) {
+        setAllProducts(staticCatalog);
+      }
     } catch (e) {
       console.log('Using static products catalog for live domain:', e);
-      setProducts(filterFallbackProducts(staticCatalog));
+      const fallback = filterFallbackProducts(staticCatalog);
+      setProductsState(fallback);
+      setAllProducts(staticCatalog);
     } finally {
       setLoading(false);
     }
@@ -741,6 +794,9 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   // 6. Navigation router
   const setActivePage = (page: string, pId: string | null = null) => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
+    if (page === 'home') {
+      setActiveFilters(EMPTY_ACTIVE_FILTERS);
+    }
     setActivePageInternal(page);
     setSelectedProductId(pId);
 
@@ -1104,12 +1160,12 @@ const sanitizeCategories = (cats: any[]): CategoryDef[] => {
   return cats.map((c, idx) => ({
     id: c.id || `cat-${idx}-${Date.now()}`,
     num: c.num || (idx + 1).toString().padStart(2, '0'),
-    label: (c.label && c.label.trim()) || (c.title && c.title.trim()) || (c.name && c.name.trim()) || (c.filterValue && c.filterValue.trim()) || (idx === 0 ? 'Unstitched' : idx === 1 ? 'Ready to Wear' : 'Party Wear'),
-    sublabel: c.sublabel || 'Luxury Designer Collection',
-    tag: c.tag || 'Curated Edit',
+    label: (c.label && c.label.trim()) || (c.title && c.title.trim()) || (c.name && c.name.trim()) || (c.filterValue && c.filterValue.trim()) || '',
+    sublabel: typeof c.sublabel === 'string' ? c.sublabel : '',
+    tag: typeof c.tag === 'string' ? c.tag : '',
     filterKey: c.filterKey || 'category',
-    filterValue: (c.filterValue && c.filterValue.trim()) || (c.label && c.label.trim()) || (c.name && c.name.trim()) || 'Unstitched',
-    image: c.image || c.img || (idx === 0 ? '/cat_unstitched_new.jpg' : idx === 1 ? '/cat_readytowear_new.png' : '/cat_bestseller_new.png')
+    filterValue: (c.filterValue && c.filterValue.trim()) || (c.label && c.label.trim()) || (c.name && c.name.trim()) || '',
+    image: c.image || c.img || ''
   }));
 };
 
@@ -1121,7 +1177,7 @@ const sanitizeCategories = (cats: any[]): CategoryDef[] => {
     // a freshly uploaded image, so REST is intentionally the single source of truth.
     const fetchCategories = async () => {
       try {
-        const res = await fetch('/api/categories');
+        const res = await fetch('/api/categories', { credentials: 'include' });
         if (!res.ok) return;
         const data = await res.json();
         if (!Array.isArray(data)) return;
@@ -1147,13 +1203,13 @@ const sanitizeCategories = (cats: any[]): CategoryDef[] => {
       id: newId,
       num: nextNum,
     };
-    const updated = [...categories, newCat];
-    saveCategories(updated);
+    saveCategories([...categories, newCat]);
 
     try {
       const res = await fetch('/api/categories', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
         body: JSON.stringify(newCat)
       });
       if (!res.ok) {
@@ -1163,11 +1219,14 @@ const sanitizeCategories = (cats: any[]): CategoryDef[] => {
       const savedData = await safeParseJson(res);
       if (!savedData) throw new Error('Category save failed');
       const saved = sanitizeCategories([savedData])[0];
-      saveCategories([...categories, saved]);
+      setCategories(prev => {
+        const filtered = prev.filter(c => c.id !== newCat.id && c.id !== saved.id);
+        return [...filtered, saved];
+      });
       addToast(`Category "${catData.label}" added successfully!`, 'success');
     } catch (e) {
       console.error('Error adding category to server:', e);
-      saveCategories(categories);
+      setCategories(categories);
       addToast('Category save failed. Please sign in again and retry.', 'warn');
       throw e;
     }
@@ -1180,6 +1239,7 @@ const sanitizeCategories = (cats: any[]): CategoryDef[] => {
       const res = await fetch(`/api/categories/${id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
         body: JSON.stringify(updatedData)
       });
       if (!res.ok) {
@@ -1189,24 +1249,28 @@ const sanitizeCategories = (cats: any[]): CategoryDef[] => {
       const savedData = await safeParseJson(res);
       if (!savedData) throw new Error('Category update failed');
       const saved = sanitizeCategories([savedData])[0];
-      saveCategories(categories.map(cat => cat.id === id ? saved : cat));
+      setCategories(prev => prev.map(cat => cat.id === id ? saved : cat));
       addToast('Category updated successfully!', 'success');
     } catch (e) {
       console.error('Error updating category on server:', e);
-      saveCategories(categories);
+      setCategories(categories);
       addToast('Category update failed. Your old category was restored.', 'warn');
       throw e;
     }
   };
 
   const deleteCategory = async (id: string) => {
+    const previous = [...categories];
     const updated = categories.filter(cat => cat.id !== id);
     const renumbered = updated.map((c, i) => ({ ...c, num: (i + 1).toString().padStart(2, '0') }));
     
     setCategories(renumbered);
 
     try {
-      const res = await fetch(`/api/categories/${id}`, { method: 'DELETE' });
+      const res = await fetch(`/api/categories/${id}`, { 
+        method: 'DELETE',
+        credentials: 'include'
+      });
       if (!res.ok) {
         const err = await safeParseJson<{ error?: string }>(res);
         throw new Error(err?.error || 'Category delete failed');
@@ -1214,7 +1278,7 @@ const sanitizeCategories = (cats: any[]): CategoryDef[] => {
       addToast('Category removed!', 'info');
     } catch (e) {
       console.error('Error deleting category on server:', e);
-      saveCategories(categories);
+      setCategories(previous);
       addToast('Category could not be removed.', 'warn');
       throw e;
     }
@@ -1234,6 +1298,7 @@ const sanitizeCategories = (cats: any[]): CategoryDef[] => {
   return (
     <AppContext.Provider value={{
       products,
+      allProducts,
       cart,
       activePage,
       selectedProductId,
