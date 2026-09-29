@@ -163,6 +163,10 @@ export const orderService = {
     return [...orders].reverse();
   },
 
+  clearAllOrders(): void {
+    orderRepository.clearAll();
+  },
+
   getOrderById(id: string): Order | undefined {
     return orderRepository.findById(id);
   },

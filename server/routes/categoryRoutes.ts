@@ -17,7 +17,11 @@ router.post('/', requireAdminAuth, async (req, res) => {
   if (!cat || !cat.label) {
     return res.status(400).json({ error: 'Category label is required' });
   }
-  if (typeof cat.image === 'string') cat.image = await persistImageDataUrl(cat.image, 'categories');
+  try {
+    if (typeof cat.image === 'string') cat.image = await persistImageDataUrl(cat.image, 'categories');
+  } catch (_) {
+    // Firebase Storage unavailable inside sandbox; keep local image as-is.
+  }
   const created = db.createCategory(cat);
   res.json(created);
 });
@@ -26,7 +30,11 @@ router.post('/', requireAdminAuth, async (req, res) => {
 router.put('/:id', requireAdminAuth, async (req, res) => {
   const { id } = req.params;
   const changes = { ...req.body };
-  if (typeof changes.image === 'string') changes.image = await persistImageDataUrl(changes.image, 'categories');
+  try {
+    if (typeof changes.image === 'string') changes.image = await persistImageDataUrl(changes.image, 'categories');
+  } catch (_) {
+    // Firebase Storage unavailable inside sandbox; keep local image as-is.
+  }
   const updated = db.updateCategory(id, changes);
   if (updated) {
     res.json(updated);

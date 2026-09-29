@@ -264,9 +264,9 @@ export default function Admin() {
     setActiveSlot(0);
     setFormId(p.id);
     setFormName(p.name);
-    const { currentPrice, wasPrice } = getProductPrices(p);
-    setFormPrice(currentPrice.toString());
-    setFormWasPrice(wasPrice ? wasPrice.toString() : '');
+    setFormPrice(p.price ? p.price.toString() : '');
+    const existingWas = p.wasPrice || p.compareAtPrice || '';
+    setFormWasPrice(existingWas ? existingWas.toString() : '');
     setFormFabric(p.fabric);
     setFormType(p.type);
     setFormCollection(p.collection || '');
@@ -278,7 +278,7 @@ export default function Admin() {
     setFormColors(p.colors ? p.colors.join(', ') : '');
     setFormFeatures(p.features ? p.features.join(', ') : '');
     setFormImages(p.images ? p.images.join('\n') : '');
-    setFormOnSale(p.onSale || Boolean(wasPrice && wasPrice > currentPrice));
+    setFormOnSale(Boolean(p.onSale));
     setFormSalePrice(p.salePrice ? p.salePrice.toString() : '');
     setFormIsBestSeller(p.isBestSeller || false);
     setFormIsNewArrival(p.isNewArrival || false);
@@ -368,15 +368,12 @@ export default function Admin() {
       addToast('Select at least one available size.', 'warn');
       return;
     }
-    const effectiveWasPrice = parsedWasPrice > 0 ? parsedWasPrice : (formOnSale && parsedSalePrice > 0 ? parsedPrice : null);
-    const effectiveNowPrice = (formOnSale && parsedSalePrice > 0 && parsedWasPrice <= 0) ? parsedSalePrice : parsedPrice;
-
     const payload = {
       id: formId || undefined,
       name: formName,
-      price: effectiveNowPrice,
-      wasPrice: effectiveWasPrice,
-      compareAtPrice: effectiveWasPrice,
+      price: parsedPrice,
+      wasPrice: parsedWasPrice > 0 ? parsedWasPrice : null,
+      compareAtPrice: parsedWasPrice > 0 ? parsedWasPrice : null,
       fabric: formFabric,
       type: formType,
       collection: formCollection,
@@ -385,8 +382,8 @@ export default function Admin() {
       season: formSeason,
       stock: parsedStock,
       description: formDescription,
-      onSale: Boolean(formOnSale || (effectiveWasPrice && effectiveWasPrice > effectiveNowPrice)),
-      salePrice: (effectiveWasPrice && effectiveWasPrice > effectiveNowPrice) ? effectiveNowPrice : (formOnSale && parsedSalePrice > 0 ? parsedSalePrice : null),
+      onSale: Boolean(formOnSale),
+      salePrice: formOnSale && parsedSalePrice > 0 ? parsedSalePrice : null,
       isBestSeller: formIsBestSeller,
       isNewArrival: formIsNewArrival,
       sizes: formSizes,
@@ -503,25 +500,22 @@ export default function Admin() {
     if (!matchesSearch) return false;
 
     // Pill filters
-    switch (catalogFilter) {
-      case 'UNSTITCHED':
-        return p.category === 'Unstitched';
-      case 'READY TO WEAR':
-        return p.category === 'Ready to Wear';
-      case 'LAWN':
-        return p.fabric === 'Lawn';
-      case 'CHIFFON':
-        return p.fabric === 'Chiffon';
-      case 'BEST SELLERS':
-        return !!p.isBestSeller;
-      case 'NEW ARRIVALS':
-        return !!p.isNewArrival;
-      case 'ON SALE':
-        return !!p.onSale;
-      case 'ALL PRODUCTS':
-      default:
-        return true;
-    }
+    const filterUpper = catalogFilter.toUpperCase();
+    if (filterUpper === 'ALL PRODUCTS') return true;
+    if (filterUpper === 'BEST SELLERS') return !!p.isBestSeller;
+    if (filterUpper === 'NEW ARRIVALS') return !!p.isNewArrival;
+    if (filterUpper === 'ON SALE') return !!p.onSale;
+    if (filterUpper === 'LAWN') return p.fabric?.toLowerCase() === 'lawn';
+    if (filterUpper === 'CHIFFON') return p.fabric?.toLowerCase() === 'chiffon';
+
+    const pCatLower = (p.category || '').trim().toLowerCase();
+    const filterLower = catalogFilter.trim().toLowerCase();
+    if (pCatLower === filterLower) return true;
+
+    const readyAliases = ['ready to wear', 'stitches', 'stitched', 'pret-a-porter'];
+    if (readyAliases.includes(filterLower) && readyAliases.includes(pCatLower)) return true;
+
+    return false;
   });
 
   if (!isLoggedIn) {
@@ -566,7 +560,7 @@ export default function Admin() {
                 type="email" 
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="rutabaglobal@gmail.com"
+                placeholder="admin@example.com"
                 className="w-full bg-[#FCFAF7] text-neutral-800 border border-neutral-200/85 focus:border-[#C5A059] focus:ring-4 focus:ring-[#C5A059]/10 rounded-xl py-3 px-4 text-xs font-mono placeholder-neutral-400 focus:outline-hidden transition-all shadow-inner"
               />
             </div>
@@ -1594,7 +1588,11 @@ export default function Admin() {
                               </button>
                               <button
                                 onClick={() => {
-                                  if (confirm(`Are you sure you want to delete category "${label}"?`)) {
+                                  const matchingProducts = products.filter(p => p.category && p.category.trim().toLowerCase() === filterVal.trim().toLowerCase());
+                                  const warnMsg = matchingProducts.length > 0
+                                    ? `Category "${label}" currently has ${matchingProducts.length} product(s) assigned to it. Deleting this category will not delete the products, but they will no longer be grouped under this category. Are you sure?`
+                                    : `Are you sure you want to delete category "${label}"?`;
+                                  if (confirm(warnMsg)) {
                                     deleteCategory(cat.id);
                                   }
                                 }}

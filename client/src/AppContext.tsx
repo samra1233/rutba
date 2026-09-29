@@ -2,6 +2,17 @@ import React, { createContext, useContext, useState, useEffect, useRef } from 'r
 import { Product, Cart, CartItem, Order, ShippingDetails, RealTimeUpdateEvent, CurrencyCode, CURRENCIES, CategoryDef } from '../../shared/types';
 import initialDb from '../../shared/rubta_db.json';
 
+/** Parse JSON from an API response safely. Non-JSON bodies (502 "Bad Gateway" text, empty bodies) return null instead of throwing. */
+async function safeParseJson<T>(res: Response): Promise<T | null> {
+  try {
+    const text = await res.text();
+    if (!text) return null;
+    return JSON.parse(text) as T;
+  } catch {
+    return null;
+  }
+}
+
 export const DEFAULT_CATEGORIES: CategoryDef[] = [
   {
     id: 'unstitched',
@@ -1145,8 +1156,13 @@ const sanitizeCategories = (cats: any[]): CategoryDef[] => {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(newCat)
       });
-      if (!res.ok) throw new Error((await res.json()).error || 'Category save failed');
-      const saved = sanitizeCategories([await res.json()])[0];
+      if (!res.ok) {
+        const err = await safeParseJson<{ error?: string }>(res);
+        throw new Error(err?.error || 'Category save failed');
+      }
+      const savedData = await safeParseJson(res);
+      if (!savedData) throw new Error('Category save failed');
+      const saved = sanitizeCategories([savedData])[0];
       saveCategories([...categories, saved]);
       addToast(`Category "${catData.label}" added successfully!`, 'success');
     } catch (e) {
@@ -1166,8 +1182,13 @@ const sanitizeCategories = (cats: any[]): CategoryDef[] => {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(updatedData)
       });
-      if (!res.ok) throw new Error((await res.json()).error || 'Category update failed');
-      const saved = sanitizeCategories([await res.json()])[0];
+      if (!res.ok) {
+        const err = await safeParseJson<{ error?: string }>(res);
+        throw new Error(err?.error || 'Category update failed');
+      }
+      const savedData = await safeParseJson(res);
+      if (!savedData) throw new Error('Category update failed');
+      const saved = sanitizeCategories([savedData])[0];
       saveCategories(categories.map(cat => cat.id === id ? saved : cat));
       addToast('Category updated successfully!', 'success');
     } catch (e) {
@@ -1186,7 +1207,10 @@ const sanitizeCategories = (cats: any[]): CategoryDef[] => {
 
     try {
       const res = await fetch(`/api/categories/${id}`, { method: 'DELETE' });
-      if (!res.ok) throw new Error((await res.json()).error || 'Category delete failed');
+      if (!res.ok) {
+        const err = await safeParseJson<{ error?: string }>(res);
+        throw new Error(err?.error || 'Category delete failed');
+      }
       addToast('Category removed!', 'info');
     } catch (e) {
       console.error('Error deleting category on server:', e);
